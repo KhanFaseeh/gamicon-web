@@ -1,0 +1,664 @@
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
+import VideoModal from '../components/VideoModal'
+import { supabase, type Game } from '../lib/supabaseClient'
+
+// Curated fallback data matching the Stitch UI design in case database is not yet seeded
+const DEFAULT_GAMES: Game[] = [
+  {
+    id: '1',
+    title: 'NEON PROTOCOL',
+    slug: 'neon-protocol',
+    release_date: '2024-11-15',
+    youtube_id: 'dQw4w9WgXcQ', // default placeholder or trailer
+    description:
+      'High-octane tactical cyber-action in a vertical megacity. Navigate corporate warfare with lethal cybernetic loadouts. Every encounter is a fast-twitch puzzle of momentum, spatial ballistic calculations, and consequence.',
+    tags: ['Cyberpunk RPG', 'Available Now', 'Unreal Engine 5'],
+  },
+  {
+    id: '2',
+    title: 'RUNEBOUND: OBLIVION',
+    slug: 'runebound-oblivion',
+    release_date: '2025-05-20',
+    youtube_id: 'dQw4w9WgXcQ',
+    description:
+      'Unforgiving dungeon delving into forbidden subterranean monoliths. Decipher ancient runes and harvest elder power. Designed for total player spatial agency with permadeath systems that enforce ruthless precision.',
+    tags: ['Dark Fantasy Roguelike', 'Closed Alpha Q2 2025', 'PC // PS5'],
+  },
+  {
+    id: '3',
+    title: 'IRON TALON: 2184',
+    slug: 'iron-talon-2184',
+    release_date: '2025-10-30',
+    youtube_id: 'dQw4w9WgXcQ',
+    description:
+      'Squad-based mechanized warfare across ravaged frontier wastelands. Master modular ballistic platforms and tactical positioning in real-time calculated atmospheric environments.',
+    tags: ['Tactical Mech Warfare', 'Co-Op & PvP', 'Active Prototype'],
+  },
+]
+
+export default function Home() {
+  const [games, setGames] = useState<Game[]>(DEFAULT_GAMES)
+  const [selectedVideo, setSelectedVideo] = useState<{ id: string; title: string } | null>(null)
+  const [emailInput, setEmailInput] = useState('')
+  const [subscribeStatus, setSubscribeStatus] = useState<string | null>(null)
+
+  useEffect(() => {
+    async function fetchGames() {
+      try {
+        const { data, error } = await supabase
+          .from('games')
+          .select('*')
+          .order('release_date', { ascending: false })
+
+        if (!error && data && data.length > 0) {
+          setGames(data as Game[])
+        }
+      } catch (err) {
+        console.warn('Supabase fetch returned error or offline, displaying curated showcase', err)
+      }
+    }
+    fetchGames()
+  }, [])
+
+  const handlePlaytestSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!emailInput) return
+    setSubscribeStatus('TRANSMISSION RECEIVED // CLEARANCE PENDING ENCRYPTION')
+    setEmailInput('')
+    setTimeout(() => {
+      setSubscribeStatus(null)
+    }, 6000)
+  }
+
+  // Pick first 3 games or use defaults
+  const game1 = games[0] || DEFAULT_GAMES[0]
+  const game2 = games[1] || DEFAULT_GAMES[1]
+  const game3 = games[2] || DEFAULT_GAMES[2]
+
+  return (
+    <div className="bg-[#0e0e0e] text-[#e5e2e1] min-h-screen font-sans selection:bg-white selection:text-black">
+      <Header />
+
+      {/* HERO SECTION: FULL BLEED CINEMATIC IMMERSION */}
+      <section className="relative min-h-screen w-full flex flex-col justify-between pt-20 overflow-hidden bg-[#0e0e0e]">
+        {/* Ambient Edge Backdrop with Deep Vignette */}
+        <div className="absolute inset-0 z-0">
+          <div
+            className="absolute inset-0 bg-cover bg-center filter saturate-75 brightness-75 scale-105 transition-transform duration-1000 ease-out"
+            style={{
+              backgroundImage:
+                "url('https://lh3.googleusercontent.com/aida/AEtjO1W8l1YFBtH3X_E6WY4GiitT_RiPH7iW_0qgptlmrSoiJlCDizxfzPe_pKkQ74OO4aeaCBUxJ1tcaohW4f8bv2EuPO7vC2vJArRHJlcFt_9NBqdWTQSKw8LMOmJbOagJYNhEOzrPgAP3Q5OXc4lOtxJ48ySUKuXWGRauto2aDR8ERVxBO7mZ6AWbbF2-sqh81Yt7aql18eMW6NSwwxD42RDuIQSjKPGKqAvoPs5ZtxyJP54Rx8f2VL9FJ2c')",
+            }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0e0e0e] via-[#0e0e0e]/60 to-[#0e0e0e]/40" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0e0e0e]/90 via-transparent to-[#0e0e0e]/90" />
+        </div>
+
+        {/* Telemetry Overhead Bar */}
+        <div className="relative z-10 w-full px-6 md:px-16 pt-8 flex justify-between items-center text-[#8e9192] font-display text-[11px] tracking-widest">
+          <div className="flex items-center gap-2">
+            <span className="inline-block w-1.5 h-1.5 bg-white" />
+            <span>LAT 45.5017° N // LON 73.5673° W</span>
+          </div>
+          <div className="hidden sm:block">
+            <span>ARCHIVE REF: GMCN-AUTEUR-00</span>
+          </div>
+        </div>
+
+        {/* Centered Hero Focal Hierarchy */}
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-16 my-auto text-center flex flex-col items-center">
+          <div className="inline-block border border-[#444748]/60 px-4 py-1 mb-8">
+            <span className="font-display text-[11px] tracking-widest uppercase text-[#c7c6c6]">
+              GAMICON / INDEPENDENT AUTEUR PRODUCTION
+            </span>
+          </div>
+
+          <h1 className="font-display text-4xl sm:text-6xl md:text-8xl uppercase text-white tracking-tight max-w-5xl leading-none">
+            Crafting Uncompromising Indie Experiences
+          </h1>
+
+          <p className="mt-8 text-base md:text-xl text-[#c4c7c8] max-w-2xl font-light leading-relaxed">
+            We architect unforgiving worlds for players who demand mastery. Physics, narrative literacy, and visceral design.
+          </p>
+
+          <div className="mt-12 flex flex-col sm:flex-row gap-4 items-center justify-center">
+            <a
+              href="#games"
+              className="border border-white px-8 py-3 font-display text-xs tracking-widest uppercase text-white hover:bg-white hover:text-black transition-all duration-150 ease-linear"
+            >
+              Explore Works
+            </a>
+            <button
+              onClick={() => setSelectedVideo({ id: game1.youtube_id, title: game1.title })}
+              className="border border-[#444748]/60 px-8 py-3 font-display text-xs tracking-widest uppercase text-[#c7c6c6] hover:text-white hover:border-white transition-all duration-150 ease-linear"
+            >
+              Latest Trailer
+            </button>
+          </div>
+        </div>
+
+        {/* Hero Base Telemetry Footer Indicator */}
+        <div className="relative z-10 w-full px-6 md:px-16 pb-8 flex justify-between items-end text-[#8e9192] border-t border-[#444748]/20 pt-4">
+          <div className="font-display text-[10px] tracking-widest">
+            <span>EST. 2019 // MONTREAL LAB</span>
+          </div>
+          <a
+            href="#games"
+            className="flex items-center gap-1 font-display text-[10px] uppercase tracking-widest text-[#c7c6c6] hover:text-white transition-colors duration-150"
+          >
+            <span>SCROLL DOWN</span>
+            <span className="material-symbols-outlined text-sm">south</span>
+          </a>
+          <div className="font-display text-[10px] tracking-widest hidden sm:block">
+            <span>100% SELF-OWNED EQUITY</span>
+          </div>
+        </div>
+      </section>
+
+      {/* STATEMENT INTERLUDE */}
+      <section className="border-y border-[#444748]/20 bg-[#131313] py-16 px-6 md:px-16">
+        <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-8 justify-between items-start md:items-center">
+          <div className="space-y-2 max-w-2xl">
+            <span className="font-display text-[10px] uppercase tracking-widest text-[#8e9192]">
+              STUDIO PHILOSOPHY
+            </span>
+            <p className="font-display text-xl md:text-2xl text-white font-normal leading-relaxed">
+              "Gamicon is an independent studio forging mechanics-driven, narrative-rich titles built without creative compromise. We architect unforgiving worlds for players who demand mastery."
+            </p>
+          </div>
+          <div className="flex flex-col gap-1 text-left md:text-right border-l md:border-l-0 md:border-r border-[#444748]/40 pl-4 md:pl-0 md:pr-4">
+            <span className="font-display text-5xl text-white font-light">28</span>
+            <span className="font-display text-[10px] text-[#8e9192] tracking-widest uppercase">
+              Engineers & Artists
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* SHOWCASE SECTION 1: NEON PROTOCOL */}
+      <section className="py-20 md:py-28 px-6 md:px-16 border-b border-[#444748]/20" id="games">
+        <div className="max-w-7xl mx-auto">
+          {/* Section Tag & Index */}
+          <div className="flex justify-between items-baseline mb-4 border-b border-[#444748]/20 pb-2">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-white" />
+              <span className="font-display text-xs uppercase tracking-widest text-white">
+                PROJECT ARCHIVE // 01
+              </span>
+            </div>
+            <span className="font-display text-xs text-[#8e9192] uppercase tracking-widest">
+              {game1.tags?.[0] || 'CYBERPUNK RPG'}
+            </span>
+          </div>
+
+          {/* Cinematic Frame */}
+          <div
+            onClick={() => setSelectedVideo({ id: game1.youtube_id, title: game1.title })}
+            className="relative w-full aspect-[21/9] md:aspect-[2.35/1] overflow-hidden border border-[#444748]/40 bg-[#1c1b1b] group cursor-pointer"
+          >
+            <img
+              alt={`${game1.title} cinematic key art`}
+              className="w-full h-full object-cover object-center filter grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out"
+              src="https://lh3.googleusercontent.com/aida/AEtjO1W8l1YFBtH3X_E6WY4GiitT_RiPH7iW_0qgptlmrSoiJlCDizxfzPe_pKkQ74OO4aeaCBUxJ1tcaohW4f8bv2EuPO7vC2vJArRHJlcFt_9NBqdWTQSKw8LMOmJbOagJYNhEOzrPgAP3Q5OXc4lOtxJ48ySUKuXWGRauto2aDR8ERVxBO7mZ6AWbbF2-sqh81Yt7aql18eMW6NSwwxD42RDuIQSjKPGKqAvoPs5ZtxyJP54Rx8f2VL9FJ2c"
+            />
+            {/* Play Button Overlay */}
+            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40">
+              <div className="w-16 h-16 rounded-full border border-white flex items-center justify-center bg-black/60">
+                <span className="material-symbols-outlined text-white text-3xl">play_arrow</span>
+              </div>
+            </div>
+
+            {/* Telemetry HUD Inset */}
+            <div className="absolute top-4 left-4 pointer-events-none">
+              <div className="inline-flex items-center gap-2 bg-[#0e0e0e]/80 backdrop-blur-sm border border-[#444748]/40 px-3 py-1">
+                <span className="inline-block w-2 h-2 bg-white animate-pulse" />
+                <span className="font-display text-[10px] text-white uppercase tracking-widest">
+                  AVAILABLE NOW
+                </span>
+              </div>
+            </div>
+            <div className="absolute bottom-4 right-4 pointer-events-none hidden md:block">
+              <span className="font-display text-[10px] text-[#c4c7c8]/80 bg-[#0e0e0e]/80 backdrop-blur-sm px-3 py-1 border border-[#444748]/30">
+                FRAME RATE TARGET: 60-120 FPS // UNREAL ENGINE 5
+              </span>
+            </div>
+          </div>
+
+          {/* Dossier & Detail Technical Grid */}
+          <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div className="lg:col-span-7">
+              <span className="font-display text-xs text-[#8e9192] tracking-widest uppercase">
+                TITLE 01
+              </span>
+              <h2 className="font-display text-3xl md:text-5xl uppercase text-white mt-1 mb-4 tracking-tight">
+                {game1.title}
+              </h2>
+              <p className="text-base md:text-lg text-[#c4c7c8] font-light leading-relaxed max-w-2xl">
+                {game1.description}
+              </p>
+              <div className="mt-8 flex flex-wrap gap-4">
+                <button
+                  onClick={() => setSelectedVideo({ id: game1.youtube_id, title: game1.title })}
+                  className="border border-white px-6 py-2.5 font-display text-xs uppercase tracking-widest text-white hover:bg-white hover:text-black transition-all duration-150"
+                >
+                  Watch Trailer
+                </button>
+                <Link
+                  to={`/game/${game1.slug}`}
+                  className="border border-[#444748]/50 px-6 py-2.5 font-display text-xs uppercase tracking-widest text-[#c7c6c6] hover:border-white hover:text-white transition-all duration-150 inline-block"
+                >
+                  View Dossier
+                </Link>
+              </div>
+            </div>
+
+            {/* Technical Telemetry Columns */}
+            <div className="lg:col-span-5 border-t lg:border-t-0 lg:border-l border-[#444748]/30 pt-6 lg:pt-0 lg:pl-8 space-y-4 font-display text-xs">
+              <div className="flex justify-between items-center py-2 border-b border-[#444748]/20">
+                <span className="uppercase tracking-widest text-[#8e9192]">RELEASE DATE</span>
+                <span className="uppercase tracking-widest text-white">{game1.release_date}</span>
+              </div>
+              <div className="flex justify-between items-center py-2 border-b border-[#444748]/20">
+                <span className="uppercase tracking-widest text-[#8e9192]">PLATFORMS</span>
+                <span className="uppercase tracking-widest text-white">PC • NEXT-GEN CONSOLES</span>
+              </div>
+              <div className="flex justify-between items-center py-2 border-b border-[#444748]/20">
+                <span className="uppercase tracking-widest text-[#8e9192]">DIRECTED BY</span>
+                <span className="uppercase tracking-widest text-white">GAMICON CORE</span>
+              </div>
+              <div className="flex justify-between items-center py-2 border-b border-[#444748]/20">
+                <span className="uppercase tracking-widest text-[#8e9192]">STATUS</span>
+                <span className="uppercase tracking-widest text-white">LIVE IN PRODUCTION</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SHOWCASE SECTION 2: RUNEBOUND: OBLIVION */}
+      <section className="py-20 md:py-28 px-6 md:px-16 border-b border-[#444748]/20 bg-[#131313]">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex justify-between items-baseline mb-4 border-b border-[#444748]/20 pb-2">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-white" />
+              <span className="font-display text-xs uppercase tracking-widest text-white">
+                PROJECT ARCHIVE // 02
+              </span>
+            </div>
+            <span className="font-display text-xs text-[#8e9192] uppercase tracking-widest">
+              {game2.tags?.[0] || 'DARK FANTASY ROGUELIKE'}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Towering Key Visual Side */}
+            <div className="lg:col-span-7 order-2 lg:order-1">
+              <div
+                onClick={() => setSelectedVideo({ id: game2.youtube_id, title: game2.title })}
+                className="relative w-full aspect-[16/10] overflow-hidden border border-[#444748]/40 bg-[#1c1b1b] group cursor-pointer"
+              >
+                <img
+                  alt={`${game2.title} monolith key visual`}
+                  className="w-full h-full object-cover filter contrast-125 grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out"
+                  src="https://lh3.googleusercontent.com/aida/AEtjO1UpxOajIDGPHIMZhXK7qHEht7POwCTiErEsrqDLUdkS0CPcFt7oxdJPjRRpliYp7mIb_-O9TkUo3s8uVkaNYdUkhn4v_boUK3hDb7nvFfL1WktMDugUmOd-xhyVuHQG4XRLTJJPZFdUfuukoTC_P1QFcYF7S0KFZr6W8DD6-st_BhRSTQVm7byKicNL1tK3rcorW7Ta0gEksbkRQEhZigkDrp9ZznNZK-pNPLyZCD5DF9l73PUvUwvMYT4"
+                />
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40">
+                  <div className="w-16 h-16 rounded-full border border-white flex items-center justify-center bg-black/60">
+                    <span className="material-symbols-outlined text-white text-3xl">play_arrow</span>
+                  </div>
+                </div>
+                <div className="absolute top-4 left-4">
+                  <span className="font-display text-[10px] text-white uppercase tracking-widest bg-[#0e0e0e]/90 px-3 py-1 border border-[#444748]/40">
+                    CLOSED ALPHA Q2 2025
+                  </span>
+                </div>
+                <div className="absolute bottom-4 left-4">
+                  <span className="font-display text-[10px] text-[#8e9192] uppercase tracking-widest">
+                    TARGET HARDWARE: PC // PLAYSTATION 5
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Editorial Dossier Side */}
+            <div className="lg:col-span-5 order-1 lg:order-2 space-y-4">
+              <span className="font-display text-xs text-[#8e9192] tracking-widest uppercase">
+                PROJECT CODENAME
+              </span>
+              <h2 className="font-display text-3xl md:text-5xl uppercase text-white tracking-tight">
+                {game2.title}
+              </h2>
+              <div className="w-12 h-0.5 bg-white" />
+              <p className="text-base md:text-lg text-[#c4c7c8] font-light leading-relaxed">
+                {game2.description}
+              </p>
+
+              {/* Technical Spec List */}
+              <div className="pt-4 space-y-2 border-t border-[#444748]/20 font-display text-xs">
+                <div className="flex justify-between text-[#8e9192]">
+                  <span>COMBAT PARADIGM:</span>
+                  <span className="text-white uppercase">FRAME-ACCURATE PARRY MATRIX</span>
+                </div>
+                <div className="flex justify-between text-[#8e9192]">
+                  <span>PROCEDURAL TOPOLOGY:</span>
+                  <span className="text-white uppercase">SEEDED RUNIC LABYRINTH</span>
+                </div>
+                <div className="flex justify-between text-[#8e9192]">
+                  <span>PLAYTEST ENROLLMENT:</span>
+                  <span className="text-white uppercase">OPEN ALPHA REGISTRATION</span>
+                </div>
+              </div>
+
+              <div className="pt-4 flex gap-4">
+                <button
+                  onClick={() => setSelectedVideo({ id: game2.youtube_id, title: game2.title })}
+                  className="border border-white px-6 py-2.5 font-display text-xs uppercase tracking-widest text-white hover:bg-white hover:text-black transition-all duration-150"
+                >
+                  Watch Alpha Trailer
+                </button>
+                <Link
+                  to={`/game/${game2.slug}`}
+                  className="border border-[#444748]/50 px-6 py-2.5 font-display text-xs uppercase tracking-widest text-[#c7c6c6] hover:border-white hover:text-white transition-all duration-150"
+                >
+                  View Dossier
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SHOWCASE SECTION 3: IRON TALON: 2184 */}
+      <section className="py-20 md:py-28 px-6 md:px-16 border-b border-[#444748]/20">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex justify-between items-baseline mb-4 border-b border-[#444748]/20 pb-2">
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-white" />
+              <span className="font-display text-xs uppercase tracking-widest text-white">
+                PROJECT ARCHIVE // 03
+              </span>
+            </div>
+            <span className="font-display text-xs text-[#8e9192] uppercase tracking-widest">
+              {game3.tags?.[0] || 'TACTICAL MECH WARFARE'}
+            </span>
+          </div>
+
+          {/* Cinematic Frame */}
+          <div
+            onClick={() => setSelectedVideo({ id: game3.youtube_id, title: game3.title })}
+            className="relative w-full aspect-[21/9] md:aspect-[2.4/1] overflow-hidden border border-[#444748]/40 bg-[#1c1b1b] group cursor-pointer"
+          >
+            <img
+              alt={`${game3.title} tactical mech key art`}
+              className="w-full h-full object-cover filter contrast-125 grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out"
+              src="https://lh3.googleusercontent.com/aida/AEtjO1UJMRZzH5hkjwGYbhPftm1WQxBVgPZhhN-1HNr-hozj8Rwg67e0k9Hu6kaiMr1EHPHAeqq5bTM6kVLpri8Sv3bVG76Xc6ksXCwe8ZGzpyPu8y050ns3BjCQpo5oPvLJGXrxbuWhGihn3V5eUYn_aUZpcvSHAXc7SkkaXR0ncFL47P4S-Pf74EEFu2GT5BFFyPU7hoPg14OUNZNJDFRX-vbpMa_62lIMqfPSdXqchfq_kXD593V3jfhVarw"
+            />
+            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40">
+              <div className="w-16 h-16 rounded-full border border-white flex items-center justify-center bg-black/60">
+                <span className="material-symbols-outlined text-white text-3xl">play_arrow</span>
+              </div>
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0e0e0e]/90 via-transparent to-transparent flex flex-col justify-end p-6 md:p-8">
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+                <div>
+                  <span className="font-display text-xs text-[#8e9192] uppercase tracking-widest">
+                    SIMULATION STATUS // ACTIVE PROTOTYPE
+                  </span>
+                  <h2 className="font-display text-3xl md:text-5xl uppercase text-white tracking-tight">
+                    {game3.title}
+                  </h2>
+                </div>
+                <div className="flex gap-4">
+                  <span className="font-display text-xs text-white uppercase tracking-widest border border-white/50 px-3 py-1 bg-[#0e0e0e]/60">
+                    CO-OP & PVP
+                  </span>
+                  <span className="font-display text-xs text-[#c7c6c6] uppercase tracking-widest border border-[#444748]/40 px-3 py-1 bg-[#0e0e0e]/60">
+                    RELEASE 2025
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Three-Column Spec Grid */}
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-[#444748]/20 pt-8">
+            <div className="space-y-2">
+              <span className="font-display text-xs uppercase tracking-widest text-[#8e9192]">
+                01 // PLATFORM SYNOPSIS
+              </span>
+              <p className="text-sm md:text-base text-[#c4c7c8] font-light leading-relaxed">
+                {game3.description}
+              </p>
+            </div>
+            <div className="space-y-2">
+              <span className="font-display text-xs uppercase tracking-widest text-[#8e9192]">
+                02 // MODULAR BALLISTICS
+              </span>
+              <p className="text-sm md:text-base text-[#c4c7c8] font-light leading-relaxed">
+                Every chassis possesses authentic weight dynamics, heat dissipation challenges, and locational armor failure modeling. Coordinated fire regimes determine outcome.
+              </p>
+            </div>
+            <div className="space-y-2 flex flex-col justify-between">
+              <div>
+                <span className="font-display text-xs uppercase tracking-widest text-[#8e9192]">
+                  03 // INTEL FEED
+                </span>
+                <p className="text-sm md:text-base text-[#c4c7c8] font-light leading-relaxed">
+                  Closed multiplayer stress test dates announced via devlog terminal.
+                </p>
+              </div>
+              <div className="pt-4 flex gap-3">
+                <button
+                  onClick={() => setSelectedVideo({ id: game3.youtube_id, title: game3.title })}
+                  className="border border-[#444748]/60 hover:border-white text-[#c7c6c6] hover:text-white px-4 py-2 font-display text-xs uppercase tracking-widest transition-all"
+                >
+                  Watch Feed -&gt;
+                </button>
+                <Link
+                  to={`/game/${game3.slug}`}
+                  className="border border-white hover:bg-white hover:text-black text-white px-4 py-2 font-display text-xs uppercase tracking-widest transition-all"
+                >
+                  Dossier
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* STUDIO MANIFESTO & TENETS */}
+      <section className="py-20 md:py-36 px-6 md:px-16 bg-[#0e0e0e] border-b border-[#444748]/20" id="about">
+        <div className="max-w-7xl mx-auto">
+          {/* Studio Header */}
+          <div className="mb-16 max-w-3xl">
+            <span className="font-display text-xs uppercase tracking-widest text-[#8e9192]">
+              STUDIO ETHOS & TENETS
+            </span>
+            <h2 className="font-display text-3xl md:text-5xl uppercase text-white mt-2 tracking-tight">
+              ARCHITECTS OF VISCERAL INTERACTION
+            </h2>
+            <p className="mt-4 text-base md:text-lg text-[#c4c7c8] font-light">
+              We reject automated formulas and safety-first design paradigms. Gamicon exists to create art with sharp edges.
+            </p>
+          </div>
+
+          {/* Tenets Bento Row */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            <div className="border border-[#444748]/30 p-8 bg-[#131313]/40 flex flex-col justify-between hover:border-white/60 transition-colors duration-150">
+              <div>
+                <span className="font-display text-xs uppercase tracking-widest text-white block mb-6">
+                  01 / MECHANICS FIRST
+                </span>
+                <h3 className="font-display text-2xl uppercase text-white mb-2 font-normal">
+                  PHYSICAL INTEGRITY
+                </h3>
+                <p className="text-sm md:text-base text-[#c4c7c8] font-light leading-relaxed">
+                  Physics, frame timing, and tactile responsiveness dictate design. We do not construct sets before proving the visceral integrity of the physical interaction loop.
+                </p>
+              </div>
+              <div className="pt-8 mt-8 border-t border-[#444748]/20 text-[#8e9192] font-display text-[10px]">
+                <span>PARAMETER: ZERO LATENCY TOLERANCE</span>
+              </div>
+            </div>
+
+            <div className="border border-[#444748]/30 p-8 bg-[#131313]/40 flex flex-col justify-between hover:border-white/60 transition-colors duration-150">
+              <div>
+                <span className="font-display text-xs uppercase tracking-widest text-white block mb-6">
+                  02 / NARRATIVE DEPTH
+                </span>
+                <h3 className="font-display text-2xl uppercase text-white mb-2 font-normal">
+                  CONTEXTUAL IMMERSION
+                </h3>
+                <p className="text-sm md:text-base text-[#c4c7c8] font-light leading-relaxed">
+                  Environmental storytelling without handholding. Player agency is earned through deductive literacy and contextual immersion rather than instructional tutorials.
+                </p>
+              </div>
+              <div className="pt-8 mt-8 border-t border-[#444748]/20 text-[#8e9192] font-display text-[10px]">
+                <span>PARAMETER: DIEGETIC DISCOVERY</span>
+              </div>
+            </div>
+
+            <div className="border border-[#444748]/30 p-8 bg-[#131313]/40 flex flex-col justify-between hover:border-white/60 transition-colors duration-150">
+              <div>
+                <span className="font-display text-xs uppercase tracking-widest text-white block mb-6">
+                  03 / COMMUNITY DRIVEN
+                </span>
+                <h3 className="font-display text-2xl uppercase text-white mb-2 font-normal">
+                  OPEN PLAYTEST LOOPS
+                </h3>
+                <p className="text-sm md:text-base text-[#c4c7c8] font-light leading-relaxed">
+                  Direct feedback loops via open developer builds. Transparent devlogs and direct player playtesting pipelines ensure genuine mechanical rigor.
+                </p>
+              </div>
+              <div className="pt-8 mt-8 border-t border-[#444748]/20 text-[#8e9192] font-display text-[10px]">
+                <span>PARAMETER: BI-WEEKLY COMMITS</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Studio Lab Workstation Feature */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center border border-[#444748]/30 bg-[#131313]/30">
+            <div className="lg:col-span-7 h-full">
+              <img
+                alt="Gamicon Montreal Studio Lab Workstations"
+                className="w-full h-full object-cover min-h-[360px] filter grayscale contrast-125"
+                src="https://lh3.googleusercontent.com/aida/AEtjO1X8gVDzQKeN1xnNu8yH5hqMwFVSf2tgib-RrN4qRR4hYfMl1W1K84GlSKWbF0bCtfapCBy75RgVw9rATVOsigq89QNtmXDugvbaXFOC9wAq6I0iCDdcZcFx4jVjZhwbsp3B7bvutYI3lt0ZGkoF19qWlev-tk3rDCALHDrL8Et0daLsjCKEjSy9vr0fudlrSAaMt_g1GO8wLvg6Ua1DGh0Ss2NmAle4pFz2_R2WwvLr2qcyJh0haDvSHZ0"
+              />
+            </div>
+            <div className="lg:col-span-5 p-8 space-y-4">
+              <span className="font-display text-xs uppercase tracking-widest text-[#8e9192]">
+                PHYSICAL FACILITY
+              </span>
+              <h3 className="font-display text-2xl uppercase text-white font-normal">
+                MONTREAL STUDIO LAB
+              </h3>
+              <p className="text-sm md:text-base text-[#c4c7c8] font-light leading-relaxed">
+                Our atelier houses high-throughput workstations, dedicated motion simulation gear, and localized build clusters. We maintain complete autonomy over every frame rendered.
+              </p>
+              <div className="pt-4 space-y-2 font-display text-xs text-[#8e9192] border-t border-[#444748]/20">
+                <div className="flex justify-between">
+                  <span>LOCATION:</span>
+                  <span className="text-white">MONTREAL, QC (45.5017° N, 73.5673° W)</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>PERSONNEL:</span>
+                  <span className="text-white">28 SPECIALISTS</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>CAPITALIZATION:</span>
+                  <span className="text-white">100% SELF-OWNED</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CRITICAL ACCLAIM & PRESS QUOTE STRIP */}
+      <section className="py-20 px-6 md:px-16 border-b border-[#444748]/20 bg-[#131313]" id="press">
+        <div className="max-w-5xl mx-auto text-center space-y-4">
+          <div className="flex items-center justify-center gap-2 text-[#8e9192]">
+            <span className="material-symbols-outlined text-sm">star</span>
+            <span className="font-display text-xs uppercase tracking-widest">CRITICAL DISPATCH</span>
+            <span className="material-symbols-outlined text-sm">star</span>
+          </div>
+          <blockquote className="font-display text-2xl md:text-4xl text-white font-light uppercase tracking-tight leading-snug">
+            "Gamicon pushes visual fidelity and combat precision to an unprecedented indie standard. Their titles showcase rare auteur audacity."
+          </blockquote>
+          <div className="pt-2">
+            <span className="font-display text-xs text-[#8e9192] uppercase tracking-widest">
+              EDGE MAGAZINE // ISSUE 391
+            </span>
+          </div>
+        </div>
+      </section>
+
+      {/* PLAYTEST TERMINAL & SIGNUP */}
+      <section className="py-20 md:py-28 px-6 md:px-16 bg-[#0e0e0e] border-b border-[#444748]/20" id="contact">
+        <div className="max-w-4xl mx-auto border border-[#444748]/40 p-8 md:p-12 bg-[#131313]/20">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 pb-4 border-b border-[#444748]/20">
+            <div>
+              <span className="font-display text-xs uppercase tracking-widest text-[#8e9192]">
+                DIRECT ACCESS PROTOCOL
+              </span>
+              <h3 className="font-display text-2xl uppercase text-white mt-1">
+                JOIN CLOSED PLAYTEST PIPELINE
+              </h3>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="w-2 h-2 bg-white" />
+              <span className="font-display text-xs uppercase tracking-widest text-[#c7c6c6]">
+                ACCEPTING ALPHA COHORTS
+              </span>
+            </div>
+          </div>
+
+          <p className="text-sm md:text-base text-[#c4c7c8] font-light mb-8">
+            Receive unreleased development builds directly via private launcher branches. All playtesters are subject to strict NDA provisions and required telemetry upload.
+          </p>
+
+          <form className="flex flex-col sm:flex-row gap-3" onSubmit={handlePlaytestSubmit}>
+            <input
+              type="email"
+              value={emailInput}
+              onChange={(e) => setEmailInput(e.target.value)}
+              placeholder="OPERATOR_EMAIL@DOMAIN.COM"
+              required
+              className="flex-1 bg-[#0e0e0e] border border-[#444748]/50 focus:border-white text-white font-display text-xs uppercase px-4 py-3 placeholder:text-[#8e9192]/60 focus:ring-0 focus:outline-none"
+            />
+            <button
+              type="submit"
+              className="border border-white bg-white text-black hover:bg-transparent hover:text-white px-8 py-3 font-display text-xs uppercase tracking-widest transition-all duration-150"
+            >
+              Request Clearance
+            </button>
+          </form>
+
+          {subscribeStatus && (
+            <div className="mt-4 p-3 border border-white/40 bg-white/5 font-display text-xs text-white tracking-widest uppercase">
+              {subscribeStatus}
+            </div>
+          )}
+
+          <div className="mt-6 flex flex-col sm:flex-row justify-between items-center text-[#8e9192] font-display text-[10px] gap-2">
+            <span>ENCRYPTION: 4096-BIT TLS</span>
+            <span>NO MARKETING DISPATCHES // RAW BUILDS ONLY</span>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+
+      {/* Interactive Video Modal for YouTube Trailers */}
+      <VideoModal
+        isOpen={Boolean(selectedVideo)}
+        youtubeId={selectedVideo?.id || ''}
+        title={selectedVideo?.title || ''}
+        onClose={() => setSelectedVideo(null)}
+      />
+    </div>
+  )
+}
