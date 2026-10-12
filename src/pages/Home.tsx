@@ -59,11 +59,6 @@ export default function Home() {
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-16 my-auto text-center flex flex-col items-center">
           <div className="flex flex-col items-center gap-4 mb-6">
             <MonogramIcon className="w-16 h-16 md:w-20 md:h-20" animated={true} />
-            <div className="inline-block border border-[#444748]/60 px-4 py-1">
-              <span className="font-display text-[11px] tracking-widest uppercase text-[#c7c6c6]">
-                GAMICON // INDEPENDENT AUTEUR PRODUCTION
-              </span>
-            </div>
           </div>
 
           <h1 className="font-display text-4xl sm:text-6xl md:text-8xl uppercase text-white tracking-tight max-w-5xl leading-none">
@@ -129,7 +124,7 @@ export default function Home() {
             </p>
           </div>
           <div className="flex flex-col gap-1 text-left md:text-right border-l md:border-l-0 md:border-r border-[#444748]/40 pl-4 md:pl-0 md:pr-4">
-            <span className="font-display text-5xl text-white font-light">28</span>
+            <span className="font-display text-5xl text-white font-light">5</span>
             <span className="font-display text-[10px] text-[#8e9192] tracking-widest uppercase">
               Engineers & Artists
             </span>
@@ -391,7 +386,7 @@ export default function Home() {
                 </div>
                 <div className="flex justify-between">
                   <span>PERSONNEL:</span>
-                  <span className="text-white">28 SPECIALISTS</span>
+                  <span className="text-white">5 SPECIALISTS</span>
                 </div>
                 <div className="flex justify-between">
                   <span>CAPITALIZATION:</span>
@@ -399,25 +394,6 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CRITICAL ACCLAIM & PRESS QUOTE STRIP */}
-      <section className="py-20 px-6 md:px-16 border-b border-[#444748]/20 bg-[#131313]" id="press">
-        <div className="max-w-5xl mx-auto text-center space-y-4">
-          <div className="flex items-center justify-center gap-2 text-[#8e9192]">
-            <span className="material-symbols-outlined text-sm">star</span>
-            <span className="font-display text-xs uppercase tracking-widest">CRITICAL DISPATCH</span>
-            <span className="material-symbols-outlined text-sm">star</span>
-          </div>
-          <blockquote className="font-display text-2xl md:text-4xl text-white font-light uppercase tracking-tight leading-snug">
-            "Gamicon pushes visual fidelity and combat precision to an unprecedented indie standard. Their titles showcase rare auteur audacity."
-          </blockquote>
-          <div className="pt-2">
-            <span className="font-display text-xs text-[#8e9192] uppercase tracking-widest">
-              EDGE MAGAZINE // ISSUE 391
-            </span>
           </div>
         </div>
       </section>

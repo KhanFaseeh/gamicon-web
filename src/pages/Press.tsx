@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import Logo from '../components/Logo'
 import { supabase, type StudioInfo } from '../lib/supabaseClient'
 
 const DEFAULT_STUDIO_INFO: StudioInfo = {
@@ -44,14 +43,6 @@ const DISPATCHES: Dispatch[] = [
     title: 'FOUNDER MANIFESTO: ON BLENDER MODELING, UNITY ARCHITECTURE & AUTEUR DESIGN',
     desc: 'CEO Mian Faseeh Ur Rehman and partner Muhammad Tayyab outline Gamicon\'s development philosophy, utilizing Blender for tactile 3D assets, Unity Engine for high-speed deterministic mechanics, and ElevenLabs for atmospheric vocal narration.',
     dept: 'EXECUTIVE DIRECTION // M. F. UR REHMAN & M. TAYYAB',
-  },
-  {
-    date: '2024.11.20',
-    code: 'MEDIA RECEPTION',
-    tag: 'COVER STORY',
-    title: 'EDGE MAGAZINE FEATURE: VISUAL FIDELITY AND THE INDIE AVANT-GARDE',
-    desc: '"Gamicon represents a rare phenomenon in contemporary gaming: a mid-sized studio wielding the technical firepower of a AAA titan while preserving the dangerous, poetic unpredictability of auteur cinema."',
-    dept: 'EDITORIAL REPRINT // EDGE #398',
   },
 ]
 
@@ -245,15 +236,15 @@ export default function Press() {
             </span>
           </div>
 
-          <div className="border-t border-[#444748]/30 divide-y divide-[#444748]/20">
-            {/* Row 1: General */}
+          <div className="border-t border-[#444748]/30">
+            {/* Single Unified Studio Contact Row */}
             <div className="py-6 px-2 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-[#1c1b1b] transition-colors">
               <div className="w-full md:w-1/3">
                 <span className="font-display text-xs text-white tracking-widest uppercase block">
-                  GENERAL INQUIRIES
+                  STUDIO CORRESPONDENCE
                 </span>
                 <span className="text-[#8e9192] font-display text-[10px] tracking-widest uppercase">
-                  DIRECT STUDIO CORRESPONDENCE
+                  DIRECT INQUIRIES & PARTNERSHIPS
                 </span>
               </div>
               <div className="w-full md:w-1/3">
@@ -267,56 +258,6 @@ export default function Press() {
               <div className="w-full md:w-1/3 text-left md:text-right">
                 <span className="font-display text-[10px] text-[#c7c6c6] uppercase tracking-widest">
                   RESPONSE SLA: 48 HOURS
-                </span>
-              </div>
-            </div>
-
-            {/* Row 2: Press & Editorial */}
-            <div className="py-6 px-2 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-[#1c1b1b] transition-colors">
-              <div className="w-full md:w-1/3">
-                <span className="font-display text-xs text-white tracking-widest uppercase block">
-                  PRESS & EDITORIAL
-                </span>
-                <span className="text-[#8e9192] font-display text-[10px] tracking-widest uppercase">
-                  MEDIA & INTERVIEW INQUIRIES
-                </span>
-              </div>
-              <div className="w-full md:w-1/3">
-                <a
-                  className="text-white hover:underline font-mono text-sm tracking-wide"
-                  href="mailto:press@gamicon.studio"
-                >
-                  press@gamicon.studio
-                </a>
-              </div>
-              <div className="w-full md:w-1/3 text-left md:text-right">
-                <span className="font-display text-[10px] text-[#c7c6c6] uppercase tracking-widest">
-                  INTERVIEW DISPATCHES
-                </span>
-              </div>
-            </div>
-
-            {/* Row 3: Publishing */}
-            <div className="py-6 px-2 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-[#1c1b1b] transition-colors">
-              <div className="w-full md:w-1/3">
-                <span className="font-display text-xs text-white tracking-widest uppercase block">
-                  PUBLISHING & PARTNERSHIPS
-                </span>
-                <span className="text-[#8e9192] font-display text-[10px] tracking-widest uppercase">
-                  COMMERCIAL & PLATFORM DIALOGUE
-                </span>
-              </div>
-              <div className="w-full md:w-1/3">
-                <a
-                  className="text-white hover:underline font-mono text-sm tracking-wide"
-                  href="mailto:business@gamicon.studio"
-                >
-                  business@gamicon.studio
-                </a>
-              </div>
-              <div className="w-full md:w-1/3 text-left md:text-right">
-                <span className="font-display text-[10px] text-[#c7c6c6] uppercase tracking-widest">
-                  PARTNERSHIP INQUIRIES
                 </span>
               </div>
             </div>
@@ -365,98 +306,6 @@ export default function Press() {
               <div className="mt-4 pt-3 border-t border-[#444748]/20 flex items-center justify-between text-[#8e9192] font-display text-[10px] uppercase">
                 <span>AUTHENTICATION PGP</span>
                 <span className="font-mono text-[#c7c6c6]">0x7F...C8E1</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* Brand Identity Matrix & Vector Monogram Spec (Press Kit)                  */}
-        {/* ========================================================================= */}
-        <section className="px-6 md:px-16 pb-16">
-          <div className="pt-12 border-t border-[#444748]/30">
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-3 border-b border-[#444748]/20 gap-4">
-              <div>
-                <span className="font-mono text-[10px] text-[#8e9192] tracking-widest uppercase block mb-1">
-                  OFFICIAL ASSETS // BRAND MATRIX
-                </span>
-                <h2 className="font-display text-2xl md:text-3xl text-white uppercase tracking-tight font-bold">
-                  Vector Monogram & Identity Specification
-                </h2>
-              </div>
-              <div className="font-mono text-[10px] text-[#8e9192]">
-                STATUS: MASTER ASSET // 0PX RADIUS // 21:1 CONTRAST
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              {/* Variation 1: Primary Lockup */}
-              <div className="border border-[#444748]/40 bg-[#0e0e0e] p-6 flex flex-col justify-between">
-                <div>
-                  <div className="flex justify-between items-center border-b border-[#444748]/30 pb-2 mb-6">
-                    <span className="font-mono text-[10px] text-[#8e9192] tracking-widest uppercase">
-                      [SPEC 01] PRIMARY LOCKUP
-                    </span>
-                    <span className="font-mono text-[9px] text-white border border-[#444748]/40 px-1.5 py-0.5">
-                      HERO KEYSTONE
-                    </span>
-                  </div>
-                  <div className="py-10 flex items-center justify-center border border-[#444748]/20 bg-[#050505] my-2">
-                    <Logo variant="primary" iconSize="lg" animated={true} />
-                  </div>
-                </div>
-                <div className="pt-4 border-t border-[#444748]/20 text-[11px] font-mono text-[#8e9192] space-y-1">
-                  <div className="text-white font-bold uppercase tracking-wider">USAGE DIRECTIVES</div>
-                  <p className="leading-relaxed">
-                    Main splash headers, title cards, official decks. Strict 0.25em tracking.
-                  </p>
-                </div>
-              </div>
-
-              {/* Variation 2: Minimal HUD Badge */}
-              <div className="border border-[#444748]/40 bg-[#0e0e0e] p-6 flex flex-col justify-between">
-                <div>
-                  <div className="flex justify-between items-center border-b border-[#444748]/30 pb-2 mb-6">
-                    <span className="font-mono text-[10px] text-[#8e9192] tracking-widest uppercase">
-                      [SPEC 02] MINIMAL HUD BADGE
-                    </span>
-                    <span className="font-mono text-[9px] text-white border border-[#444748]/40 px-1.5 py-0.5">
-                      COMPACT NAV
-                    </span>
-                  </div>
-                  <div className="py-10 flex items-center justify-center border border-[#444748]/20 bg-[#050505] my-2">
-                    <Logo variant="badge" iconSize="md" animated={true} />
-                  </div>
-                </div>
-                <div className="pt-4 border-t border-[#444748]/20 text-[11px] font-mono text-[#8e9192] space-y-1">
-                  <div className="text-white font-bold uppercase tracking-wider">USAGE DIRECTIVES</div>
-                  <p className="leading-relaxed">
-                    Tactical HUD telemetry bars, mobile navigation, diegetic status widgets.
-                  </p>
-                </div>
-              </div>
-
-              {/* Variation 3: Inverted Press Stamp */}
-              <div className="border border-[#444748]/40 bg-[#0e0e0e] p-6 flex flex-col justify-between">
-                <div>
-                  <div className="flex justify-between items-center border-b border-[#444748]/30 pb-2 mb-6">
-                    <span className="font-mono text-[10px] text-[#8e9192] tracking-widest uppercase">
-                      [SPEC 03] INVERTED STAMP
-                    </span>
-                    <span className="font-mono text-[9px] text-black bg-white px-1.5 py-0.5 font-bold">
-                      PRESS WATERMARK
-                    </span>
-                  </div>
-                  <div className="my-2">
-                    <Logo variant="inverted" iconSize="lg" animated={false} />
-                  </div>
-                </div>
-                <div className="pt-4 border-t border-[#444748]/20 text-[11px] font-mono text-[#8e9192] space-y-1">
-                  <div className="text-white font-bold uppercase tracking-wider">USAGE DIRECTIVES</div>
-                  <p className="leading-relaxed">
-                    Physical exhibition print, official media press kits, document watermarks.
-                  </p>
-                </div>
               </div>
             </div>
           </div>

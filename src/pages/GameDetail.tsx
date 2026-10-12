@@ -294,15 +294,7 @@ export default function GameDetail() {
                 </div>
               )}
 
-              {/* Critical Quote Banner */}
-              <div className="border-l-2 border-[#0A0A0A] pl-8 py-6 my-8 bg-[#FAFAFA]/70">
-                <blockquote className="font-display text-2xl md:text-3xl text-[#0A0A0A] font-light leading-snug tracking-tight mb-4">
-                  “Gamicon pushes visual fidelity and combat precision to an unprecedented indie standard.”
-                </blockquote>
-                <cite className="font-display text-[10px] text-[#737373] uppercase tracking-widest block not-italic">
-                  — Edge Magazine (Dispatch // Issue 391)
-                </cite>
-              </div>
+
             </div>
           </div>
         </div>

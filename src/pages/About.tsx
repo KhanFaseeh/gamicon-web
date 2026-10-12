@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { MonogramIcon } from '../components/Logo'
@@ -207,7 +206,7 @@ export default function About() {
                 {/* Metadata Strip below image */}
                 <div className="mt-3 pt-3 border-t border-[#444748]/20 flex flex-wrap justify-between items-center font-display text-[10px] text-[#8e9192]">
                   <span>FACILITY: PESHAWAR LAB 01</span>
-                  <span>CREW: 28 VETERAN ENGINEERS</span>
+                  <span>CREW: 5 CORE ENGINEERS & ARTISTS</span>
                   <span>RIG: DUAL-SIMULATION SOUNDSTAGE</span>
                 </div>
               </div>
@@ -315,31 +314,6 @@ export default function About() {
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* =========================================================================
-               SECTION 5: PRESS & EDGE MAGAZINE DISPATCH
-               ========================================================================= */}
-        <section className="w-full bg-[#0e0e0e] px-6 md:px-16 py-24 border-t border-b border-[#444748]/30 text-center">
-          <div className="max-w-4xl mx-auto space-y-6">
-            <span className="font-display text-[10px] text-[#8e9192] tracking-widest uppercase">
-              CRITICAL RECEPTION // PRESS DISPATCH
-            </span>
-            <blockquote className="text-2xl md:text-4xl font-display text-white uppercase leading-tight tracking-tight font-light">
-              "Gamicon pushes visual fidelity and combat precision to an unprecedented indie standard. Their titles showcase rare auteur audacity."
-            </blockquote>
-            <div className="font-display text-xs text-[#c7c6c6] tracking-widest uppercase">
-              — EDGE MAGAZINE (ISSUE 391)
-            </div>
-            <div className="pt-6">
-              <Link
-                to="/press"
-                className="inline-block border border-white px-8 py-3 font-display text-xs uppercase tracking-widest text-white hover:bg-white hover:text-black transition-colors"
-              >
-                Access Press Center & Contact
-              </Link>
             </div>
           </div>
         </section>
