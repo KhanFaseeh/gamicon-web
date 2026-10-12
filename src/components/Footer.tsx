@@ -8,10 +8,10 @@ export default function Footer() {
         {/* Studio Monogram & Copyright */}
         <div className="flex flex-col gap-2">
           <Link to="/" className="group inline-block">
-            <Logo variant="primary" iconSize="sm" animated={true} />
+            <Logo variant="navbar" animated={true} />
           </Link>
           <span className="text-[#8e9192] font-mono text-[9px] tracking-wider uppercase">
-            © 2026 GAMICON STUDIOS LLC // ALL MARKS & DIEGETIC SPECIFICATIONS REGISTERED.
+            © 2026 ANAMORPHIC STUDIOS LLC // ALL OPTICAL PERSPECTIVE SPECIFICATIONS REGISTERED.
           </span>
         </div>
 

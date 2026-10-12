@@ -10,8 +10,8 @@ export default function Header() {
     <header className="fixed top-0 left-0 w-full z-50 bg-[#0e0e0e]/90 backdrop-blur-md border-b border-[#444748]/30 transition-colors duration-150">
       <div className="flex justify-between items-center w-full px-6 md:px-16 h-20">
         {/* Studio Monogram / Brand Logo */}
-        <Link to="/" className="flex items-center gap-3 group">
-          <Logo variant="primary" iconSize="md" animated={true} />
+        <Link to="/" className="flex items-center group">
+          <Logo variant="navbar" animated={true} />
         </Link>
 
         {/* Universal Desktop Nav Links: Games, About, Contact */}

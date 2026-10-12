@@ -13,8 +13,8 @@ import { MonogramIcon } from '../components/Logo'
 const DEFAULT_STUDIO: StudioInfo = {
   id: 1,
   manifesto:
-    'Gamicon is an independent studio forging mechanics-driven, narrative-rich titles built without creative compromise. We reject automated formulas and safety-first design paradigms. We architect unforgiving worlds for players who demand mastery, physics, narrative literacy, and visceral design.',
-  contact_email: 'contact@gamicon.studio',
+    'ANAMORPHIC is an independent studio forging mechanics-driven, narrative-rich titles built without creative compromise. We reject automated formulas and safety-first design paradigms. We architect unforgiving worlds for players who demand mastery, physics, narrative literacy, and visceral design.',
+  contact_email: 'contact@anamorphic.studio',
 }
 
 function extractYouTubeId(urlOrId: string): string {
@@ -410,7 +410,7 @@ export default function Admin() {
               <MonogramIcon className="w-7 h-7" animated={true} />
               <div>
                 <span className="font-display tracking-[0.2em] text-white uppercase font-bold text-sm leading-none block group-hover:text-neutral-300 transition-colors">
-                  GAMICON
+                  ANAMORPHIC
                 </span>
                 <span className="font-mono text-[8px] uppercase tracking-widest text-[#8e9192] block mt-1">
                   CMS // PRODUCT MANAGER
@@ -982,7 +982,7 @@ export default function Admin() {
                   required
                   value={studioEmail}
                   onChange={(e) => setStudioEmail(e.target.value)}
-                  placeholder="contact@gamicon.studio"
+                  placeholder="contact@anamorphic.studio"
                   className="w-full bg-[#131313] border border-[#444748]/40 text-white text-xs px-3 py-2 font-mono"
                 />
               </div>
@@ -996,7 +996,7 @@ export default function Admin() {
                   required
                   value={studioManifesto}
                   onChange={(e) => setStudioManifesto(e.target.value)}
-                  placeholder="Gamicon is an independent studio forging mechanics-driven, narrative-rich titles built without creative compromise..."
+                  placeholder="ANAMORPHIC is an independent studio forging mechanics-driven, narrative-rich titles built without creative compromise..."
                   className="w-full bg-[#131313] border border-[#444748]/40 text-white text-xs p-3 font-mono leading-relaxed"
                 />
               </div>

@@ -6,8 +6,8 @@ import { supabase, type StudioInfo } from '../lib/supabaseClient'
 const DEFAULT_STUDIO_INFO: StudioInfo = {
   id: 1,
   manifesto:
-    'Gamicon is an independent studio forging mechanics-driven, narrative-rich titles built without creative compromise. We reject automated formulas and safety-first design paradigms.',
-  contact_email: 'contact@gamicon.studio',
+    'ANAMORPHIC is an independent studio forging mechanics-driven, narrative-rich titles built without creative compromise. We reject automated formulas and safety-first design paradigms.',
+  contact_email: 'contact@anamorphic.studio',
 }
 
 interface Dispatch {
@@ -41,7 +41,7 @@ const DISPATCHES: Dispatch[] = [
     code: 'STUDIO DISPATCH',
     tag: 'MANIFESTO',
     title: 'FOUNDER MANIFESTO: ON BLENDER MODELING, UNITY ARCHITECTURE & AUTEUR DESIGN',
-    desc: 'CEO Mian Faseeh Ur Rehman and partner Muhammad Tayyab outline Gamicon\'s development philosophy, utilizing Blender for tactile 3D assets, Unity Engine for high-speed deterministic mechanics, and ElevenLabs for atmospheric vocal narration.',
+    desc: 'CEO Mian Faseeh Ur Rehman and partner Muhammad Tayyab outline ANAMORPHIC\'s development philosophy, utilizing Blender for tactile 3D assets, Unity Engine for high-speed deterministic mechanics, and ElevenLabs for atmospheric vocal narration.',
     dept: 'EXECUTIVE DIRECTION // M. F. UR REHMAN & M. TAYYAB',
   },
 ]
@@ -97,7 +97,7 @@ export default function Press() {
                 STUDIO DISPATCHES & CONTACT DIRECTORY
               </h1>
               <p className="mt-4 text-[#c7c6c6] text-base md:text-lg max-w-2xl font-light leading-relaxed">
-                Official studio communications, development milestones, and direct correspondence channels for Gamicon.
+                Official studio communications, development milestones, and direct correspondence channels for ANAMORPHIC.
               </p>
             </div>
             <div className="lg:col-span-4 flex flex-col items-start lg:items-end gap-1 font-display">
@@ -133,7 +133,7 @@ export default function Press() {
               <div className="w-full aspect-[21/9] overflow-hidden bg-[#201f1f]">
                 <img
                   className="w-full h-full object-cover filter grayscale contrast-125 group-hover:grayscale-0 transition-all duration-300"
-                  alt="Gamicon Peshawar Dev Floor"
+                  alt="ANAMORPHIC Peshawar Dev Floor"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2cOOxbCilaHe97REcOuuPeAOtdQvXV9AmGHYCoRw_TFUfvlN2Ci2DU2qgd4jhGk5HYWNXtV8y6uGYgBecfX69OhSMJzA9nJQjAAan_oJgwbzNwtP-ksKksZfq2wG4CoDWoWLsrkQ-iqq2kmiCm_HbMvqsjF68p-zbZ2xhnlD28ULzCh5xsaWbb5Xdz_OXVhS1z_5Bz-1RaR_LmmxvOkuU5JqTuqKf-TI6It1jMrTTPxGlhC4kFk2J"
                 />
               </div>

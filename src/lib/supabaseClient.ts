@@ -24,7 +24,8 @@ export interface StudioInfo {
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-const IMAGE_DELIMITER = '\n<!--GAMICON_IMAGE:'
+const ANAMORPHIC_DELIMITER = '\n<!--ANAMORPHIC_IMAGE:'
+const LEGACY_DELIMITER = '\n<!--GAMICON_IMAGE:'
 const IMAGE_DELIMITER_END = '-->'
 
 /**
@@ -63,8 +64,15 @@ export function parseGameRecord(raw: any): Game {
   let imageUrl = raw.image_url || ''
   let description = raw.description || ''
 
-  if (description.includes(IMAGE_DELIMITER)) {
-    const parts = description.split(IMAGE_DELIMITER)
+  let activeDelimiter = ''
+  if (description.includes(ANAMORPHIC_DELIMITER)) {
+    activeDelimiter = ANAMORPHIC_DELIMITER
+  } else if (description.includes(LEGACY_DELIMITER)) {
+    activeDelimiter = LEGACY_DELIMITER
+  }
+
+  if (activeDelimiter) {
+    const parts = description.split(activeDelimiter)
     description = parts[0].trim()
     const metaPart = parts[1] || ''
     const extractedImg = metaPart.split(IMAGE_DELIMITER_END)[0]
@@ -98,7 +106,7 @@ export function serializeGameRecord(game: {
 
   // Always embed cleanImage into the description as metadata tag
   const enrichedDescription = cleanImage
-    ? `${cleanDesc}${IMAGE_DELIMITER}${cleanImage}${IMAGE_DELIMITER_END}`
+    ? `${cleanDesc}${ANAMORPHIC_DELIMITER}${cleanImage}${IMAGE_DELIMITER_END}`
     : cleanDesc
 
   const payload: Record<string, any> = {

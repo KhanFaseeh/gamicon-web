@@ -132,7 +132,7 @@ export default function GameDetail() {
               </span>
             </div>
             <span className="font-display text-[10px] text-neutral-400">
-              PLATFORM // GAMICON PRODUCTION ARCHIVE
+              PLATFORM // ANAMORPHIC PRODUCTION ARCHIVE
             </span>
           </div>
           <div className="hidden sm:flex items-center space-x-4 text-right">

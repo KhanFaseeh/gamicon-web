@@ -7,9 +7,9 @@ import { supabase, type StudioInfo } from '../lib/supabaseClient'
 const DEFAULT_STUDIO_INFO: StudioInfo = {
   id: 1,
   manifesto:
-    'Gamicon is an independent studio forging mechanics-driven, narrative-rich titles built without creative compromise. We reject automated formulas and safety-first design paradigms. We architect unforgiving worlds for players who demand mastery, physics, narrative literacy, and visceral design.',
-  contact_email: 'contact@gamicon.studio',
-  press_kit_url: 'https://gamicon.studio/press-kit.zip',
+    'ANAMORPHIC is an independent studio forging mechanics-driven, narrative-rich titles built without creative compromise. We reject automated formulas and safety-first design paradigms. We architect unforgiving worlds for players who demand mastery, physics, narrative literacy, and visceral design.',
+  contact_email: 'contact@anamorphic.studio',
+  press_kit_url: 'https://anamorphic.studio/press-kit.zip',
 }
 
 export default function About() {
@@ -131,7 +131,7 @@ export default function About() {
                 FLAGSHIP CONCEPT // ECHOES OF DESOLATION
               </div>
               <div className="font-display text-2xl md:text-3xl text-white tracking-widest uppercase">
-                THE EMBODIED SPIRIT OF GAMICON
+                THE EMBODIED SPIRIT OF ANAMORPHIC
               </div>
               <p className="text-xs md:text-sm text-[#c4c7c8] max-w-lg font-light leading-relaxed">
                 Atmospheric psychological survival horror modeled in Blender, engineered in Unity Engine, and voiced with ElevenLabs audio.
@@ -161,7 +161,7 @@ export default function About() {
               </h2>
               <div className="space-y-4 text-sm md:text-base text-[#c4c7c8] leading-relaxed font-light">
                 <p>
-                  "Games are not passive entertainment; they are interactive architecture. When we founded Gamicon, our goal was singular: create a sanctuary where high-fidelity Blender 3D modeling, Unity Engine technical precision, and immersive ElevenLabs audio storytelling exist as one."
+                  "Games are not passive entertainment; they are interactive architecture. When we founded ANAMORPHIC, our goal was singular: create a sanctuary where high-fidelity Blender 3D modeling, Unity Engine technical precision, and immersive ElevenLabs audio storytelling exist as one."
                 </p>
                 <p>
                   "We do not design games to be consumed in haste; we build worlds to be inhabited, analyzed, and mastered. Every model sculpted in Blender, every frame simulated in Unity, and every voice engineered with ElevenLabs is crafted with uncompromising creative intent."

@@ -120,7 +120,7 @@ export default function Home() {
               STUDIO PHILOSOPHY
             </span>
             <p className="font-display text-xl md:text-2xl text-white font-normal leading-relaxed">
-              "Gamicon is an independent studio forging mechanics-driven, narrative-rich titles built without creative compromise. We architect unforgiving worlds for players who demand mastery."
+              "ANAMORPHIC is an independent studio forging mechanics-driven, narrative-rich titles built without creative compromise. We architect unforgiving worlds for players who demand mastery."
             </p>
           </div>
           <div className="flex flex-col gap-1 text-left md:text-right border-l md:border-l-0 md:border-r border-[#444748]/40 pl-4 md:pl-0 md:pr-4">
@@ -269,7 +269,7 @@ export default function Home() {
                         )}
                         <div className="flex justify-between text-[#8e9192]">
                           <span>STUDIO ARCHIVE:</span>
-                          <span className="text-white uppercase">GAMICON AUTEUR LAB</span>
+                          <span className="text-white uppercase">ANAMORPHIC AUTEUR LAB</span>
                         </div>
                       </div>
 
@@ -302,7 +302,7 @@ export default function Home() {
               ARCHITECTS OF VISCERAL INTERACTION
             </h2>
             <p className="mt-4 text-base md:text-lg text-[#c4c7c8] font-light">
-              We reject automated formulas and safety-first design paradigms. Gamicon exists to create art with sharp edges.
+              We reject automated formulas and safety-first design paradigms. ANAMORPHIC exists to create art with sharp edges.
             </p>
           </div>
 
@@ -364,7 +364,7 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center border border-[#444748]/30 bg-[#131313]/30">
             <div className="lg:col-span-7 h-full">
               <img
-                alt="Gamicon Peshawar Studio Lab Workstations"
+                alt="ANAMORPHIC Peshawar Studio Lab Workstations"
                 className="w-full h-full object-cover min-h-[360px] filter grayscale contrast-125"
                 src="https://lh3.googleusercontent.com/aida/AEtjO1X8gVDzQKeN1xnNu8yH5hqMwFVSf2tgib-RrN4qRR4hYfMl1W1K84GlSKWbF0bCtfapCBy75RgVw9rATVOsigq89QNtmXDugvbaXFOC9wAq6I0iCDdcZcFx4jVjZhwbsp3B7bvutYI3lt0ZGkoF19qWlev-tk3rDCALHDrL8Et0daLsjCKEjSy9vr0fudlrSAaMt_g1GO8wLvg6Ua1DGh0Ss2NmAle4pFz2_R2WwvLr2qcyJh0haDvSHZ0"
               />
