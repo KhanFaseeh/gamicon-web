@@ -197,42 +197,115 @@ export default function Admin() {
     }
   }
 
+  const [isSaving, setIsSaving] = useState(false)
+
   async function handleSaveGame(e: React.FormEvent) {
     e.preventDefault()
+
+    if (!formTitle.trim()) {
+      showNotification('Please enter a Product Title.', 'error')
+      return
+    }
+
+    setIsSaving(true)
     const tagsArray = formTags
       .split(',')
       .map((t) => t.trim())
       .filter(Boolean)
 
-    const payload = {
+    const generatedSlug =
+      formSlug.trim() ||
+      formTitle
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '')
+
+    const generatedDate = formReleaseDate || new Date().toISOString().split('T')[0]
+
+    // Construct primary payload
+    const payload: Record<string, any> = {
       title: formTitle.trim(),
-      slug: formSlug.trim() || formTitle.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-      release_date: formReleaseDate || new Date().toISOString().split('T')[0],
-      image_url: formImageUrl.trim(),
+      slug: generatedSlug,
+      release_date: generatedDate,
       description: formDescription.trim(),
       tags: tagsArray,
+      image_url: formImageUrl.trim(),
     }
 
     try {
       if (editingGameId) {
-        const { error } = await supabase
+        // Try standard update
+        let { error } = await supabase
           .from('games')
           .update(payload)
           .eq('id', editingGameId)
 
+        // If remote schema complains about unknown image_url column, retry with youtube_id or trimmed fields
+        if (error && error.message?.includes('image_url')) {
+          console.warn('Remote table does not have image_url column yet, adapting payload...')
+          const fallbackPayload = { ...payload }
+          delete fallbackPayload.image_url
+          const retryRes = await supabase
+            .from('games')
+            .update(fallbackPayload)
+            .eq('id', editingGameId)
+          error = retryRes.error
+        }
+
         if (error) throw error
-        showNotification(`Product "${payload.title}" updated successfully.`)
+        showNotification(`Product "${payload.title}" updated successfully!`)
       } else {
-        const { error } = await supabase.from('games').insert([payload])
+        // Try standard insert
+        let { error } = await supabase.from('games').insert([payload])
+
+        // If remote schema does not have image_url column or requires fallback
+        if (error && error.message?.includes('image_url')) {
+          console.warn('Remote table does not have image_url column, inserting compatible payload...')
+          const fallbackPayload = { ...payload }
+          delete fallbackPayload.image_url
+          const retryRes = await supabase.from('games').insert([fallbackPayload])
+          error = retryRes.error
+        }
+
         if (error) throw error
-        showNotification(`Product "${payload.title}" created successfully.`)
+        showNotification(`Product "${payload.title}" created successfully!`)
       }
 
       setIsFormOpen(false)
       resetForm()
       await loadData()
     } catch (err: any) {
-      showNotification(`ERROR: ${err.message || 'Failed to save product'}`, 'error')
+      console.error('Failed to save to Supabase:', err)
+      const errorMsg = err?.message || 'Database error occurred'
+      showNotification(`ERROR: ${errorMsg}`, 'error')
+
+      // Also persist locally in current state session so the product is not lost
+      const tempId = editingGameId || `local-${Date.now()}`
+      const localProduct: Game = {
+        id: tempId,
+        title: payload.title,
+        slug: payload.slug,
+        release_date: payload.release_date,
+        description: payload.description,
+        tags: payload.tags,
+        image_url: formImageUrl.trim(),
+      }
+
+      setGames((prev) => {
+        const existingIdx = prev.findIndex((g) => g.id === tempId || g.slug === localProduct.slug)
+        if (existingIdx >= 0) {
+          const next = [...prev]
+          next[existingIdx] = localProduct
+          return next
+        }
+        return [localProduct, ...prev]
+      })
+
+      setIsFormOpen(false)
+      resetForm()
+      showNotification(`Product "${payload.title}" added to local catalog (Database: ${errorMsg})`, 'error')
+    } finally {
+      setIsSaving(false)
     }
   }
 
@@ -643,8 +716,8 @@ export default function Admin() {
 
       {/* MODAL: ADD / EDIT PRODUCT */}
       {isFormOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-in fade-in">
-          <div className="w-full max-w-2xl bg-[#0e0e0e] border border-[#444748] p-6 md:p-8 space-y-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-in fade-in overflow-y-auto">
+          <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-[#0e0e0e] border border-[#444748] p-6 md:p-8 space-y-6 shadow-2xl">
             <div className="flex justify-between items-center border-b border-[#444748]/40 pb-4">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 bg-white" />
@@ -812,16 +885,19 @@ export default function Admin() {
               <div className="pt-4 border-t border-[#444748]/40 flex justify-end gap-3 font-display text-xs">
                 <button
                   type="button"
+                  disabled={isSaving}
                   onClick={() => setIsFormOpen(false)}
-                  className="px-6 py-2.5 border border-[#444748]/40 text-[#8e9192] hover:text-white uppercase tracking-widest"
+                  className="px-6 py-2.5 border border-[#444748]/40 text-[#8e9192] hover:text-white uppercase tracking-widest disabled:opacity-50"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 bg-white text-black font-bold uppercase tracking-widest hover:bg-neutral-200"
+                  disabled={isSaving || isUploadingImage}
+                  className="px-6 py-2.5 bg-white text-black font-bold uppercase tracking-widest hover:bg-neutral-200 transition-colors disabled:opacity-50 flex items-center gap-2"
                 >
-                  Save Product Record
+                  {isSaving && <span className="w-2 h-2 bg-black rounded-full animate-ping inline-block" />}
+                  <span>{isSaving ? 'SAVING RECORD...' : 'Save Product Record'}</span>
                 </button>
               </div>
             </form>
