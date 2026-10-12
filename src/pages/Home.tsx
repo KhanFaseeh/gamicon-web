@@ -3,41 +3,11 @@ import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { MonogramIcon } from '../components/Logo'
-import ScrambleText from '../components/ScrambleText'
-import LiveTimecode from '../components/LiveTimecode'
 import { supabase, parseGameRecord, type Game } from '../lib/supabaseClient'
-import { useReveal } from '../hooks/useReveal'
 
 export default function Home() {
   const [games, setGames] = useState<Game[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [scrollY, setScrollY] = useState(0)
-
-  // Animated stat counter for team members (counts 0 -> 5 on reveal)
-  const [teamCount, setTeamCount] = useState(0)
-  const { ref: philosophyRef, isVisible: philosophyVisible } = useReveal<HTMLElement>({ threshold: 0.3 })
-
-  useEffect(() => {
-    if (philosophyVisible) {
-      let start = 0
-      const target = 5
-      const timer = window.setInterval(() => {
-        start += 1
-        setTeamCount(start)
-        if (start >= target) clearInterval(timer)
-      }, 90)
-      return () => clearInterval(timer)
-    }
-  }, [philosophyVisible])
-
-  // Parallax scroll listener for hero depth
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrollY(window.scrollY)
-    }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
 
   useEffect(() => {
     async function fetchGames() {
@@ -69,29 +39,19 @@ export default function Home() {
     <div className="bg-[#0e0e0e] text-[#e5e2e1] min-h-screen font-sans selection:bg-white selection:text-black">
       <Header />
 
-      {/* HERO SECTION: FULL BLEED CINEMATIC IMMERSION WITH SUBTLE PARALLAX DEPTH */}
+      {/* HERO SECTION: FULL BLEED CINEMATIC IMMERSION */}
       <section className="relative min-h-screen w-full flex flex-col justify-between pt-20 overflow-hidden bg-[#0e0e0e]">
-        {/* Parallax Geometric Reticle Layer */}
-        <div
-          className="absolute inset-0 z-0 pointer-events-none opacity-20 flex items-center justify-center transition-transform duration-100 ease-out"
-          style={{ transform: `translateY(${scrollY * 0.15}px)` }}
-        >
-          <div className="w-[600px] h-[600px] border border-[#333333] relative">
-            <div className="absolute inset-x-0 top-1/2 h-[1px] bg-[#333333]" />
-            <div className="absolute inset-y-0 left-1/2 w-[1px] bg-[#333333]" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 border border-[#444444]" />
-          </div>
-        </div>
+        {/* Clean Blank Backdrop */}
+        <div className="absolute inset-0 z-0 bg-[#0e0e0e]" />
 
         {/* Telemetry Overhead Bar */}
-        <div className="relative z-10 w-full px-6 md:px-16 pt-8 flex justify-between items-center text-[#8e9192] font-display text-[11px] tracking-widest border-b border-[#444748]/20 pb-4">
+        <div className="relative z-10 w-full px-6 md:px-16 pt-8 flex justify-between items-center text-[#8e9192] font-display text-[11px] tracking-widest">
           <div className="flex items-center gap-2">
-            <span className="inline-block w-1.5 h-1.5 bg-white telemetry-indicator" />
-            <ScrambleText text="PESHAWAR LAB // PAKISTAN" scrambleOnHover={true} />
+            <span className="inline-block w-1.5 h-1.5 bg-white" />
+            <span>PESHAWAR LAB // PAKISTAN</span>
           </div>
-          <div className="hidden sm:flex items-center gap-4">
-            <LiveTimecode prefix="SYS_TIME:" />
-            <span>ARCHIVE REF: ANMR-AUTEUR-00</span>
+          <div className="hidden sm:block">
+            <span>ARCHIVE REF: GMCN-AUTEUR-00</span>
           </div>
         </div>
 
@@ -101,11 +61,9 @@ export default function Home() {
             <MonogramIcon className="w-16 h-16 md:w-20 md:h-20" animated={true} />
           </div>
 
-          <div className="overflow-hidden">
-            <h1 className="font-display text-4xl sm:text-6xl md:text-8xl uppercase text-white tracking-tight max-w-5xl leading-none animate-reveal-up">
-              Crafting Uncompromising Indie Experiences
-            </h1>
-          </div>
+          <h1 className="font-display text-4xl sm:text-6xl md:text-8xl uppercase text-white tracking-tight max-w-5xl leading-none">
+            Crafting Uncompromising Indie Experiences
+          </h1>
 
           <p className="mt-8 text-base md:text-xl text-[#c4c7c8] max-w-2xl font-light leading-relaxed">
             We architect unforgiving worlds for players who demand mastery. High visual fidelity, physics, and visceral narrative design.
@@ -114,23 +72,23 @@ export default function Home() {
           <div className="mt-12 flex flex-col sm:flex-row gap-4 items-center justify-center">
             <a
               href="#games"
-              className="btn-mechanical px-8 py-3 font-display text-xs tracking-widest uppercase"
+              className="border border-white px-8 py-3 font-display text-xs tracking-widest uppercase text-white hover:bg-white hover:text-black transition-all duration-150 ease-linear"
             >
-              <ScrambleText text="Explore Products" scrambleOnHover={true} />
+              Explore Products
             </a>
             {flagshipGame ? (
               <Link
                 to={`/game/${flagshipGame.slug}`}
-                className="btn-mechanical-solid px-8 py-3 font-display text-xs tracking-widest uppercase font-bold"
+                className="border border-[#444748]/60 px-8 py-3 font-display text-xs tracking-widest uppercase text-[#c7c6c6] hover:text-white hover:border-white transition-all duration-150 ease-linear"
               >
-                <ScrambleText text="View Flagship Dossier" scrambleOnHover={true} />
+                View Flagship Dossier
               </Link>
             ) : (
               <Link
                 to="/admin"
-                className="btn-mechanical-solid px-8 py-3 font-display text-xs tracking-widest uppercase font-bold"
+                className="border border-[#444748]/60 px-8 py-3 font-display text-xs tracking-widest uppercase text-[#c7c6c6] hover:text-white hover:border-white transition-all duration-150 ease-linear"
               >
-                <ScrambleText text="Access CMS Panel" scrambleOnHover={true} />
+                Access CMS Panel
               </Link>
             )}
           </div>
@@ -154,24 +112,19 @@ export default function Home() {
         </div>
       </section>
 
-      {/* STATEMENT INTERLUDE WITH ANIMATED STAT COUNTER */}
-      <section
-        ref={philosophyRef}
-        className="border-y border-[#444748]/20 bg-[#131313] py-16 px-6 md:px-16 relative overflow-hidden"
-      >
+      {/* STATEMENT INTERLUDE */}
+      <section className="border-y border-[#444748]/20 bg-[#131313] py-16 px-6 md:px-16">
         <div className="max-w-5xl mx-auto flex flex-col md:flex-row gap-8 justify-between items-start md:items-center">
           <div className="space-y-2 max-w-2xl">
             <span className="font-display text-[10px] uppercase tracking-widest text-[#8e9192]">
-              <ScrambleText text="STUDIO PHILOSOPHY" scrambleOnHover={true} />
+              STUDIO PHILOSOPHY
             </span>
             <p className="font-display text-xl md:text-2xl text-white font-normal leading-relaxed">
               "ANAMORPHIC is an independent studio forging mechanics-driven, narrative-rich titles built without creative compromise. We architect unforgiving worlds for players who demand mastery."
             </p>
           </div>
-          <div className="flex flex-col gap-1 text-left md:text-right border-l md:border-l-0 md:border-r border-[#444748]/40 pl-4 md:pl-0 md:pr-4 min-w-[140px]">
-            <span className="font-display text-5xl text-white font-light tabular-nums">
-              {teamCount}
-            </span>
+          <div className="flex flex-col gap-1 text-left md:text-right border-l md:border-l-0 md:border-r border-[#444748]/40 pl-4 md:pl-0 md:pr-4">
+            <span className="font-display text-5xl text-white font-light">5</span>
             <span className="font-display text-[10px] text-[#8e9192] tracking-widest uppercase">
               Engineers & Artists
             </span>
@@ -185,8 +138,8 @@ export default function Home() {
           <section className="py-24 px-6 md:px-16 border-b border-[#444748]/20 bg-[#0e0e0e] text-center">
             <div className="max-w-xl mx-auto space-y-4">
               <span className="inline-block w-2 h-2 bg-white animate-ping" />
-              <p className="font-display text-xs tracking-widest text-[#8e9192] uppercase">
-                CALIBRATING TRANSMISSION CHANNELS...
+              <p className="font-display text-xs text-[#8e9192] tracking-widest uppercase">
+                QUERYING ARCHIVE TELEMETRY...
               </p>
             </div>
           </section>
@@ -212,9 +165,9 @@ export default function Home() {
               <div className="pt-4">
                 <Link
                   to="/admin"
-                  className="btn-mechanical-solid px-8 py-3 font-display text-xs uppercase tracking-widest font-bold"
+                  className="inline-block border border-white bg-white text-black px-8 py-3 font-display text-xs uppercase tracking-widest hover:bg-neutral-200 transition-colors font-bold"
                 >
-                  <ScrambleText text="OPEN CMS ADMIN PANEL →" scrambleOnHover={true} />
+                  OPEN CMS ADMIN PANEL →
                 </Link>
               </div>
             </div>
@@ -232,12 +185,12 @@ export default function Home() {
                 }`}
               >
                 <div className="max-w-7xl mx-auto">
-                  {/* Section Tag & Index with Self-Drawing 1px Line */}
-                  <div className="flex justify-between items-baseline mb-4 border-b border-[#444748]/20 pb-2 relative">
+                  {/* Section Tag & Index */}
+                  <div className="flex justify-between items-baseline mb-4 border-b border-[#444748]/20 pb-2">
                     <div className="flex items-center gap-2">
                       <span className="w-2 h-2 bg-white" />
                       <span className="font-display text-xs uppercase tracking-widest text-white">
-                        <ScrambleText text={`PRODUCT ARCHIVE // ${archiveNum}`} scrambleOnHover={true} />
+                        PRODUCT ARCHIVE // {archiveNum}
                       </span>
                     </div>
                     <span className="font-display text-xs text-[#8e9192] uppercase tracking-widest">
@@ -247,25 +200,16 @@ export default function Home() {
 
                   {/* Showcase Layout Grid */}
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-                    {/* Visual Media Frame with 21:9 Viewfinder Brackets & Shutter Curtain Reveal */}
+                    {/* Visual Media Frame */}
                     <div className={`lg:col-span-7 ${isEven ? 'order-2 lg:order-1' : ''}`}>
                       <Link
                         to={`/game/${game.slug}`}
-                        className="block relative w-full aspect-[21/9] md:aspect-[16/9] overflow-hidden border border-[#444748]/40 bg-[#1c1b1b] group viewfinder-card animate-shutter-reveal"
+                        className="block relative w-full aspect-[21/9] md:aspect-[16/9] overflow-hidden border border-[#444748]/40 bg-[#1c1b1b] group"
                       >
-                        {/* 4 Viewfinder L-Corner Brackets (8x8px) that snap outward on hover */}
-                        <div className="viewfinder-corner-tl" />
-                        <div className="viewfinder-corner-tr" />
-                        <div className="viewfinder-corner-bl" />
-                        <div className="viewfinder-corner-br" />
-
-                        {/* Translucent Horizontal Scanline Sweep Overlay */}
-                        <div className="media-scan-sweep" />
-
                         {game.image_url ? (
                           <img
                             alt={`${game.title} visual`}
-                            className="w-full h-full object-cover object-center filter grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                            className="w-full h-full object-cover object-center filter grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out"
                             src={game.image_url}
                           />
                         ) : (
@@ -277,9 +221,9 @@ export default function Home() {
                           </div>
                         )}
 
-                        <div className="absolute top-4 left-4 pointer-events-none z-10">
+                        <div className="absolute top-4 left-4 pointer-events-none">
                           <div className="inline-flex items-center gap-2 bg-[#0e0e0e]/90 backdrop-blur-sm border border-[#444748]/40 px-3 py-1">
-                            <span className="inline-block w-2 h-2 bg-white telemetry-indicator" />
+                            <span className="inline-block w-2 h-2 bg-white animate-pulse" />
                             <span className="font-display text-[10px] text-white uppercase tracking-widest">
                               ACTIVE TRANSMISSION
                             </span>
@@ -287,7 +231,7 @@ export default function Home() {
                         </div>
 
                         {game.release_date && (
-                          <div className="absolute bottom-4 left-4 pointer-events-none z-10">
+                          <div className="absolute bottom-4 left-4 pointer-events-none">
                             <span className="font-display text-[10px] text-[#8e9192] bg-[#0e0e0e]/90 px-3 py-1 border border-[#444748]/40 uppercase tracking-widest">
                               RELEASE: {game.release_date}
                             </span>
@@ -304,12 +248,13 @@ export default function Home() {
                       <h2 className="font-display text-3xl md:text-5xl uppercase text-white tracking-tight">
                         {game.title}
                       </h2>
-                      <p className="text-sm md:text-base text-[#c4c7c8] font-light leading-relaxed line-clamp-4">
+                      <div className="w-12 h-0.5 bg-white" />
+                      <p className="text-base md:text-lg text-[#c4c7c8] font-light leading-relaxed">
                         {game.description}
                       </p>
 
-                      {/* Metadata spec pills */}
-                      <div className="border-t border-b border-[#444748]/20 py-4 my-4 space-y-2 font-display text-xs">
+                      {/* Technical Specs List */}
+                      <div className="pt-4 space-y-2 border-t border-[#444748]/20 font-display text-xs">
                         {game.release_date && (
                           <div className="flex justify-between text-[#8e9192]">
                             <span>RELEASE WINDOW:</span>
@@ -331,9 +276,9 @@ export default function Home() {
                       <div className="pt-4 flex gap-4">
                         <Link
                           to={`/game/${game.slug}`}
-                          className="btn-mechanical-solid px-6 py-2.5 font-display text-xs uppercase tracking-widest font-bold inline-block"
+                          className="border border-white bg-white text-black px-6 py-2.5 font-display text-xs uppercase tracking-widest hover:bg-neutral-200 transition-all duration-150 font-bold inline-block"
                         >
-                          <ScrambleText text="View Full Product Dossier →" scrambleOnHover={true} />
+                          View Full Product Dossier →
                         </Link>
                       </div>
                     </div>
@@ -351,7 +296,7 @@ export default function Home() {
           {/* Studio Header */}
           <div className="mb-16 max-w-3xl">
             <span className="font-display text-xs uppercase tracking-widest text-[#8e9192]">
-              <ScrambleText text="STUDIO ETHOS & TENETS" scrambleOnHover={true} />
+              STUDIO ETHOS & TENETS
             </span>
             <h2 className="font-display text-3xl md:text-5xl uppercase text-white mt-2 tracking-tight">
               ARCHITECTS OF VISCERAL INTERACTION
@@ -363,7 +308,7 @@ export default function Home() {
 
           {/* Tenets Bento Row */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            <div className="border border-[#444748]/30 p-8 bg-[#131313]/40 flex flex-col justify-between hover:border-white/60 transition-colors duration-150 group">
+            <div className="border border-[#444748]/30 p-8 bg-[#131313]/40 flex flex-col justify-between hover:border-white/60 transition-colors duration-150">
               <div>
                 <span className="font-display text-xs uppercase tracking-widest text-white block mb-6">
                   01 / MECHANICS FIRST
@@ -380,7 +325,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="border border-[#444748]/30 p-8 bg-[#131313]/40 flex flex-col justify-between hover:border-white/60 transition-colors duration-150 group">
+            <div className="border border-[#444748]/30 p-8 bg-[#131313]/40 flex flex-col justify-between hover:border-white/60 transition-colors duration-150">
               <div>
                 <span className="font-display text-xs uppercase tracking-widest text-white block mb-6">
                   02 / NARRATIVE DEPTH
@@ -397,7 +342,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="border border-[#444748]/30 p-8 bg-[#131313]/40 flex flex-col justify-between hover:border-white/60 transition-colors duration-150 group">
+            <div className="border border-[#444748]/30 p-8 bg-[#131313]/40 flex flex-col justify-between hover:border-white/60 transition-colors duration-150">
               <div>
                 <span className="font-display text-xs uppercase tracking-widest text-white block mb-6">
                   03 / COMMUNITY DRIVEN
@@ -415,23 +360,18 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Studio Lab Workstation Feature with Viewfinder Framing */}
+          {/* Studio Lab Workstation Feature */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center border border-[#444748]/30 bg-[#131313]/30">
-            <div className="lg:col-span-7 h-full relative group overflow-hidden">
-              <div className="viewfinder-corner-tl" />
-              <div className="viewfinder-corner-tr" />
-              <div className="viewfinder-corner-bl" />
-              <div className="viewfinder-corner-br" />
-              <div className="media-scan-sweep" />
+            <div className="lg:col-span-7 h-full">
               <img
                 alt="ANAMORPHIC Peshawar Studio Lab Workstations"
-                className="w-full h-full object-cover min-h-[360px] filter grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-[1.03] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                className="w-full h-full object-cover min-h-[360px] filter grayscale contrast-125"
                 src="https://lh3.googleusercontent.com/aida/AEtjO1X8gVDzQKeN1xnNu8yH5hqMwFVSf2tgib-RrN4qRR4hYfMl1W1K84GlSKWbF0bCtfapCBy75RgVw9rATVOsigq89QNtmXDugvbaXFOC9wAq6I0iCDdcZcFx4jVjZhwbsp3B7bvutYI3lt0ZGkoF19qWlev-tk3rDCALHDrL8Et0daLsjCKEjSy9vr0fudlrSAaMt_g1GO8wLvg6Ua1DGh0Ss2NmAle4pFz2_R2WwvLr2qcyJh0haDvSHZ0"
               />
             </div>
             <div className="lg:col-span-5 p-8 space-y-4">
               <span className="font-display text-xs uppercase tracking-widest text-[#8e9192]">
-                <ScrambleText text="PHYSICAL FACILITY" scrambleOnHover={true} />
+                PHYSICAL FACILITY
               </span>
               <h3 className="font-display text-2xl uppercase text-white font-normal">
                 PESHAWAR STUDIO LAB

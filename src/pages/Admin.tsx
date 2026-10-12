@@ -85,10 +85,7 @@ function compressImageFile(file: File, maxWidth = 1280, quality = 0.82): Promise
 
 export default function Admin() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    return (
-      sessionStorage.getItem('anamorphic_admin_auth') === 'authenticated' ||
-      sessionStorage.getItem('gamicon_admin_auth') === 'authenticated'
-    )
+    return sessionStorage.getItem('gamicon_admin_auth') === 'authenticated'
   })
   const [games, setGames] = useState<Game[]>([])
   const [loading, setLoading] = useState(true)
@@ -384,7 +381,6 @@ export default function Admin() {
   }
 
   const handleSignOut = () => {
-    sessionStorage.removeItem('anamorphic_admin_auth')
     sessionStorage.removeItem('gamicon_admin_auth')
     setIsAuthenticated(false)
   }
@@ -530,13 +526,6 @@ export default function Admin() {
               </span>
               <span className="px-2 py-0.5 border border-[#444748]/40 bg-[#1c1b1b] font-mono text-xs text-[#c4c7c8]">
                 {games.length} PRODUCTS
-              </span>
-              <span className="hidden sm:inline-flex items-center gap-1.5 px-2 py-0.5 border border-emerald-500/40 bg-emerald-950/20 font-mono text-[9px] text-emerald-400">
-                <span className="w-1.5 h-1.5 bg-emerald-400 telemetry-indicator inline-block" />
-                <span>STATUS: NOMINAL</span>
-              </span>
-              <span className="hidden lg:inline-flex items-center gap-1.5 px-2 py-0.5 border border-[#444748]/40 bg-[#1c1b1b] font-mono text-[9px] text-[#8e9192]">
-                <span>STREAM: RESOLVED 4K</span>
               </span>
             </div>
 

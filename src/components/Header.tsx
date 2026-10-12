@@ -2,8 +2,6 @@ import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import Logo from './Logo'
 
-import ScrambleText from './ScrambleText'
-
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const location = useLocation()
@@ -26,7 +24,7 @@ export default function Header() {
                 : 'text-[#c7c6c6] hover:text-white'
             }`}
           >
-            <ScrambleText text="Games" scrambleOnHover={true} />
+            Games
           </Link>
           <Link
             to="/about"
@@ -36,7 +34,7 @@ export default function Header() {
                 : 'text-[#c7c6c6] hover:text-white'
             }`}
           >
-            <ScrambleText text="About" scrambleOnHover={true} />
+            About
           </Link>
           <Link
             to="/press"
@@ -46,7 +44,7 @@ export default function Header() {
                 : 'text-[#c7c6c6] hover:text-white'
             }`}
           >
-            <ScrambleText text="Contact & Intel" scrambleOnHover={true} />
+            Contact & Intel
           </Link>
         </nav>
 
@@ -54,9 +52,9 @@ export default function Header() {
         <div className="flex items-center gap-4">
           <Link
             to="/#games"
-            className="hidden sm:inline-flex btn-mechanical px-4 py-1.5 text-xs font-display uppercase tracking-widest"
+            className="hidden sm:inline-flex items-center justify-center border border-white/60 px-4 py-1.5 text-white font-display text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-150 ease-linear"
           >
-            <ScrambleText text="Our Catalog" scrambleOnHover={true} />
+            Our Catalog
           </Link>
           <button
             aria-label="Toggle Navigation"
