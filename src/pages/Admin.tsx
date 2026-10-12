@@ -846,15 +846,30 @@ export default function Admin() {
                   {/* Or enter Direct URL */}
                   <div className="space-y-1">
                     <span className="block font-display text-[9px] uppercase tracking-widest text-[#8e9192]">
-                      OR PASTE PICTURE URL / CDN LINK
+                      OR PASTE PICTURE URL / GOOGLE DRIVE LINK
                     </span>
                     <input
                       type="text"
                       value={formImageUrl}
-                      onChange={(e) => setFormImageUrl(e.target.value)}
-                      placeholder="https://... or uploaded image"
+                      onChange={(e) => {
+                        const val = e.target.value
+                        // If user pastes a Google Drive link, immediately convert to direct streamable image URL
+                        if (val.includes('drive.google.com')) {
+                          const fileMatch = val.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || val.match(/[?&]id=([a-zA-Z0-9_-]+)/)
+                          if (fileMatch && fileMatch[1]) {
+                            setFormImageUrl(`https://lh3.googleusercontent.com/d/${fileMatch[1]}`)
+                            showNotification('Google Drive link converted to direct image URL!')
+                            return
+                          }
+                        }
+                        setFormImageUrl(val)
+                      }}
+                      placeholder="https://drive.google.com/file/d/... or direct image URL"
                       className="w-full bg-[#0e0e0e] border border-[#444748]/40 text-white text-xs px-3 py-2 font-mono focus:border-white focus:outline-none"
                     />
+                    <p className="text-[9px] text-[#8e9192] font-mono">
+                      Tip: Google Drive share links ("Anyone with the link") are auto-formatted into direct images.
+                    </p>
                     {formImageUrl && (
                       <button
                         type="button"

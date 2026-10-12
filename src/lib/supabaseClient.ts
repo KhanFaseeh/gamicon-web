@@ -28,6 +28,33 @@ const IMAGE_DELIMITER = '\n<!--GAMICON_IMAGE:'
 const IMAGE_DELIMITER_END = '-->'
 
 /**
+ * Automatically converts Google Drive share/view links into direct image streaming URLs.
+ * Works with:
+ * - https://drive.google.com/file/d/FILE_ID/view?usp=sharing
+ * - https://drive.google.com/open?id=FILE_ID
+ * - https://drive.google.com/uc?id=FILE_ID
+ */
+export function normalizeImageUrl(url: string): string {
+  if (!url || typeof url !== 'string') return ''
+  const trimmed = url.trim()
+
+  if (trimmed.includes('drive.google.com')) {
+    // 1. /file/d/FILE_ID/...
+    const fileMatch = trimmed.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)
+    if (fileMatch && fileMatch[1]) {
+      return `https://lh3.googleusercontent.com/d/${fileMatch[1]}`
+    }
+    // 2. ?id=FILE_ID or &id=FILE_ID
+    const idMatch = trimmed.match(/[?&]id=([a-zA-Z0-9_-]+)/)
+    if (idMatch && idMatch[1]) {
+      return `https://lh3.googleusercontent.com/d/${idMatch[1]}`
+    }
+  }
+
+  return trimmed
+}
+
+/**
  * Parses a game record retrieved from Supabase.
  * If the record has its image embedded in description or image_url, extracts both cleanly.
  */
@@ -48,7 +75,7 @@ export function parseGameRecord(raw: any): Game {
 
   return {
     ...raw,
-    image_url: imageUrl,
+    image_url: normalizeImageUrl(imageUrl),
     description,
   }
 }
