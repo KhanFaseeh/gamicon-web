@@ -5,34 +5,24 @@ import AdminLogin from './AdminLogin'
 
 const INITIAL_SEED_GAMES: Omit<Game, 'id'>[] = [
   {
-    title: 'NEON PROTOCOL',
-    slug: 'neon-protocol',
-    release_date: '2024-11-15',
+    title: 'Echoes of Desolation',
+    slug: 'echoes-of-desolation',
+    release_date: '2025-10-31',
     image_url:
-      'https://lh3.googleusercontent.com/aida/AEtjO1W8l1YFBtH3X_E6WY4GiitT_RiPH7iW_0qgptlmrSoiJlCDizxfzPe_pKkQ74OO4aeaCBUxJ1tcaohW4f8bv2EuPO7vC2vJArRHJlcFt_9NBqdWTQSKw8LMOmJbOagJYNhEOzrPgAP3Q5OXc4lOtxJ48ySUKuXWGRauto2aDR8ERVxBO7mZ6AWbbF2-sqh81Yt7aql18eMW6NSwwxD42RDuIQSjKPGKqAvoPs5ZtxyJP54Rx8f2VL9FJ2c',
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuBPDot2E_OV1D-vLdPARlhiiTmL9DFIXeS6qb3wDjw3xfq_Z0Qv-L8rIwrPl6bp88_emkbMejDOSSqzrnTWCVwKOSqSl6EDYPR3TmqFJOjJ8HaOoLzPENJsk2Q95af_QeQYCI4gknuBfg4BX35f_Hj08zKBE7-aVwtTUw7IflkFe1-QqQRZ7XVxbdb3VREFZAdTQhCBvcRq_XzhUdugkokgLlEljJVq093KrwA_9vSe-HPPj1vSAVVv',
     description:
-      'High-octane tactical cyber-action in a vertical megacity. Navigate corporate warfare with lethal cybernetic loadouts. Every encounter is a fast-twitch puzzle of momentum, spatial ballistic calculations, and consequence.',
-    tags: ['Cyberpunk RPG', 'Available Now', 'Unreal Engine 5'],
+      'Following classified reports of illegal human experimentation inside Elysium Asylum, a lone detective enters the facility to uncover the truth. Trapped within its walls alongside patients mutated into grotesque monsters, you must fight through the horrors of the ward, confront the mutated mastermind Dr. Voss, and survive long enough to escape.',
+    tags: ['Survival Horror', 'Action', 'Single-Player'],
   },
   {
-    title: 'IRON TALON: 2184',
-    slug: 'iron-talon-2184',
-    release_date: '2025-10-30',
+    title: 'Ashes of Escape',
+    slug: 'ashes-of-escape',
+    release_date: '2026-03-15',
     image_url:
       'https://lh3.googleusercontent.com/aida/AEtjO1UJMRZzH5hkjwGYbhPftm1WQxBVgPZhhN-1HNr-hozj8Rwg67e0k9Hu6kaiMr1EHPHAeqq5bTM6kVLpri8Sv3bVG76Xc6ksXCwe8ZGzpyPu8y050ns3BjCQpo5oPvLJGXrxbuWhGihn3V5eUYn_aUZpcvSHAXc7SkkaXR0ncFL47P4S-Pf74EEFu2GT5BFFyPU7hoPg14OUNZNJDFRX-vbpMa_62lIMqfPSdXqchfq_kXD593V3jfhVarw',
     description:
-      'Squad-based mechanized warfare across ravaged frontier wastelands. Master modular ballistic platforms and tactical positioning in real-time calculated atmospheric environments.',
-    tags: ['Tactical Mech Warfare', 'Co-Op & PvP', 'Active Prototype'],
-  },
-  {
-    title: 'RUNEBOUND: OBLIVION',
-    slug: 'runebound-oblivion',
-    release_date: '2025-05-20',
-    image_url:
-      'https://lh3.googleusercontent.com/aida/AEtjO1UpxOajIDGPHIMZhXK7qHEht7POwCTiErEsrqDLUdkS0CPcFt7oxdJPjRRpliYp7mIb_-O9TkUo3s8uVkaNYdUkhn4v_boUK3hDb7nvFfL1WktMDugUmOd-xhyVuHQG4XRLTJJPZFdUfuukoTC_P1QFcYF7S0KFZr6W8DD6-st_BhRSTQVm7byKicNL1tK3rcorW7Ta0gEksbkRQEhZigkDrp9ZznNZK-pNPLyZCD5DF9l73PUvUwvMYT4',
-    description:
-      'Unforgiving dungeon delving into forbidden subterranean monoliths. Decipher ancient runes and harvest elder power. Designed for total player spatial agency with permadeath systems that enforce ruthless precision.',
-    tags: ['Dark Fantasy Roguelike', 'Closed Alpha Q2 2025', 'PC // PS5'],
+      'A relentless gauntlet across three distinct, hostile environments. Fight through waves of enemies across shifting combat zones and carve a path to extraction before you are overrun.',
+    tags: ['Action', 'Combat', 'Survival'],
   },
 ]
 
@@ -619,7 +609,7 @@ export default function Admin() {
                     required
                     value={formTitle}
                     onChange={(e) => setFormTitle(e.target.value)}
-                    placeholder="e.g. NEON PROTOCOL"
+                    placeholder="e.g. Echoes of Desolation"
                     className="w-full bg-[#131313] border border-[#444748]/40 text-white text-xs px-3 py-2 font-mono"
                   />
                 </div>
@@ -632,7 +622,7 @@ export default function Admin() {
                     required
                     value={formSlug}
                     onChange={(e) => setFormSlug(e.target.value)}
-                    placeholder="e.g. neon-protocol"
+                    placeholder="e.g. echoes-of-desolation"
                     className="w-full bg-[#131313] border border-[#444748]/40 text-white text-xs px-3 py-2 font-mono"
                   />
                 </div>

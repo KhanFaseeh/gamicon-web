@@ -15,22 +15,22 @@ const FALLBACK_GAMES: Record<string, {
   tenets: { num: string; title: string; desc: string }[]
   companions: { title: string; slug: string; year: string; genre: string; desc: string; img: string }[]
 }> = {
-  'neon-protocol': {
+  'echoes-of-desolation': {
     game: {
       id: '1',
-      title: 'NEON PROTOCOL',
-      slug: 'neon-protocol',
-      release_date: '2024-11-15',
+      title: 'Echoes of Desolation',
+      slug: 'echoes-of-desolation',
+      release_date: '2025-10-31',
       image_url:
         'https://lh3.googleusercontent.com/aida-public/AB6AXuBPDot2E_OV1D-vLdPARlhiiTmL9DFIXeS6qb3wDjw3xfq_Z0Qv-L8rIwrPl6bp88_emkbMejDOSSqzrnTWCVwKOSqSl6EDYPR3TmqFJOjJ8HaOoLzPENJsk2Q95af_QeQYCI4gknuBfg4BX35f_Hj08zKBE7-aVwtTUw7IflkFe1-QqQRZ7XVxbdb3VREFZAdTQhCBvcRq_XzhUdugkokgLlEljJVq093KrwA_9vSe-HPPj1vSAVVv',
       description:
-        'High-octane tactical cyber-action in a vertical megacity. Navigate corporate warfare with lethal cybernetic loadouts. Every encounter is a fast-twitch puzzle of momentum, spatial ballistic calculations, and consequence.',
-      tags: ['Cyberpunk RPG', 'Available Now', 'Unreal Engine 5.4'],
+        'Following classified reports of illegal human experimentation inside Elysium Asylum, a lone detective enters the facility to uncover the truth. Trapped within its walls alongside patients mutated into grotesque monsters, you must fight through the horrors of the ward, confront the mutated mastermind Dr. Voss, and survive long enough to escape.',
+      tags: ['Survival Horror', 'Action', 'Single-Player'],
     },
-    engine: 'Unreal Engine 5.4 Custom Build',
+    engine: 'Unreal Engine 5.4 Lumen / Nanite Pipeline',
     platforms: 'PC • PlayStation 5 • Xbox Series X',
-    director: 'Kenji Sato & Gamicon Core Unit',
-    audio: 'Spatial Ambisonics 3D Object Audio',
+    director: 'Gamicon Core Unit // Direction',
+    audio: 'Spatial Ambisonics 3D Object Audio & Heartbeat Feedback',
     heroImage:
       'https://lh3.googleusercontent.com/aida-public/AB6AXuBPDot2E_OV1D-vLdPARlhiiTmL9DFIXeS6qb3wDjw3xfq_Z0Qv-L8rIwrPl6bp88_emkbMejDOSSqzrnTWCVwKOSqSl6EDYPR3TmqFJOjJ8HaOoLzPENJsk2Q95af_QeQYCI4gknuBfg4BX35f_Hj08zKBE7-aVwtTUw7IflkFe1-QqQRZ7XVxbdb3VREFZAdTQhCBvcRq_XzhUdugkokgLlEljJVq093KrwA_9vSe-HPPj1vSAVVv',
     galleryImages: [
@@ -40,151 +40,78 @@ const FALLBACK_GAMES: Record<string, {
     tenets: [
       {
         num: '01',
-        title: 'Physical Integrity',
-        desc: 'Real-time kinetic physics, deterministic penetration, and responsive frame timing. No superficial hitscan compromises.',
+        title: 'Claustrophobic Resource Scarcity',
+        desc: 'Every syringe, flashlight battery, and round of ammunition counts. Resource desperation directly influences panic parameters.',
       },
       {
         num: '02',
-        title: 'Diegetic Immersion',
-        desc: 'Zero visual clutter. In-world tactical HUD telemetry, spatial acoustic clues, and environmental deduction replace minimaps.',
+        title: 'Grotesque Behavioral AI',
+        desc: 'Mutated ward patients track acoustic footprints, broken glass, and weapon chamber clicks rather than scripted patrol loops.',
       },
       {
         num: '03',
-        title: 'Open Combat',
-        desc: 'Modular neural augmentations and high-altitude grapple kinematics allow unprecedented traversal across vertical corporate towers.',
+        title: 'Dr. Voss Mastermind Encounters',
+        desc: 'Uncompromising multi-stage psychological and biological confrontation demanding acute situational awareness and agility.',
       },
     ],
     companions: [
       {
-        title: 'IRON TALON: 2184',
-        slug: 'iron-talon-2184',
-        year: '2025',
-        genre: 'MECH SIMULATOR',
-        desc: 'Heavy armor warfare across scorched outer colonies. Ballistic resource management and realistic hydraulic recoil simulation.',
-        img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCHN47rmROJicK9klFUzbZOudT2MB8wkdW4Sc5lg89-Fa7pHTtPM21oWvvq1ruet7SAZMoFjmpDBK3ohT8Y64Cy3VlG1m9VFmeNuKplkRrlTDNlj0w1NFAgUSwqzpwEwPy5RgQdlQvsilgrNaxUjKoJF4cRalK9CuKuWtsLkZpjkhCJNROTziIe65CYgf2Nl9NhSeg2xywl_-erVzbEE308FLHVOm655w5ArTikC_UYtesRwz1Dh8i5',
-      },
-      {
-        title: 'RUNEBOUND: OBLIVION',
-        slug: 'runebound-oblivion',
+        title: 'Ashes of Escape',
+        slug: 'ashes-of-escape',
         year: '2026',
-        genre: 'DARK FANTASY',
-        desc: 'A solitary descent into ancestral subterranean tombs. Cryptic rune translations, spatial ritual puzzles, and uncompromising combat cadence.',
-        img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAai-OizVRHKUSAm2aoxw-gFfJsk1MRGE4oeLy5EaLH2zFv_L1K2dBv3y4MsoPPOrO_S6vHOyqpvlN57kUophNrJodfMX8v-FDTPIRkNufDnQDMwXv-7Dgf6l9wmJnSEuan8Tu6Ks6swgED7kVeWxRfya0zd_vjJYkSKAbV8KHmSdqDB6BNfUph3LDXBBv4AxH8E92LSgw2Ls1D9k_cPcNzEQboDAbTcIUr8fmsqZBrcHzjh_wzcn31',
+        genre: 'ACTION SURVIVAL',
+        desc: 'A relentless gauntlet across three distinct, hostile environments. Carve a path to extraction.',
+        img: 'https://lh3.googleusercontent.com/aida/AEtjO1UJMRZzH5hkjwGYbhPftm1WQxBVgPZhhN-1HNr-hozj8Rwg67e0k9Hu6kaiMr1EHPHAeqq5bTM6kVLpri8Sv3bVG76Xc6ksXCwe8ZGzpyPu8y050ns3BjCQpo5oPvLJGXrxbuWhGihn3V5eUYn_aUZpcvSHAXc7SkkaXR0ncFL47P4S-Pf74EEFu2GT5BFFyPU7hoPg14OUNZNJDFRX-vbpMa_62lIMqfPSdXqchfq_kXD593V3jfhVarw',
       },
     ],
   },
-  'iron-talon-2184': {
+  'ashes-of-escape': {
     game: {
       id: '2',
-      title: 'IRON TALON: 2184',
-      slug: 'iron-talon-2184',
-      release_date: '2025-10-30',
+      title: 'Ashes of Escape',
+      slug: 'ashes-of-escape',
+      release_date: '2026-03-15',
       image_url:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuCHN47rmROJicK9klFUzbZOudT2MB8wkdW4Sc5lg89-Fa7pHTtPM21oWvvq1ruet7SAZMoFjmpDBK3ohT8Y64Cy3VlG1m9VFmeNuKplkRrlTDNlj0w1NFAgUSwqzpwEwPy5RgQdlQvsilgrNaxUjKoJF4cRalK9CuKuWtsLkZpjkhCJNROTziIe65CYgf2Nl9NhSeg2xywl_-erVzbEE308FLHVOm655w5ArTikC_UYtesRwz1Dh8i5',
+        'https://lh3.googleusercontent.com/aida/AEtjO1UJMRZzH5hkjwGYbhPftm1WQxBVgPZhhN-1HNr-hozj8Rwg67e0k9Hu6kaiMr1EHPHAeqq5bTM6kVLpri8Sv3bVG76Xc6ksXCwe8ZGzpyPu8y050ns3BjCQpo5oPvLJGXrxbuWhGihn3V5eUYn_aUZpcvSHAXc7SkkaXR0ncFL47P4S-Pf74EEFu2GT5BFFyPU7hoPg14OUNZNJDFRX-vbpMa_62lIMqfPSdXqchfq_kXD593V3jfhVarw',
       description:
-        'Heavy armor warfare across scorched outer colonies. Ballistic resource management and realistic hydraulic recoil simulation in real-time calculated atmospheric environments.',
-      tags: ['Tactical Mech Warfare', 'Release 2025', 'Active Prototype'],
+        'A relentless gauntlet across three distinct, hostile environments. Fight through waves of enemies across shifting combat zones and carve a path to extraction before you are overrun.',
+      tags: ['Action', 'Combat', 'Survival'],
     },
-    engine: 'Unreal Engine 5.4 Chaos Physics',
+    engine: 'Gamicon High-Throughput Combat Framework',
     platforms: 'PC • Next-Gen Platforms',
-    director: 'Gamicon Heavy Ordnance Lab',
-    audio: 'Dynamic Acoustic Impulse Calibration',
+    director: 'Gamicon Combat Systems Unit',
+    audio: 'Dynamic Multi-Zone Combat Mix Profile',
     heroImage:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuCHN47rmROJicK9klFUzbZOudT2MB8wkdW4Sc5lg89-Fa7pHTtPM21oWvvq1ruet7SAZMoFjmpDBK3ohT8Y64Cy3VlG1m9VFmeNuKplkRrlTDNlj0w1NFAgUSwqzpwEwPy5RgQdlQvsilgrNaxUjKoJF4cRalK9CuKuWtsLkZpjkhCJNROTziIe65CYgf2Nl9NhSeg2xywl_-erVzbEE308FLHVOm655w5ArTikC_UYtesRwz1Dh8i5',
-    galleryImages: [
       'https://lh3.googleusercontent.com/aida/AEtjO1UJMRZzH5hkjwGYbhPftm1WQxBVgPZhhN-1HNr-hozj8Rwg67e0k9Hu6kaiMr1EHPHAeqq5bTM6kVLpri8Sv3bVG76Xc6ksXCwe8ZGzpyPu8y050ns3BjCQpo5oPvLJGXrxbuWhGihn3V5eUYn_aUZpcvSHAXc7SkkaXR0ncFL47P4S-Pf74EEFu2GT5BFFyPU7hoPg14OUNZNJDFRX-vbpMa_62lIMqfPSdXqchfq_kXD593V3jfhVarw',
+    galleryImages: [
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuCHN47rmROJicK9klFUzbZOudT2MB8wkdW4Sc5lg89-Fa7pHTtPM21oWvvq1ruet7SAZMoFjmpDBK3ohT8Y64Cy3VlG1m9VFmeNuKplkRrlTDNlj0w1NFAgUSwqzpwEwPy5RgQdlQvsilgrNaxUjKoJF4cRalK9CuKuWtsLkZpjkhCJNROTziIe65CYgf2Nl9NhSeg2xywl_-erVzbEE308FLHVOm655w5ArTikC_UYtesRwz1Dh8i5',
       'https://lh3.googleusercontent.com/aida-public/AB6AXuBUqrBiEbtQ9z9K5SEojag5pJIoM2QysO2Slf7Fzm7-m-jHdleNbpGaEiGCJUyR9yCJUuqwiFDLzeZm2QWTc1atIxMay_vT3mpX4WJp32ab5efbwQxMOfDZ-Fgol9Fie8r5NzJ40fV8VNeHV9a7DMzDc4zVqnigDsxw64XSRUGfBOGdk3CCLdlurwanYP_0lzqRD8WoK6Rp68Bu1M64pkTlSXfxB8NqhYKVJEa8rWtLG2eWy-anw7iJ',
     ],
     tenets: [
       {
         num: '01',
-        title: 'Hydraulic Weight Dynamics',
-        desc: 'Every bipedal chassis models mass inertia, torque distribution, and surface friction.',
+        title: 'Tri-Environment Gauntlet',
+        desc: 'Adapt to three hostile, visually distinct ecosystems each requiring unique loadout discipline and threat prioritization.',
       },
       {
         num: '02',
-        title: 'Thermal Dissipation',
-        desc: 'Sustained energy discharge risks internal meltdown. Divert coolant or vent atmosphere.',
+        title: 'Wave Dynamics & Shifting Zones',
+        desc: 'Defensive positions deteriorate under relentless assaults, forcing fluid repositioning and rapid tactical improvisation.',
       },
       {
         num: '03',
-        title: 'Locational Armor Stripping',
-        desc: 'Targeted kinetic penetrators fracture external ceramics exposing vital reactor cores.',
+        title: 'High-Stakes Extraction Protocol',
+        desc: 'Reaching extraction beacon triggers maximum escalation where disciplined timing separates survival from annihilation.',
       },
     ],
     companions: [
       {
-        title: 'NEON PROTOCOL',
-        slug: 'neon-protocol',
-        year: '2024',
-        genre: 'CYBERPUNK RPG',
-        desc: 'High-octane tactical cyber-action in a vertical megacity. Lethal cybernetic loadouts.',
-        img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBPDot2E_OV1D-vLdPARlhiiTmL9DFIXeS6qb3wDjw3xfq_Z0Qv-L8rIwrPl6bp88_emkbMejDOSSqzrnTWCVwKOSqSl6EDYPR3TmqFJOjJ8HaOoLzPENJsk2Q95af_QeQYCI4gknuBfg4BX35f_Hj08zKBE7-aVwtTUw7IflkFe1-QqQRZ7XVxbdb3VREFZAdTQhCBvcRq_XzhUdugkokgLlEljJVq093KrwA_9vSe-HPPj1vSAVVv',
-      },
-      {
-        title: 'RUNEBOUND: OBLIVION',
-        slug: 'runebound-oblivion',
-        year: '2026',
-        genre: 'DARK FANTASY',
-        desc: 'A solitary descent into ancestral subterranean tombs. Cryptic rune translations and spatial ritual puzzles.',
-        img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAai-OizVRHKUSAm2aoxw-gFfJsk1MRGE4oeLy5EaLH2zFv_L1K2dBv3y4MsoPPOrO_S6vHOyqpvlN57kUophNrJodfMX8v-FDTPIRkNufDnQDMwXv-7Dgf6l9wmJnSEuan8Tu6Ks6swgED7kVeWxRfya0zd_vjJYkSKAbV8KHmSdqDB6BNfUph3LDXBBv4AxH8E92LSgw2Ls1D9k_cPcNzEQboDAbTcIUr8fmsqZBrcHzjh_wzcn31',
-      },
-    ],
-  },
-  'runebound-oblivion': {
-    game: {
-      id: '3',
-      title: 'RUNEBOUND: OBLIVION',
-      slug: 'runebound-oblivion',
-      release_date: '2025-05-20',
-      image_url:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuAai-OizVRHKUSAm2aoxw-gFfJsk1MRGE4oeLy5EaLH2zFv_L1K2dBv3y4MsoPPOrO_S6vHOyqpvlN57kUophNrJodfMX8v-FDTPIRkNufDnQDMwXv-7Dgf6l9wmJnSEuan8Tu6Ks6swgED7kVeWxRfya0zd_vjJYkSKAbV8KHmSdqDB6BNfUph3LDXBBv4AxH8E92LSgw2Ls1D9k_cPcNzEQboDAbTcIUr8fmsqZBrcHzjh_wzcn31',
-      description:
-        'Unforgiving dungeon delving into forbidden subterranean monoliths. Decipher ancient runes and harvest elder power with permadeath systems that enforce ruthless precision.',
-      tags: ['Dark Fantasy Roguelike', 'Alpha Q2 2025', 'PC // PS5'],
-    },
-    engine: 'Gamicon Custom Voxel Runic Pipeline',
-    platforms: 'PC • PlayStation 5',
-    director: 'Aria Thorne & Gamicon Core Unit',
-    audio: 'Binaural Tomb Reverberation Profile',
-    heroImage:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuAai-OizVRHKUSAm2aoxw-gFfJsk1MRGE4oeLy5EaLH2zFv_L1K2dBv3y4MsoPPOrO_S6vHOyqpvlN57kUophNrJodfMX8v-FDTPIRkNufDnQDMwXv-7Dgf6l9wmJnSEuan8Tu6Ks6swgED7kVeWxRfya0zd_vjJYkSKAbV8KHmSdqDB6BNfUph3LDXBBv4AxH8E92LSgw2Ls1D9k_cPcNzEQboDAbTcIUr8fmsqZBrcHzjh_wzcn31',
-    galleryImages: [
-      'https://lh3.googleusercontent.com/aida/AEtjO1UpxOajIDGPHIMZhXK7qHEht7POwCTiErEsrqDLUdkS0CPcFt7oxdJPjRRpliYp7mIb_-O9TkUo3s8uVkaNYdUkhn4v_boUK3hDb7nvFfL1WktMDugUmOd-xhyVuHQG4XRLTJJPZFdUfuukoTC_P1QFcYF7S0KFZr6W8DD6-st_BhRSTQVm7byKicNL1tK3rcorW7Ta0gEksbkRQEhZigkDrp9ZznNZK-pNPLyZCD5DF9l73PUvUwvMYT4',
-    ],
-    tenets: [
-      {
-        num: '01',
-        title: 'Frame-Accurate Parry Matrix',
-        desc: 'Cadence over combos. Every enemy strike possesses precise telegraphs rewardable by millisecond deflections.',
-      },
-      {
-        num: '02',
-        title: 'Seeded Runic Labyrinth',
-        desc: 'Topology regenerates deterministically using archaic cryptographic seeds rather than generic noise.',
-      },
-      {
-        num: '03',
-        title: 'Elder Inscription Synergies',
-        desc: 'Carve active glyphs into stone tablets. Combinatorial elemental effects alter the environment permanently.',
-      },
-    ],
-    companions: [
-      {
-        title: 'NEON PROTOCOL',
-        slug: 'neon-protocol',
-        year: '2024',
-        genre: 'CYBERPUNK RPG',
-        desc: 'High-octane tactical cyber-action in a vertical megacity. Lethal cybernetic loadouts.',
-        img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBPDot2E_OV1D-vLdPARlhiiTmL9DFIXeS6qb3wDjw3xfq_Z0Qv-L8rIwrPl6bp88_emkbMejDOSSqzrnTWCVwKOSqSl6EDYPR3TmqFJOjJ8HaOoLzPENJsk2Q95af_QeQYCI4gknuBfg4BX35f_Hj08zKBE7-aVwtTUw7IflkFe1-QqQRZ7XVxbdb3VREFZAdTQhCBvcRq_XzhUdugkokgLlEljJVq093KrwA_9vSe-HPPj1vSAVVv',
-      },
-      {
-        title: 'IRON TALON: 2184',
-        slug: 'iron-talon-2184',
+        title: 'Echoes of Desolation',
+        slug: 'echoes-of-desolation',
         year: '2025',
-        genre: 'MECH SIMULATOR',
-        desc: 'Squad-based mechanized warfare across ravaged frontier wastelands.',
-        img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCHN47rmROJicK9klFUzbZOudT2MB8wkdW4Sc5lg89-Fa7pHTtPM21oWvvq1ruet7SAZMoFjmpDBK3ohT8Y64Cy3VlG1m9VFmeNuKplkRrlTDNlj0w1NFAgUSwqzpwEwPy5RgQdlQvsilgrNaxUjKoJF4cRalK9CuKuWtsLkZpjkhCJNROTziIe65CYgf2Nl9NhSeg2xywl_-erVzbEE308FLHVOm655w5ArTikC_UYtesRwz1Dh8i5',
+        genre: 'SURVIVAL HORROR',
+        desc: 'Trapped inside Elysium Asylum with mutated monsters. Confront Dr. Voss and survive.',
+        img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBPDot2E_OV1D-vLdPARlhiiTmL9DFIXeS6qb3wDjw3xfq_Z0Qv-L8rIwrPl6bp88_emkbMejDOSSqzrnTWCVwKOSqSl6EDYPR3TmqFJOjJ8HaOoLzPENJsk2Q95af_QeQYCI4gknuBfg4BX35f_Hj08zKBE7-aVwtTUw7IflkFe1-QqQRZ7XVxbdb3VREFZAdTQhCBvcRq_XzhUdugkokgLlEljJVq093KrwA_9vSe-HPPj1vSAVVv',
       },
     ],
   },
@@ -192,8 +119,8 @@ const FALLBACK_GAMES: Record<string, {
 
 export default function GameDetail() {
   const { slug } = useParams<{ slug: string }>()
-  const activeSlug = slug || 'neon-protocol'
-  const fallback = FALLBACK_GAMES[activeSlug] || FALLBACK_GAMES['neon-protocol']
+  const activeSlug = slug || 'echoes-of-desolation'
+  const fallback = FALLBACK_GAMES[activeSlug] || FALLBACK_GAMES['echoes-of-desolation']
 
   const [game, setGame] = useState<Game>(fallback.game)
 

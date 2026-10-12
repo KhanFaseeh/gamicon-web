@@ -125,13 +125,13 @@ export default function About() {
             {/* Overlay Caption */}
             <div className="absolute bottom-6 left-6 md:left-16 md:bottom-8 z-10 space-y-2">
               <div className="font-display text-[10px] text-white bg-[#0e0e0e]/80 px-2 py-1 backdrop-blur-sm border border-[#444748]/30 inline-block uppercase tracking-widest">
-                FLAGSHIP CONCEPT // NEON PROTOCOL
+                FLAGSHIP CONCEPT // ECHOES OF DESOLATION
               </div>
               <div className="font-display text-2xl md:text-3xl text-white tracking-widest uppercase">
                 THE EMBODIED SPIRIT OF GAMICON
               </div>
               <p className="text-xs md:text-sm text-[#c4c7c8] max-w-lg font-light leading-relaxed">
-                High-density architectural verticality and dystopian combat systems crafted in Unreal Engine 5.
+                Atmospheric psychological survival horror and grotesque tactical encounters crafted in Unreal Engine 5.
               </p>
             </div>
           </div>
@@ -284,41 +284,41 @@ export default function About() {
                   </div>
                 </div>
 
-                {/* Item 4: 2024 */}
+                {/* Item 4: 2025 */}
                 <div className="relative flex flex-col md:flex-row-reverse items-start md:items-center justify-between">
                   <div className="md:w-5/12 pl-12 md:pl-8 space-y-2">
                     <span className="font-display text-[10px] text-[#888888] tracking-widest block uppercase">
-                      GLOBAL REVEAL
+                      FLAGSHIP PRODUCTION
                     </span>
                     <h3 className="font-display text-2xl text-[#050505] uppercase">
-                      NEON PROTOCOL
+                      ECHOES OF DESOLATION
                     </h3>
                     <p className="text-xs md:text-sm text-[#444444] leading-relaxed">
-                      Worldwide reveal of flagship cyberpunk tactical RPG; playable closed alpha cohorts initiated across 12 countries.
+                      Investigation into Elysium Asylum; psychological single-player survival horror with brutal combat encounters and unsparing narrative literacy.
                     </p>
                   </div>
                   <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-3 h-3 bg-[#050505] border-2 border-[#FFFFFF] rounded-none z-10 mt-1 md:mt-0" />
                   <div className="md:w-5/12 pl-12 md:pl-0 md:text-right font-display text-sm text-[#050505] tracking-widest font-bold">
-                    2024
+                    2025
                   </div>
                 </div>
 
-                {/* Item 5: 2025 & Beyond */}
+                {/* Item 5: 2026 & Beyond */}
                 <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between">
                   <div className="md:w-5/12 pl-12 md:pl-0 md:text-right space-y-2">
                     <span className="font-display text-[10px] text-[#888888] tracking-widest block uppercase">
-                      THE HORIZON
+                      GAUNTLET EXTRACTION
                     </span>
                     <h3 className="font-display text-2xl text-[#050505] uppercase">
-                      IRON TALON & OBLIVION
+                      ASHES OF ESCAPE
                     </h3>
                     <p className="text-xs md:text-sm text-[#444444] leading-relaxed">
-                      Full production pipeline scaling toward next-generation console and PC releases with uncompromised narrative fidelity.
+                      High-stakes survival action gauntlet spanning three brutal environments, testing wave endurance, spatial discipline, and tactical extraction.
                     </p>
                   </div>
                   <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-3 h-3 bg-[#050505] border-2 border-[#FFFFFF] rounded-none z-10 mt-1 md:mt-0" />
                   <div className="md:w-5/12 pl-12 md:pl-8 font-display text-sm text-[#050505] tracking-widest font-bold">
-                    2025+
+                    2026
                   </div>
                 </div>
               </div>

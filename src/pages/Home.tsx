@@ -8,36 +8,25 @@ import { supabase, type Game } from '../lib/supabaseClient'
 const DEFAULT_GAMES: Game[] = [
   {
     id: '1',
-    title: 'NEON PROTOCOL',
-    slug: 'neon-protocol',
-    release_date: '2024-11-15',
+    title: 'Echoes of Desolation',
+    slug: 'echoes-of-desolation',
+    release_date: '2025-10-31',
     image_url:
-      'https://lh3.googleusercontent.com/aida/AEtjO1W8l1YFBtH3X_E6WY4GiitT_RiPH7iW_0qgptlmrSoiJlCDizxfzPe_pKkQ74OO4aeaCBUxJ1tcaohW4f8bv2EuPO7vC2vJArRHJlcFt_9NBqdWTQSKw8LMOmJbOagJYNhEOzrPgAP3Q5OXc4lOtxJ48ySUKuXWGRauto2aDR8ERVxBO7mZ6AWbbF2-sqh81Yt7aql18eMW6NSwwxD42RDuIQSjKPGKqAvoPs5ZtxyJP54Rx8f2VL9FJ2c',
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuBPDot2E_OV1D-vLdPARlhiiTmL9DFIXeS6qb3wDjw3xfq_Z0Qv-L8rIwrPl6bp88_emkbMejDOSSqzrnTWCVwKOSqSl6EDYPR3TmqFJOjJ8HaOoLzPENJsk2Q95af_QeQYCI4gknuBfg4BX35f_Hj08zKBE7-aVwtTUw7IflkFe1-QqQRZ7XVxbdb3VREFZAdTQhCBvcRq_XzhUdugkokgLlEljJVq093KrwA_9vSe-HPPj1vSAVVv',
     description:
-      'High-octane tactical cyber-action in a vertical megacity. Navigate corporate warfare with lethal cybernetic loadouts. Every encounter is a fast-twitch puzzle of momentum, spatial ballistic calculations, and consequence.',
-    tags: ['Cyberpunk RPG', 'Available Now', 'Unreal Engine 5'],
+      'Following classified reports of illegal human experimentation inside Elysium Asylum, a lone detective enters the facility to uncover the truth. Trapped within its walls alongside patients mutated into grotesque monsters, you must fight through the horrors of the ward, confront the mutated mastermind Dr. Voss, and survive long enough to escape.',
+    tags: ['Survival Horror', 'Action', 'Single-Player'],
   },
   {
     id: '2',
-    title: 'RUNEBOUND: OBLIVION',
-    slug: 'runebound-oblivion',
-    release_date: '2025-05-20',
-    image_url:
-      'https://lh3.googleusercontent.com/aida/AEtjO1UpxOajIDGPHIMZhXK7qHEht7POwCTiErEsrqDLUdkS0CPcFt7oxdJPjRRpliYp7mIb_-O9TkUo3s8uVkaNYdUkhn4v_boUK3hDb7nvFfL1WktMDugUmOd-xhyVuHQG4XRLTJJPZFdUfuukoTC_P1QFcYF7S0KFZr6W8DD6-st_BhRSTQVm7byKicNL1tK3rcorW7Ta0gEksbkRQEhZigkDrp9ZznNZK-pNPLyZCD5DF9l73PUvUwvMYT4',
-    description:
-      'Unforgiving dungeon delving into forbidden subterranean monoliths. Decipher ancient runes and harvest elder power. Designed for total player spatial agency with permadeath systems that enforce ruthless precision.',
-    tags: ['Dark Fantasy Roguelike', 'Closed Alpha Q2 2025', 'PC // PS5'],
-  },
-  {
-    id: '3',
-    title: 'IRON TALON: 2184',
-    slug: 'iron-talon-2184',
-    release_date: '2025-10-30',
+    title: 'Ashes of Escape',
+    slug: 'ashes-of-escape',
+    release_date: '2026-03-15',
     image_url:
       'https://lh3.googleusercontent.com/aida/AEtjO1UJMRZzH5hkjwGYbhPftm1WQxBVgPZhhN-1HNr-hozj8Rwg67e0k9Hu6kaiMr1EHPHAeqq5bTM6kVLpri8Sv3bVG76Xc6ksXCwe8ZGzpyPu8y050ns3BjCQpo5oPvLJGXrxbuWhGihn3V5eUYn_aUZpcvSHAXc7SkkaXR0ncFL47P4S-Pf74EEFu2GT5BFFyPU7hoPg14OUNZNJDFRX-vbpMa_62lIMqfPSdXqchfq_kXD593V3jfhVarw',
     description:
-      'Squad-based mechanized warfare across ravaged frontier wastelands. Master modular ballistic platforms and tactical positioning in real-time calculated atmospheric environments.',
-    tags: ['Tactical Mech Warfare', 'Co-Op & PvP', 'Active Prototype'],
+      'A relentless gauntlet across three distinct, hostile environments. Fight through waves of enemies across shifting combat zones and carve a path to extraction before you are overrun.',
+    tags: ['Action', 'Combat', 'Survival'],
   },
 ]
 
@@ -76,7 +65,6 @@ export default function Home() {
 
   const game1 = games[0] || DEFAULT_GAMES[0]
   const game2 = games[1] || DEFAULT_GAMES[1]
-  const game3 = games[2] || DEFAULT_GAMES[2]
 
   return (
     <div className="bg-[#0e0e0e] text-[#e5e2e1] min-h-screen font-sans selection:bg-white selection:text-black">
@@ -178,261 +166,178 @@ export default function Home() {
       </section>
 
       {/* SHOWCASE SECTION 1: PRODUCT ARCHIVE 01 */}
-      <section className="py-20 md:py-28 px-6 md:px-16 border-b border-[#444748]/20" id="games">
-        <div className="max-w-7xl mx-auto">
-          {/* Section Tag & Index */}
-          <div className="flex justify-between items-baseline mb-4 border-b border-[#444748]/20 pb-2">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-white" />
-              <span className="font-display text-xs uppercase tracking-widest text-white">
-                PRODUCT ARCHIVE // 01
-              </span>
-            </div>
-            <span className="font-display text-xs text-[#8e9192] uppercase tracking-widest">
-              {game1.tags?.[0] || 'CYBERPUNK RPG'}
-            </span>
-          </div>
-
-          {/* Cinematic Image Frame */}
-          <Link
-            to={`/game/${game1.slug}`}
-            className="block relative w-full aspect-[21/9] md:aspect-[2.35/1] overflow-hidden border border-[#444748]/40 bg-[#1c1b1b] group"
-          >
-            <img
-              alt={`${game1.title} key art`}
-              className="w-full h-full object-cover object-center filter grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out"
-              src={game1.image_url || DEFAULT_GAMES[0].image_url}
-            />
-
-            {/* Telemetry HUD Inset */}
-            <div className="absolute top-4 left-4 pointer-events-none">
-              <div className="inline-flex items-center gap-2 bg-[#0e0e0e]/80 backdrop-blur-sm border border-[#444748]/40 px-3 py-1">
-                <span className="inline-block w-2 h-2 bg-white animate-pulse" />
-                <span className="font-display text-[10px] text-white uppercase tracking-widest">
-                  AVAILABLE NOW
+      {game1 && (
+        <section className="py-20 md:py-28 px-6 md:px-16 border-b border-[#444748]/20" id="games">
+          <div className="max-w-7xl mx-auto">
+            {/* Section Tag & Index */}
+            <div className="flex justify-between items-baseline mb-4 border-b border-[#444748]/20 pb-2">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-white" />
+                <span className="font-display text-xs uppercase tracking-widest text-white">
+                  PRODUCT ARCHIVE // 01
                 </span>
               </div>
-            </div>
-            <div className="absolute bottom-4 right-4 pointer-events-none hidden md:block">
-              <span className="font-display text-[10px] text-[#c4c7c8]/80 bg-[#0e0e0e]/80 backdrop-blur-sm px-3 py-1 border border-[#444748]/30 uppercase">
-                GRAPHICS TARGET: 60-120 FPS // HIGH-FIDELITY
+              <span className="font-display text-xs text-[#8e9192] uppercase tracking-widest">
+                {game1.tags?.[0] || 'SURVIVAL HORROR'}
               </span>
             </div>
-          </Link>
 
-          {/* Dossier & Detail Technical Grid */}
-          <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            <div className="lg:col-span-7">
-              <span className="font-display text-xs text-[#8e9192] tracking-widest uppercase">
-                PRODUCTION 01
-              </span>
-              <h2 className="font-display text-3xl md:text-5xl uppercase text-white mt-1 mb-4 tracking-tight">
-                {game1.title}
-              </h2>
-              <p className="text-base md:text-lg text-[#c4c7c8] font-light leading-relaxed max-w-2xl">
-                {game1.description}
-              </p>
-              <div className="mt-8 flex flex-wrap gap-4">
-                <Link
-                  to={`/game/${game1.slug}`}
-                  className="border border-white bg-white text-black px-6 py-2.5 font-display text-xs uppercase tracking-widest hover:bg-neutral-200 transition-all duration-150 inline-block font-bold"
-                >
-                  View Full Product Dossier →
-                </Link>
-              </div>
-            </div>
+            {/* Cinematic Image Frame */}
+            <Link
+              to={`/game/${game1.slug}`}
+              className="block relative w-full aspect-[21/9] md:aspect-[2.35/1] overflow-hidden border border-[#444748]/40 bg-[#1c1b1b] group"
+            >
+              <img
+                alt={`${game1.title} key art`}
+                className="w-full h-full object-cover object-center filter grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out"
+                src={game1.image_url || DEFAULT_GAMES[0].image_url}
+              />
 
-            {/* Technical Telemetry Columns */}
-            <div className="lg:col-span-5 border-t lg:border-t-0 lg:border-l border-[#444748]/30 pt-6 lg:pt-0 lg:pl-8 space-y-4 font-display text-xs">
-              <div className="flex justify-between items-center py-2 border-b border-[#444748]/20">
-                <span className="uppercase tracking-widest text-[#8e9192]">RELEASE DATE</span>
-                <span className="uppercase tracking-widest text-white">{game1.release_date}</span>
+              {/* Telemetry HUD Inset */}
+              <div className="absolute top-4 left-4 pointer-events-none">
+                <div className="inline-flex items-center gap-2 bg-[#0e0e0e]/80 backdrop-blur-sm border border-[#444748]/40 px-3 py-1">
+                  <span className="inline-block w-2 h-2 bg-white animate-pulse" />
+                  <span className="font-display text-[10px] text-white uppercase tracking-widest">
+                    ACTIVE PROJECT
+                  </span>
+                </div>
               </div>
-              <div className="flex justify-between items-center py-2 border-b border-[#444748]/20">
-                <span className="uppercase tracking-widest text-[#8e9192]">PLATFORMS</span>
-                <span className="uppercase tracking-widest text-white">PC • NEXT-GEN CONSOLES</span>
+              <div className="absolute bottom-4 right-4 pointer-events-none hidden md:block">
+                <span className="font-display text-[10px] text-[#c4c7c8]/80 bg-[#0e0e0e]/80 backdrop-blur-sm px-3 py-1 border border-[#444748]/30 uppercase">
+                  ATMOSPHERIC HORROR // HIGH VISUAL FIDELITY
+                </span>
               </div>
-              <div className="flex justify-between items-center py-2 border-b border-[#444748]/20">
-                <span className="uppercase tracking-widest text-[#8e9192]">STUDIO DIVISION</span>
-                <span className="uppercase tracking-widest text-white">GAMICON CORE LAB</span>
+            </Link>
+
+            {/* Dossier & Detail Technical Grid */}
+            <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              <div className="lg:col-span-7">
+                <span className="font-display text-xs text-[#8e9192] tracking-widest uppercase">
+                  PRODUCTION 01
+                </span>
+                <h2 className="font-display text-3xl md:text-5xl uppercase text-white mt-1 mb-4 tracking-tight">
+                  {game1.title}
+                </h2>
+                <p className="text-base md:text-lg text-[#c4c7c8] font-light leading-relaxed max-w-2xl">
+                  {game1.description}
+                </p>
+                <div className="mt-8 flex flex-wrap gap-4">
+                  <Link
+                    to={`/game/${game1.slug}`}
+                    className="border border-white bg-white text-black px-6 py-2.5 font-display text-xs uppercase tracking-widest hover:bg-neutral-200 transition-all duration-150 inline-block font-bold"
+                  >
+                    View Full Product Dossier →
+                  </Link>
+                </div>
               </div>
-              <div className="flex justify-between items-center py-2 border-b border-[#444748]/20">
-                <span className="uppercase tracking-widest text-[#8e9192]">STATUS</span>
-                <span className="uppercase tracking-widest text-white">ACTIVE RELEASE</span>
+
+              {/* Technical Telemetry Columns */}
+              <div className="lg:col-span-5 border-t lg:border-t-0 lg:border-l border-[#444748]/30 pt-6 lg:pt-0 lg:pl-8 space-y-4 font-display text-xs">
+                <div className="flex justify-between items-center py-2 border-b border-[#444748]/20">
+                  <span className="uppercase tracking-widest text-[#8e9192]">RELEASE TIMELINE</span>
+                  <span className="uppercase tracking-widest text-white">{game1.release_date}</span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b border-[#444748]/20">
+                  <span className="uppercase tracking-widest text-[#8e9192]">GENRE & TAGS</span>
+                  <span className="uppercase tracking-widest text-white">{game1.tags?.join(' • ') || 'ACTION'}</span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b border-[#444748]/20">
+                  <span className="uppercase tracking-widest text-[#8e9192]">STUDIO DIVISION</span>
+                  <span className="uppercase tracking-widest text-white">GAMICON CORE LAB</span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b border-[#444748]/20">
+                  <span className="uppercase tracking-widest text-[#8e9192]">EXPERIENCE</span>
+                  <span className="uppercase tracking-widest text-white">NARRATIVE SURVIVAL HORROR</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* SHOWCASE SECTION 2: PRODUCT ARCHIVE 02 */}
-      <section className="py-20 md:py-28 px-6 md:px-16 border-b border-[#444748]/20 bg-[#131313]">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex justify-between items-baseline mb-4 border-b border-[#444748]/20 pb-2">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-white" />
-              <span className="font-display text-xs uppercase tracking-widest text-white">
-                PRODUCT ARCHIVE // 02
-              </span>
-            </div>
-            <span className="font-display text-xs text-[#8e9192] uppercase tracking-widest">
-              {game2.tags?.[0] || 'DARK FANTASY ROGUELIKE'}
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Towering Key Visual Side */}
-            <div className="lg:col-span-7 order-2 lg:order-1">
-              <Link
-                to={`/game/${game2.slug}`}
-                className="block relative w-full aspect-[16/10] overflow-hidden border border-[#444748]/40 bg-[#1c1b1b] group"
-              >
-                <img
-                  alt={`${game2.title} key visual`}
-                  className="w-full h-full object-cover filter contrast-125 grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out"
-                  src={game2.image_url || DEFAULT_GAMES[1].image_url}
-                />
-                <div className="absolute top-4 left-4">
-                  <span className="font-display text-[10px] text-white uppercase tracking-widest bg-[#0e0e0e]/90 px-3 py-1 border border-[#444748]/40">
-                    CLOSED ALPHA Q2 2025
-                  </span>
-                </div>
-                <div className="absolute bottom-4 left-4">
-                  <span className="font-display text-[10px] text-[#8e9192] uppercase tracking-widest">
-                    TARGET HARDWARE: PC // PLAYSTATION 5
-                  </span>
-                </div>
-              </Link>
-            </div>
-
-            {/* Editorial Dossier Side */}
-            <div className="lg:col-span-5 order-1 lg:order-2 space-y-4">
-              <span className="font-display text-xs text-[#8e9192] tracking-widest uppercase">
-                PROJECT CODENAME
-              </span>
-              <h2 className="font-display text-3xl md:text-5xl uppercase text-white tracking-tight">
-                {game2.title}
-              </h2>
-              <div className="w-12 h-0.5 bg-white" />
-              <p className="text-base md:text-lg text-[#c4c7c8] font-light leading-relaxed">
-                {game2.description}
-              </p>
-
-              {/* Technical Spec List */}
-              <div className="pt-4 space-y-2 border-t border-[#444748]/20 font-display text-xs">
-                <div className="flex justify-between text-[#8e9192]">
-                  <span>COMBAT PARADIGM:</span>
-                  <span className="text-white uppercase">FRAME-ACCURATE PARRY MATRIX</span>
-                </div>
-                <div className="flex justify-between text-[#8e9192]">
-                  <span>PROCEDURAL TOPOLOGY:</span>
-                  <span className="text-white uppercase">SEEDED RUNIC LABYRINTH</span>
-                </div>
-                <div className="flex justify-between text-[#8e9192]">
-                  <span>PLAYTEST ENROLLMENT:</span>
-                  <span className="text-white uppercase">OPEN REGISTRATION</span>
-                </div>
+      {game2 && (
+        <section className="py-20 md:py-28 px-6 md:px-16 border-b border-[#444748]/20 bg-[#131313]">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex justify-between items-baseline mb-4 border-b border-[#444748]/20 pb-2">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 bg-white" />
+                <span className="font-display text-xs uppercase tracking-widest text-white">
+                  PRODUCT ARCHIVE // 02
+                </span>
               </div>
+              <span className="font-display text-xs text-[#8e9192] uppercase tracking-widest">
+                {game2.tags?.[0] || 'ACTION COMBAT SURVIVAL'}
+              </span>
+            </div>
 
-              <div className="pt-4 flex gap-4">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+              {/* Towering Key Visual Side */}
+              <div className="lg:col-span-7 order-2 lg:order-1">
                 <Link
                   to={`/game/${game2.slug}`}
-                  className="border border-white bg-white text-black px-6 py-2.5 font-display text-xs uppercase tracking-widest hover:bg-neutral-200 transition-all duration-150 font-bold"
+                  className="block relative w-full aspect-[16/10] overflow-hidden border border-[#444748]/40 bg-[#1c1b1b] group"
                 >
-                  Explore Dossier →
+                  <img
+                    alt={`${game2.title} key visual`}
+                    className="w-full h-full object-cover filter contrast-125 grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out"
+                    src={game2.image_url || DEFAULT_GAMES[1].image_url}
+                  />
+                  <div className="absolute top-4 left-4">
+                    <span className="font-display text-[10px] text-white uppercase tracking-widest bg-[#0e0e0e]/90 px-3 py-1 border border-[#444748]/40">
+                      TACTICAL SURVIVAL
+                    </span>
+                  </div>
+                  <div className="absolute bottom-4 left-4">
+                    <span className="font-display text-[10px] text-[#8e9192] uppercase tracking-widest">
+                      GAUNTLET EXTRACTION PROTOCOL
+                    </span>
+                  </div>
                 </Link>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* SHOWCASE SECTION 3: PRODUCT ARCHIVE 03 */}
-      <section className="py-20 md:py-28 px-6 md:px-16 border-b border-[#444748]/20">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex justify-between items-baseline mb-4 border-b border-[#444748]/20 pb-2">
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-white" />
-              <span className="font-display text-xs uppercase tracking-widest text-white">
-                PRODUCT ARCHIVE // 03
-              </span>
-            </div>
-            <span className="font-display text-xs text-[#8e9192] uppercase tracking-widest">
-              {game3.tags?.[0] || 'TACTICAL MECH WARFARE'}
-            </span>
-          </div>
-
-          {/* Cinematic Frame */}
-          <Link
-            to={`/game/${game3.slug}`}
-            className="block relative w-full aspect-[21/9] md:aspect-[2.4/1] overflow-hidden border border-[#444748]/40 bg-[#1c1b1b] group"
-          >
-            <img
-              alt={`${game3.title} key art`}
-              className="w-full h-full object-cover filter contrast-125 grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out"
-              src={game3.image_url || DEFAULT_GAMES[2].image_url}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0e0e0e]/90 via-transparent to-transparent flex flex-col justify-end p-6 md:p-8">
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
-                <div>
-                  <span className="font-display text-xs text-[#8e9192] uppercase tracking-widest">
-                    SIMULATION STATUS // ACTIVE PROTOTYPE
-                  </span>
-                  <h2 className="font-display text-3xl md:text-5xl uppercase text-white tracking-tight">
-                    {game3.title}
-                  </h2>
-                </div>
-                <div className="flex gap-4">
-                  <span className="font-display text-xs text-white uppercase tracking-widest border border-white/50 px-3 py-1 bg-[#0e0e0e]/60">
-                    CO-OP & PVP
-                  </span>
-                  <span className="font-display text-xs text-[#c7c6c6] uppercase tracking-widest border border-[#444748]/40 px-3 py-1 bg-[#0e0e0e]/60">
-                    RELEASE 2025
-                  </span>
-                </div>
-              </div>
-            </div>
-          </Link>
-
-          {/* Three-Column Spec Grid */}
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-[#444748]/20 pt-8">
-            <div className="space-y-2">
-              <span className="font-display text-xs uppercase tracking-widest text-[#8e9192]">
-                01 // PLATFORM SYNOPSIS
-              </span>
-              <p className="text-sm md:text-base text-[#c4c7c8] font-light leading-relaxed">
-                {game3.description}
-              </p>
-            </div>
-            <div className="space-y-2">
-              <span className="font-display text-xs uppercase tracking-widest text-[#8e9192]">
-                02 // MODULAR BALLISTICS
-              </span>
-              <p className="text-sm md:text-base text-[#c4c7c8] font-light leading-relaxed">
-                Every chassis possesses authentic weight dynamics, heat dissipation challenges, and locational armor failure modeling. Coordinated fire regimes determine outcome.
-              </p>
-            </div>
-            <div className="space-y-2 flex flex-col justify-between">
-              <div>
-                <span className="font-display text-xs uppercase tracking-widest text-[#8e9192]">
-                  03 // INTEL FEED
+              {/* Editorial Dossier Side */}
+              <div className="lg:col-span-5 order-1 lg:order-2 space-y-4">
+                <span className="font-display text-xs text-[#8e9192] tracking-widest uppercase">
+                  PRODUCTION 02
                 </span>
-                <p className="text-sm md:text-base text-[#c4c7c8] font-light leading-relaxed">
-                  Closed multiplayer stress test dates announced via devlog terminal.
+                <h2 className="font-display text-3xl md:text-5xl uppercase text-white tracking-tight">
+                  {game2.title}
+                </h2>
+                <div className="w-12 h-0.5 bg-white" />
+                <p className="text-base md:text-lg text-[#c4c7c8] font-light leading-relaxed">
+                  {game2.description}
                 </p>
-              </div>
-              <div className="pt-4 flex gap-3">
-                <Link
-                  to={`/game/${game3.slug}`}
-                  className="border border-white hover:bg-white hover:text-black text-white px-6 py-2 font-display text-xs uppercase tracking-widest transition-all"
-                >
-                  View Dossier →
-                </Link>
+
+                {/* Technical Spec List */}
+                <div className="pt-4 space-y-2 border-t border-[#444748]/20 font-display text-xs">
+                  <div className="flex justify-between text-[#8e9192]">
+                    <span>COMBAT ARCHITECTURE:</span>
+                    <span className="text-white uppercase">WAVE DEFENSE & EXTRACTION</span>
+                  </div>
+                  <div className="flex justify-between text-[#8e9192]">
+                    <span>ENVIRONMENTS:</span>
+                    <span className="text-white uppercase">THREE HOSTILE BIOMES</span>
+                  </div>
+                  <div className="flex justify-between text-[#8e9192]">
+                    <span>TAGS:</span>
+                    <span className="text-white uppercase">{game2.tags?.join(' • ') || 'ACTION'}</span>
+                  </div>
+                </div>
+
+                <div className="pt-4 flex gap-4">
+                  <Link
+                    to={`/game/${game2.slug}`}
+                    className="border border-white bg-white text-black px-6 py-2.5 font-display text-xs uppercase tracking-widest hover:bg-neutral-200 transition-all duration-150 font-bold"
+                  >
+                    Explore Dossier →
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* STUDIO MANIFESTO & TENETS */}
       <section className="py-20 md:py-36 px-6 md:px-16 bg-[#0e0e0e] border-b border-[#444748]/20" id="about">

@@ -21,20 +21,20 @@ interface Dispatch {
 
 const DISPATCHES: Dispatch[] = [
   {
-    date: '2025.04.18',
-    code: 'PATCH 0.8.4',
+    date: '2025.10.15',
+    code: 'BUILD 0.9.1',
     tag: 'PRODUCTION',
-    title: 'NEON PROTOCOL — DETERMINISTIC KINEMATICS & ENGINE OVERHAUL',
-    desc: 'Complete architectural overhaul of our Unreal Engine 5.4 physics pipeline. Introducing deterministic collision kinematics and 128Hz sub-tick networking designed for hyper-reactive gunplay without client-side prediction drift.',
-    dept: 'ENGINEERING DEPT // KENJI SATO',
+    title: 'ECHOES OF DESOLATION — ELYSIUM ASYLUM ACOUSTIC AI PIPELINE',
+    desc: 'Deep architectural dive into the procedural acoustic occlusion system built for Elysium Asylum. Mutated patients calculate reverberant footstep trajectories, broken glass audio cones, and weapon reloads in real time.',
+    dept: 'SYSTEMS DEPT // AUDIO & AI',
   },
   {
-    date: '2025.03.02',
+    date: '2025.07.22',
     code: 'PRODUCTION MILESTONE',
     tag: 'R&D REPORT',
-    title: 'CHRONO MONOLITH: PRE-VIS SANCTUARY VOLUMETRIC SHADER PIPELINE',
-    desc: 'Technical breakdown of our custom volumetric darkness shaders and Ray-Traced Subsurface Scattering methods engineered for the subterranean dark fantasy architecture of Chrono Monolith, paired with higher-order ambisonics.',
-    dept: 'TECHNICAL ART // M. VANCE',
+    title: 'ASHES OF ESCAPE: TRI-ENVIRONMENT WAVE SCALING ARCHITECTURE',
+    desc: 'Technical breakdown of dynamic wave pacing across the three hostile biomes in Ashes of Escape, balancing relentless enemy pressure with extraction zone defenses.',
+    dept: 'COMBAT DESIGN // SYSTEMS TEAM',
   },
   {
     date: '2025.01.14',
