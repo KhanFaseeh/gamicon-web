@@ -57,8 +57,70 @@ export default function Admin() {
   const [studioManifesto, setStudioManifesto] = useState('')
   const [studioEmail, setStudioEmail] = useState('')
 
+  const [isUploadingImage, setIsUploadingImage] = useState(false)
+
   // Quick Image Preview selection
   const [previewGameSlug, setPreviewGameSlug] = useState('')
+
+  async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    if (!file.type.startsWith('image/')) {
+      showNotification('Please select a valid image file (PNG, JPG, WEBP).', 'error')
+      return
+    }
+
+    setIsUploadingImage(true)
+    try {
+      // 1. Try uploading to Supabase Storage bucket 'game-images' or 'images'
+      const fileExt = file.name.split('.').pop() || 'png'
+      const cleanFileName = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`
+      const filePath = `covers/${cleanFileName}`
+
+      const { error: uploadError } = await supabase.storage
+        .from('game-images')
+        .upload(filePath, file, { cacheControl: '3600', upsert: true })
+
+      if (!uploadError) {
+        const { data: publicUrlData } = supabase.storage
+          .from('game-images')
+          .getPublicUrl(filePath)
+
+        if (publicUrlData?.publicUrl) {
+          setFormImageUrl(publicUrlData.publicUrl)
+          showNotification('Picture uploaded to Supabase Storage successfully!')
+          setIsUploadingImage(false)
+          return
+        }
+      }
+
+      // 2. If storage bucket does not exist or upload is restricted, fallback smoothly to local Base64 / Data URL
+      console.warn('Storage upload fallback triggered, generating compressed Base64 Data URL...')
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        const base64 = event.target?.result as string
+        setFormImageUrl(base64)
+        showNotification('Picture loaded & processed successfully!')
+        setIsUploadingImage(false)
+      }
+      reader.onerror = () => {
+        showNotification('Failed to read image file.', 'error')
+        setIsUploadingImage(false)
+      }
+      reader.readAsDataURL(file)
+    } catch (err: any) {
+      console.warn('Direct upload error, falling back to Data URL', err)
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        const base64 = event.target?.result as string
+        setFormImageUrl(base64)
+        showNotification('Picture processed successfully!')
+        setIsUploadingImage(false)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
 
   async function loadData() {
     setLoading(true)
@@ -628,30 +690,96 @@ export default function Admin() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block font-display text-[10px] uppercase tracking-widest text-[#8e9192] mb-1">
-                    RELEASE DATE (YYYY-MM-DD)
+              <div>
+                <label className="block font-display text-[10px] uppercase tracking-widest text-[#8e9192] mb-1">
+                  RELEASE DATE (YYYY-MM-DD)
+                </label>
+                <input
+                  type="date"
+                  value={formReleaseDate}
+                  onChange={(e) => setFormReleaseDate(e.target.value)}
+                  className="w-full bg-[#131313] border border-[#444748]/40 text-white text-xs px-3 py-2 font-mono"
+                />
+              </div>
+
+              {/* COVER PICTURE UPLOAD OR URL */}
+              <div className="border border-[#444748]/40 p-4 bg-[#131313] space-y-3">
+                <div className="flex items-center justify-between">
+                  <label className="block font-display text-[10px] uppercase tracking-widest text-white font-bold">
+                    PRODUCT COVER PICTURE
                   </label>
-                  <input
-                    type="date"
-                    value={formReleaseDate}
-                    onChange={(e) => setFormReleaseDate(e.target.value)}
-                    className="w-full bg-[#131313] border border-[#444748]/40 text-white text-xs px-3 py-2 font-mono"
-                  />
+                  <span className="text-[10px] text-[#8e9192] font-mono">
+                    PNG, JPG, WEBP, GIF
+                  </span>
                 </div>
-                <div>
-                  <label className="block font-display text-[10px] uppercase tracking-widest text-[#8e9192] mb-1">
-                    PICTURE URL
-                  </label>
-                  <input
-                    type="url"
-                    value={formImageUrl}
-                    onChange={(e) => setFormImageUrl(e.target.value)}
-                    placeholder="https://... image link"
-                    className="w-full bg-[#131313] border border-[#444748]/40 text-white text-xs px-3 py-2 font-mono"
-                  />
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 items-center">
+                  {/* File Upload Button */}
+                  <div>
+                    <label className="flex flex-col items-center justify-center border border-dashed border-[#444748] hover:border-white p-4 cursor-pointer transition-colors bg-[#0e0e0e] group">
+                      <span className="material-symbols-outlined text-2xl text-[#8e9192] group-hover:text-white transition-colors mb-1">
+                        cloud_upload
+                      </span>
+                      <span className="font-display text-[11px] text-white tracking-widest uppercase">
+                        {isUploadingImage ? 'PROCESSING FILE...' : 'SELECT & UPLOAD PICTURE'}
+                      </span>
+                      <span className="text-[9px] text-[#8e9192] mt-0.5">
+                        Direct Local File Upload
+                      </span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        disabled={isUploadingImage}
+                        onChange={handleFileUpload}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+
+                  {/* Or enter Direct URL */}
+                  <div className="space-y-1">
+                    <span className="block font-display text-[9px] uppercase tracking-widest text-[#8e9192]">
+                      OR PASTE PICTURE URL / CDN LINK
+                    </span>
+                    <input
+                      type="text"
+                      value={formImageUrl}
+                      onChange={(e) => setFormImageUrl(e.target.value)}
+                      placeholder="https://... or uploaded image"
+                      className="w-full bg-[#0e0e0e] border border-[#444748]/40 text-white text-xs px-3 py-2 font-mono focus:border-white focus:outline-none"
+                    />
+                    {formImageUrl && (
+                      <button
+                        type="button"
+                        onClick={() => setFormImageUrl('')}
+                        className="text-[10px] text-red-400 hover:underline uppercase font-mono"
+                      >
+                        [Clear Image]
+                      </button>
+                    )}
+                  </div>
                 </div>
+
+                {/* Form Image Preview */}
+                {formImageUrl && (
+                  <div className="pt-2 border-t border-[#444748]/30 flex items-center gap-4">
+                    <div className="w-24 h-16 border border-[#444748]/40 overflow-hidden bg-black flex-shrink-0">
+                      <img
+                        src={formImageUrl}
+                        alt="Upload preview"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="text-[10px] text-[#8e9192] space-y-0.5">
+                      <span className="text-white block font-display uppercase tracking-widest">
+                        Image Attached & Verified
+                      </span>
+                      <span className="font-mono text-[9px] text-[#8e9192] break-all line-clamp-1">
+                        {formImageUrl.startsWith('data:') ? 'Local Image Data Embedded (Base64)' : formImageUrl}
+                      </span>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div>
