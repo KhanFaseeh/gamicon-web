@@ -3,34 +3,29 @@ import { Link } from 'react-router-dom'
 import { supabase, type Game, type StudioInfo } from '../lib/supabaseClient'
 import AdminLogin from './AdminLogin'
 
-const INITIAL_SEED_GAMES: Omit<Game, 'id'>[] = [
-  {
-    title: 'Echoes of Desolation',
-    slug: 'echoes-of-desolation',
-    release_date: '2025-10-31',
-    image_url:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuBPDot2E_OV1D-vLdPARlhiiTmL9DFIXeS6qb3wDjw3xfq_Z0Qv-L8rIwrPl6bp88_emkbMejDOSSqzrnTWCVwKOSqSl6EDYPR3TmqFJOjJ8HaOoLzPENJsk2Q95af_QeQYCI4gknuBfg4BX35f_Hj08zKBE7-aVwtTUw7IflkFe1-QqQRZ7XVxbdb3VREFZAdTQhCBvcRq_XzhUdugkokgLlEljJVq093KrwA_9vSe-HPPj1vSAVVv',
-    description:
-      'Following classified reports of illegal human experimentation inside Elysium Asylum, a lone detective enters the facility to uncover the truth. Trapped within its walls alongside patients mutated into grotesque monsters, you must fight through the horrors of the ward, confront the mutated mastermind Dr. Voss, and survive long enough to escape.',
-    tags: ['Survival Horror', 'Action', 'Single-Player'],
-  },
-  {
-    title: 'Ashes of Escape',
-    slug: 'ashes-of-escape',
-    release_date: '2026-03-15',
-    image_url:
-      'https://lh3.googleusercontent.com/aida/AEtjO1UJMRZzH5hkjwGYbhPftm1WQxBVgPZhhN-1HNr-hozj8Rwg67e0k9Hu6kaiMr1EHPHAeqq5bTM6kVLpri8Sv3bVG76Xc6ksXCwe8ZGzpyPu8y050ns3BjCQpo5oPvLJGXrxbuWhGihn3V5eUYn_aUZpcvSHAXc7SkkaXR0ncFL47P4S-Pf74EEFu2GT5BFFyPU7hoPg14OUNZNJDFRX-vbpMa_62lIMqfPSdXqchfq_kXD593V3jfhVarw',
-    description:
-      'A relentless gauntlet across three distinct, hostile environments. Fight through waves of enemies across shifting combat zones and carve a path to extraction before you are overrun.',
-    tags: ['Action', 'Combat', 'Survival'],
-  },
-]
-
-const INITIAL_SEED_STUDIO: StudioInfo = {
+const DEFAULT_STUDIO: StudioInfo = {
   id: 1,
   manifesto:
     'Gamicon is an independent studio forging mechanics-driven, narrative-rich titles built without creative compromise. We reject automated formulas and safety-first design paradigms. We architect unforgiving worlds for players who demand mastery, physics, narrative literacy, and visceral design.',
   contact_email: 'contact@gamicon.studio',
+}
+
+function extractYouTubeId(urlOrId: string): string {
+  const trimmed = urlOrId.trim()
+  if (!trimmed) return ''
+  // 11-char ID check
+  if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) {
+    return trimmed
+  }
+  // youtu.be/<id>
+  const shortMatch = trimmed.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/)
+  if (shortMatch) return shortMatch[1]
+  // youtube.com/watch?v=<id> or embed/<id>
+  const longMatch = trimmed.match(/[?&]v=([a-zA-Z0-9_-]{11})/)
+  if (longMatch) return longMatch[1]
+  const embedMatch = trimmed.match(/\/embed\/([a-zA-Z0-9_-]{11})/)
+  if (embedMatch) return embedMatch[1]
+  return trimmed
 }
 
 export default function Admin() {
@@ -48,6 +43,7 @@ export default function Admin() {
   const [formTitle, setFormTitle] = useState('')
   const [formSlug, setFormSlug] = useState('')
   const [formReleaseDate, setFormReleaseDate] = useState('')
+  const [formYoutubeId, setFormYoutubeId] = useState('')
   const [formImageUrl, setFormImageUrl] = useState('')
   const [formDescription, setFormDescription] = useState('')
   const [formTags, setFormTags] = useState('')
@@ -149,8 +145,8 @@ export default function Admin() {
         setStudioManifesto(info.manifesto)
         setStudioEmail(info.contact_email)
       } else {
-        setStudioManifesto(INITIAL_SEED_STUDIO.manifesto)
-        setStudioEmail(INITIAL_SEED_STUDIO.contact_email)
+        setStudioManifesto(DEFAULT_STUDIO.manifesto)
+        setStudioEmail(DEFAULT_STUDIO.contact_email)
       }
     } catch (err) {
       console.error('Supabase load error', err)
@@ -170,28 +166,29 @@ export default function Admin() {
     setTimeout(() => setNotification(null), 5000)
   }
 
-  async function handleSeedData() {
+  async function handleClearAllGames() {
+    const confirmed = window.confirm(
+      'WARNING: Are you sure you want to permanently delete ALL games from the database? This cannot be undone.'
+    )
+    if (!confirmed) return
+
     try {
       setLoading(true)
-      const { error: studioErr } = await supabase
-        .from('studio_info')
-        .upsert(INITIAL_SEED_STUDIO, { onConflict: 'id' })
+      // Delete all records from games table
+      const { error } = await supabase
+        .from('games')
+        .delete()
+        .neq('id', '00000000-0000-0000-0000-000000000000')
 
-      if (studioErr) throw studioErr
+      if (error) throw error
 
-      for (const g of INITIAL_SEED_GAMES) {
-        const { error: gameErr } = await supabase
-          .from('games')
-          .upsert(g, { onConflict: 'slug' })
-
-        if (gameErr) throw gameErr
-      }
-
-      showNotification('SUCCESS: Database seeded with initial Gamicon products and studio manifesto')
+      setGames([])
+      setPreviewGameSlug('')
+      showNotification('SUCCESS: All game transmissions cleared from database.')
       await loadData()
     } catch (err: any) {
       console.error(err)
-      showNotification(`SEED FAILED: ${err.message || 'Database error'}`, 'error')
+      showNotification(`CLEAR FAILED: ${err.message || 'Database error'}`, 'error')
     } finally {
       setLoading(false)
     }
@@ -221,6 +218,7 @@ export default function Admin() {
         .replace(/^-|-$/g, '')
 
     const generatedDate = formReleaseDate || new Date().toISOString().split('T')[0]
+    const parsedYoutubeId = extractYouTubeId(formYoutubeId)
 
     // Construct primary payload
     const payload: Record<string, any> = {
@@ -230,6 +228,7 @@ export default function Admin() {
       description: formDescription.trim(),
       tags: tagsArray,
       image_url: formImageUrl.trim(),
+      youtube_id: parsedYoutubeId,
     }
 
     try {
@@ -240,7 +239,7 @@ export default function Admin() {
           .update(payload)
           .eq('id', editingGameId)
 
-        // If remote schema complains about unknown image_url column, retry with youtube_id or trimmed fields
+        // If remote schema complains about unknown image_url column, retry with trimmed fields
         if (error && error.message?.includes('image_url')) {
           console.warn('Remote table does not have image_url column yet, adapting payload...')
           const fallbackPayload = { ...payload }
@@ -289,6 +288,7 @@ export default function Admin() {
         description: payload.description,
         tags: payload.tags,
         image_url: formImageUrl.trim(),
+        youtube_id: parsedYoutubeId,
       }
 
       setGames((prev) => {
@@ -314,6 +314,7 @@ export default function Admin() {
     setFormTitle(game.title)
     setFormSlug(game.slug)
     setFormReleaseDate(game.release_date)
+    setFormYoutubeId(game.youtube_id || '')
     setFormImageUrl(game.image_url || '')
     setFormDescription(game.description)
     setFormTags(game.tags ? game.tags.join(', ') : '')
@@ -337,6 +338,7 @@ export default function Admin() {
     setFormTitle('')
     setFormSlug('')
     setFormReleaseDate('')
+    setFormYoutubeId('')
     setFormImageUrl('')
     setFormDescription('')
     setFormTags('')
@@ -373,7 +375,7 @@ export default function Admin() {
   })
 
   const selectedPreviewGame =
-    games.find((g) => g.slug === previewGameSlug) || games[0] || INITIAL_SEED_GAMES[0]
+    games.find((g) => g.slug === previewGameSlug) || games[0] || null
 
   if (!isAuthenticated) {
     return <AdminLogin onLoginSuccess={() => setIsAuthenticated(true)} />
@@ -429,12 +431,12 @@ export default function Admin() {
 
           <div className="mt-8 pt-4 border-t border-[#444748]/40 space-y-2">
             <button
-              onClick={handleSeedData}
+              onClick={handleClearAllGames}
               disabled={loading}
-              className="w-full py-2.5 px-3 border border-emerald-500/80 hover:bg-emerald-500 hover:text-black text-emerald-400 font-display text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 transition-colors duration-150 bg-emerald-950/20 font-bold"
+              className="w-full py-2.5 px-3 border border-red-500/80 hover:bg-red-500 hover:text-white text-red-400 font-display text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 transition-colors duration-150 bg-red-950/20 font-bold"
             >
-              <span className="material-symbols-outlined text-sm">database</span>
-              <span>Seed Initial Products</span>
+              <span className="material-symbols-outlined text-sm">delete_forever</span>
+              <span>Clear All Games</span>
             </button>
 
             <button
@@ -763,16 +765,30 @@ export default function Admin() {
                 </div>
               </div>
 
-              <div>
-                <label className="block font-display text-[10px] uppercase tracking-widest text-[#8e9192] mb-1">
-                  RELEASE DATE (YYYY-MM-DD)
-                </label>
-                <input
-                  type="date"
-                  value={formReleaseDate}
-                  onChange={(e) => setFormReleaseDate(e.target.value)}
-                  className="w-full bg-[#131313] border border-[#444748]/40 text-white text-xs px-3 py-2 font-mono"
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block font-display text-[10px] uppercase tracking-widest text-[#8e9192] mb-1">
+                    RELEASE DATE (YYYY-MM-DD)
+                  </label>
+                  <input
+                    type="date"
+                    value={formReleaseDate}
+                    onChange={(e) => setFormReleaseDate(e.target.value)}
+                    className="w-full bg-[#131313] border border-[#444748]/40 text-white text-xs px-3 py-2 font-mono"
+                  />
+                </div>
+                <div>
+                  <label className="block font-display text-[10px] uppercase tracking-widest text-[#8e9192] mb-1">
+                    YOUTUBE URL OR 11-CHAR ID
+                  </label>
+                  <input
+                    type="text"
+                    value={formYoutubeId}
+                    onChange={(e) => setFormYoutubeId(e.target.value)}
+                    placeholder="e.g. dQw4w9WgXcQ or https://youtu.be/..."
+                    className="w-full bg-[#131313] border border-[#444748]/40 text-white text-xs px-3 py-2 font-mono"
+                  />
+                </div>
               </div>
 
               {/* COVER PICTURE UPLOAD OR URL */}
