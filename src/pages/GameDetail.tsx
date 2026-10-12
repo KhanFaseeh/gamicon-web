@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import { supabase, type Game } from '../lib/supabaseClient'
+import { supabase, parseGameRecord, type Game } from '../lib/supabaseClient'
 
 export default function GameDetail() {
   const { slug } = useParams<{ slug: string }>()
@@ -27,7 +27,7 @@ export default function GameDetail() {
           .single()
 
         if (!error && data) {
-          setGame(data as Game)
+          setGame(parseGameRecord(data))
 
           // Fetch other parallel productions from Supabase
           const { data: others } = await supabase
@@ -37,7 +37,7 @@ export default function GameDetail() {
             .limit(2)
 
           if (others) {
-            setCompanionGames(others as Game[])
+            setCompanionGames(others.map(parseGameRecord))
           }
         } else {
           setGame(null)

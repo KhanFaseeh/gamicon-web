@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import { supabase, type Game } from '../lib/supabaseClient'
+import { supabase, parseGameRecord, type Game } from '../lib/supabaseClient'
 
 export default function Home() {
   const [games, setGames] = useState<Game[]>([])
@@ -20,7 +20,7 @@ export default function Home() {
           .order('release_date', { ascending: false })
 
         if (!error && data) {
-          setGames(data as Game[])
+          setGames(data.map(parseGameRecord))
         } else {
           setGames([])
         }

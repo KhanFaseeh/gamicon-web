@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { supabase, type Game, type StudioInfo } from '../lib/supabaseClient'
+import {
+  supabase,
+  parseGameRecord,
+  serializeGameRecord,
+  type Game,
+  type StudioInfo,
+} from '../lib/supabaseClient'
 import AdminLogin from './AdminLogin'
 
 const DEFAULT_STUDIO: StudioInfo = {
@@ -26,6 +32,54 @@ function extractYouTubeId(urlOrId: string): string {
   const embedMatch = trimmed.match(/\/embed\/([a-zA-Z0-9_-]{11})/)
   if (embedMatch) return embedMatch[1]
   return trimmed
+}
+
+/**
+ * Resizes and compresses an image in browser using an offscreen canvas
+ * Produces a lightweight, crystal-clear WebP / JPEG data URL ideal for persistence.
+ */
+function compressImageFile(file: File, maxWidth = 1280, quality = 0.82): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onerror = reject
+    reader.onload = (e) => {
+      const img = new Image()
+      img.onerror = reject
+      img.onload = () => {
+        let width = img.width
+        let height = img.height
+
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width)
+          width = maxWidth
+        }
+
+        const canvas = document.createElement('canvas')
+        canvas.width = width
+        canvas.height = height
+        const ctx = canvas.getContext('2d')
+        if (!ctx) {
+          resolve(e.target?.result as string)
+          return
+        }
+
+        ctx.drawImage(img, 0, 0, width, height)
+        // Prefer webp, fallback to jpeg
+        try {
+          const webpData = canvas.toDataURL('image/webp', quality)
+          if (webpData.startsWith('data:image/webp')) {
+            resolve(webpData)
+            return
+          }
+        } catch {
+          // ignore
+        }
+        resolve(canvas.toDataURL('image/jpeg', quality))
+      }
+      img.src = e.target?.result as string
+    }
+    reader.readAsDataURL(file)
+  })
 }
 
 export default function Admin() {
@@ -69,52 +123,14 @@ export default function Admin() {
 
     setIsUploadingImage(true)
     try {
-      // 1. Try uploading to Supabase Storage bucket 'game-images' or 'images'
-      const fileExt = file.name.split('.').pop() || 'png'
-      const cleanFileName = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`
-      const filePath = `covers/${cleanFileName}`
-
-      const { error: uploadError } = await supabase.storage
-        .from('game-images')
-        .upload(filePath, file, { cacheControl: '3600', upsert: true })
-
-      if (!uploadError) {
-        const { data: publicUrlData } = supabase.storage
-          .from('game-images')
-          .getPublicUrl(filePath)
-
-        if (publicUrlData?.publicUrl) {
-          setFormImageUrl(publicUrlData.publicUrl)
-          showNotification('Picture uploaded to Supabase Storage successfully!')
-          setIsUploadingImage(false)
-          return
-        }
-      }
-
-      // 2. If storage bucket does not exist or upload is restricted, fallback smoothly to local Base64 / Data URL
-      console.warn('Storage upload fallback triggered, generating compressed Base64 Data URL...')
-      const reader = new FileReader()
-      reader.onload = (event) => {
-        const base64 = event.target?.result as string
-        setFormImageUrl(base64)
-        showNotification('Picture loaded & processed successfully!')
-        setIsUploadingImage(false)
-      }
-      reader.onerror = () => {
-        showNotification('Failed to read image file.', 'error')
-        setIsUploadingImage(false)
-      }
-      reader.readAsDataURL(file)
+      const compressedDataUrl = await compressImageFile(file, 1280, 0.85)
+      setFormImageUrl(compressedDataUrl)
+      showNotification('Picture processed & optimized successfully!')
     } catch (err: any) {
-      console.warn('Direct upload error, falling back to Data URL', err)
-      const reader = new FileReader()
-      reader.onload = (event) => {
-        const base64 = event.target?.result as string
-        setFormImageUrl(base64)
-        showNotification('Picture processed successfully!')
-        setIsUploadingImage(false)
-      }
-      reader.readAsDataURL(file)
+      console.error('Image compression error:', err)
+      showNotification('Failed to read and process image file.', 'error')
+    } finally {
+      setIsUploadingImage(false)
     }
   }
 
@@ -127,7 +143,7 @@ export default function Admin() {
         .order('created_at', { ascending: false })
 
       if (!gamesError && gamesData) {
-        const casted = gamesData as Game[]
+        const casted = gamesData.map(parseGameRecord)
         setGames(casted)
         if (casted.length > 0 && !previewGameSlug) {
           setPreviewGameSlug(casted[0].slug)
@@ -220,8 +236,8 @@ export default function Admin() {
     const generatedDate = formReleaseDate || new Date().toISOString().split('T')[0]
     const parsedYoutubeId = extractYouTubeId(formYoutubeId)
 
-    // Construct primary payload
-    const payload: Record<string, any> = {
+    // Construct primary payload using serializer which embeds image_url into metadata tag
+    const payload = serializeGameRecord({
       title: formTitle.trim(),
       slug: generatedSlug,
       release_date: generatedDate,
@@ -229,7 +245,7 @@ export default function Admin() {
       tags: tagsArray,
       image_url: formImageUrl.trim(),
       youtube_id: parsedYoutubeId,
-    }
+    })
 
     try {
       if (editingGameId) {
@@ -239,9 +255,10 @@ export default function Admin() {
           .update(payload)
           .eq('id', editingGameId)
 
-        // If remote schema complains about unknown image_url column, retry with trimmed fields
+        // If remote schema complains about unknown image_url column, retry without the image_url field
+        // (The image is still safely stored and preserved inside payload.description!)
         if (error && error.message?.includes('image_url')) {
-          console.warn('Remote table does not have image_url column yet, adapting payload...')
+          console.warn('Remote table does not have image_url column, saving with description metadata...')
           const fallbackPayload = { ...payload }
           delete fallbackPayload.image_url
           const retryRes = await supabase
@@ -257,9 +274,10 @@ export default function Admin() {
         // Try standard insert
         let { error } = await supabase.from('games').insert([payload])
 
-        // If remote schema does not have image_url column or requires fallback
+        // If remote schema does not have image_url column, retry without it
+        // (The image is still safely stored and preserved inside payload.description!)
         if (error && error.message?.includes('image_url')) {
-          console.warn('Remote table does not have image_url column, inserting compatible payload...')
+          console.warn('Remote table does not have image_url column, inserting with description metadata...')
           const fallbackPayload = { ...payload }
           delete fallbackPayload.image_url
           const retryRes = await supabase.from('games').insert([fallbackPayload])
