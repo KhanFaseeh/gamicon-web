@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { MonogramIcon } from '../components/Logo'
+import ScrambleText from '../components/ScrambleText'
+import LiveTimecode from '../components/LiveTimecode'
 import { supabase, type StudioInfo } from '../lib/supabaseClient'
+import { useReveal } from '../hooks/useReveal'
 
 const DEFAULT_STUDIO_INFO: StudioInfo = {
   id: 1,
@@ -12,8 +15,40 @@ const DEFAULT_STUDIO_INFO: StudioInfo = {
   press_kit_url: 'https://anamorphic.studio/press-kit.zip',
 }
 
+const TIMELINE_YEARS = [
+  {
+    year: '2023',
+    era: 'FOUNDING ERA',
+    title: 'GENESIS // PESHAWAR',
+    desc: 'Founded as an auteur studio collective uniting Blender 3D modeling, Unity Engine precision, and ElevenLabs audio architecture. 100% self-owned equity secured to guarantee permanent creative autonomy.',
+    align: 'left',
+  },
+  {
+    year: '2024',
+    era: 'TECH FOUNDATION',
+    title: 'CORE ENGINE PIPELINE',
+    desc: 'Integration of advanced Unity Engine physics pipelines, procedural high-poly Blender assets, and ElevenLabs dynamic voice synthesis for high-tension spatial realism.',
+    align: 'right',
+  },
+  {
+    year: '2025',
+    era: 'FLAGSHIP PRODUCTION',
+    title: 'ECHOES OF DESOLATION',
+    desc: 'Investigation into Elysium Asylum; psychological single-player survival horror with brutal combat encounters and unsparing narrative literacy.',
+    align: 'right',
+  },
+  {
+    year: '2026+',
+    era: 'GLOBAL HORIZON',
+    title: 'DISTRIBUTED ARCHITECTURE',
+    desc: 'Scaling the proprietary 2.39:1 widescreen optical aesthetics, multi-biome dynamic wave simulation, and unassisted player deduction to global platforms.',
+    align: 'left',
+  },
+]
+
 export default function About() {
   const [studioInfo, setStudioInfo] = useState<StudioInfo>(DEFAULT_STUDIO_INFO)
+  const { ref: timelineRef, isVisible: timelineVisible } = useReveal<HTMLDivElement>({ threshold: 0.1 })
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -46,11 +81,13 @@ export default function About() {
         <section className="min-h-screen flex flex-col justify-between px-6 md:px-16 pt-28 pb-12 relative bg-[#0e0e0e] border-b border-[#444748]/30">
           {/* Studio Telemetry Coordinates Header */}
           <div className="flex flex-col md:flex-row md:items-center justify-between text-[#8e9192] border-b border-[#444748]/20 pb-4 gap-2 font-display text-[10px] tracking-widest">
-            <div className="text-[#c7c6c6]">
-              EST. 2023 // PESHAWAR LAB // PAKISTAN // 100% SELF-OWNED EQUITY
+            <div className="text-[#c7c6c6] flex items-center gap-3">
+              <span className="w-1.5 h-1.5 bg-white telemetry-indicator inline-block" />
+              <span>EST. 2023 // PESHAWAR LAB // PAKISTAN // 100% SELF-OWNED EQUITY</span>
             </div>
-            <div className="text-[#8e9192]">
-              AUTEUR SPECIFICATION // SPEC-092
+            <div className="text-[#8e9192] flex items-center gap-4">
+              <LiveTimecode prefix="SYS_CLOCK:" />
+              <span>AUTEUR SPECIFICATION // SPEC-092</span>
             </div>
           </div>
 
@@ -60,12 +97,14 @@ export default function About() {
               <MonogramIcon className="w-16 h-16 md:w-20 md:h-20" animated={true} />
             </div>
             <span className="font-display text-[10px] text-[#8e9192] tracking-widest uppercase mb-6 inline-block">
-              STUDIO MANIFESTO // VOL. 01
+              <ScrambleText text="STUDIO MANIFESTO // VOL. 01" scrambleOnHover={true} />
             </span>
-            <h1 className="text-3xl sm:text-5xl md:text-7xl font-display text-white uppercase leading-tight md:leading-none tracking-tight">
-              FROM HOMO SAPIENS TO HOMO LUDENS — WE ARE THE ARCHITECTS OF VISCERAL INTERACTION
-            </h1>
-            <div className="w-16 h-[1px] bg-[#444748] my-10" />
+            <div className="overflow-hidden">
+              <h1 className="text-3xl sm:text-5xl md:text-7xl font-display text-white uppercase leading-tight md:leading-none tracking-tight animate-reveal-up">
+                FROM HOMO SAPIENS TO HOMO LUDENS — WE ARE THE ARCHITECTS OF VISCERAL INTERACTION
+              </h1>
+            </div>
+            <div className="w-16 h-[1px] bg-[#444748] my-10 animate-draw-line-x" />
             <p className="text-base md:text-xl font-light text-[#c4c7c8] max-w-3xl leading-relaxed text-center">
               {studioInfo.manifesto}
             </p>
@@ -110,14 +149,23 @@ export default function About() {
                SECTION 2: MASCOT / STUDIO IDENTITY VISUAL BREAK (Letterbox 21:9)
                ========================================================================= */}
         <section className="w-full bg-[#0e0e0e] border-b border-[#444748]/30 overflow-hidden">
-          {/* Letterbox Top Bar */}
+          {/* Letterbox Top Bar with Live Telemetry */}
           <div className="w-full bg-[#000000] py-3 px-6 md:px-16 flex justify-between items-center text-[#8e9192] border-b border-[#444748]/20 font-display text-[10px] tracking-widest">
-            <span>ASPECT RATIO 21:9 // ANAMORPHIC SENSOR SIMULATION</span>
+            <span className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 bg-white telemetry-indicator" />
+              <span>ASPECT RATIO 21:9 // ANAMORPHIC SENSOR SIMULATION</span>
+            </span>
             <span>FPS 24.000 // MONO-CHROME LOG</span>
           </div>
 
-          {/* Cinematic Artwork Frame */}
-          <div className="relative w-full aspect-[21/9] min-h-[480px] bg-[#0e0e0e] overflow-hidden group">
+          {/* Cinematic Artwork Frame with Viewfinder Shutter and scanline */}
+          <div className="relative w-full aspect-[21/9] min-h-[480px] bg-[#0e0e0e] overflow-hidden group viewfinder-card">
+            <div className="viewfinder-corner-tl" />
+            <div className="viewfinder-corner-tr" />
+            <div className="viewfinder-corner-bl" />
+            <div className="viewfinder-corner-br" />
+            <div className="media-scan-sweep" />
+
             <img
               alt="PROJECT 01 // NEON PROTOCOL"
               className="w-full h-full object-cover grayscale contrast-125 transition-all duration-700 group-hover:grayscale-0 group-hover:scale-105"
@@ -139,10 +187,10 @@ export default function About() {
             </div>
           </div>
 
-          {/* Letterbox Bottom Bar */}
+          {/* Letterbox Bottom Bar with Live Ticking Timecode */}
           <div className="w-full bg-[#000000] py-3 px-6 md:px-16 flex justify-between items-center text-[#8e9192] border-t border-[#444748]/20 font-display text-[10px] tracking-widest">
             <span>PESHAWAR PRODUCTION UNIT // SECTOR 04</span>
-            <span>TIME CODE: 01:44:28:12</span>
+            <LiveTimecode prefix="TIME CODE:" />
           </div>
         </section>
 
@@ -154,7 +202,7 @@ export default function About() {
             {/* Statement Left Column */}
             <div className="lg:col-span-6 space-y-6">
               <div className="font-display text-[10px] tracking-widest text-[#8e9192] uppercase">
-                EXECUTIVE DISPATCH // FOUNDER DIRECTIVE
+                <ScrambleText text="EXECUTIVE DISPATCH // FOUNDER DIRECTIVE" scrambleOnHover={true} />
               </div>
               <h2 className="font-display text-3xl md:text-4xl text-white uppercase tracking-tight">
                 A MESSAGE FROM CEO MIAN FASEEH UR REHMAN & PARTNER MUHAMMAD TAYYAB
@@ -178,27 +226,30 @@ export default function About() {
                     CHIEF EXECUTIVE OFFICER & FOUNDER
                   </div>
                 </div>
-                <div className="space-y-1">
+                <div className="space-y-1 text-right">
                   <div className="font-display text-xs text-white tracking-widest uppercase">
                     MUHAMMAD TAYYAB
                   </div>
                   <div className="font-display text-[10px] text-[#8e9192] tracking-widest uppercase">
-                    STUDIO PARTNER & CO-FOUNDER
+                    CO-FOUNDER & CREATIVE PARTNER
                   </div>
-                </div>
-                <div className="font-display text-[10px] text-[#c7c6c6] tracking-widest border border-[#444748] px-3 py-1 uppercase">
-                  LEADERSHIP
                 </div>
               </div>
             </div>
 
             {/* Laboratory Photo Right Column */}
             <div className="lg:col-span-6">
-              <div className="border border-[#444748]/30 p-2 bg-[#1c1b1b]">
+              <div className="border border-[#444748]/30 p-2 bg-[#1c1b1b] relative group viewfinder-card">
+                <div className="viewfinder-corner-tl" />
+                <div className="viewfinder-corner-tr" />
+                <div className="viewfinder-corner-bl" />
+                <div className="viewfinder-corner-br" />
+                <div className="media-scan-sweep" />
+
                 <div className="relative overflow-hidden aspect-[4/3]">
                   <img
                     alt="Peshawar Soundstage & Engineering Lab"
-                    className="w-full h-full object-cover filter contrast-110"
+                    className="w-full h-full object-cover filter contrast-110 group-hover:scale-105 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
                     src="https://lh3.googleusercontent.com/aida/AEtjO1X8gVDzQKeN1xnNu8yH5hqMwFVSf2tgib-RrN4qRR4hYfMl1W1K84GlSKWbF0bCtfapCBy75RgVw9rATVOsigq89QNtmXDugvbaXFOC9wAq6I0iCDdcZcFx4jVjZhwbsp3B7bvutYI3lt0ZGkoF19qWlev-tk3rDCALHDrL8Et0daLsjCKEjSy9vr0fudlrSAaMt_g1GO8wLvg6Ua1DGh0Ss2NmAle4pFz2_R2WwvLr2qcyJh0haDvSHZ0"
                   />
                   <div className="absolute inset-0 bg-[#0e0e0e]/20 pointer-events-none" />
@@ -215,14 +266,14 @@ export default function About() {
         </section>
 
         {/* =========================================================================
-               SECTION 4: STUDIO TIMELINE (Dramatic High-Contrast White Canvas)
+               SECTION 4: STUDIO TIMELINE WITH ANIMATED VERTICAL SPINE
                ========================================================================= */}
         <section className="w-full bg-[#FFFFFF] text-[#050505] px-6 md:px-16 py-24 transition-colors duration-300">
           <div className="max-w-4xl mx-auto">
             {/* Timeline Header */}
             <div className="text-center mb-16 space-y-3">
               <span className="font-display text-[10px] text-[#777777] tracking-widest uppercase inline-block">
-                CHRONOLOGICAL ARCHIVE // 2023 — BEYOND
+                <ScrambleText text="CHRONOLOGICAL ARCHIVE // 2023 — BEYOND" scrambleOnHover={true} />
               </span>
               <h2 className="font-display text-3xl md:text-5xl uppercase text-[#050505] tracking-tight">
                 THE CHRONOLOGY OF AUTEUR DEV
@@ -232,87 +283,56 @@ export default function About() {
               </p>
             </div>
 
-            {/* Center Spine Vertical Timeline */}
-            <div className="relative">
-              {/* Hairline center vertical line */}
-              <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[1px] bg-[#D4D4D4] transform md:-translate-x-1/2" />
+            {/* Center Spine Vertical Timeline with Scroll Reveal */}
+            <div ref={timelineRef} className="relative">
+              {/* Animated Vertical Center Spine Line that draws downward */}
+              <div
+                className={`absolute left-4 md:left-1/2 top-0 bottom-0 w-[1px] bg-[#050505] transform md:-translate-x-1/2 transition-transform duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] origin-top ${
+                  timelineVisible ? 'scale-y-100' : 'scale-y-0'
+                }`}
+              />
 
               <div className="space-y-16">
-                {/* Item 1: 2023 */}
-                <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between">
-                  <div className="md:w-5/12 pl-12 md:pl-0 md:text-right space-y-2">
-                    <span className="font-display text-[10px] text-[#888888] tracking-widest block uppercase">
-                      FOUNDING ERA
-                    </span>
-                    <h3 className="font-display text-2xl text-[#050505] uppercase">
-                      GENESIS // PESHAWAR
-                    </h3>
-                    <p className="text-xs md:text-sm text-[#444444] leading-relaxed">
-                      Founded as an auteur studio collective uniting Blender 3D modeling, Unity Engine precision, and ElevenLabs audio architecture. 100% self-owned equity secured to guarantee permanent creative autonomy.
-                    </p>
-                  </div>
-                  <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-3 h-3 bg-[#050505] border-2 border-[#FFFFFF] rounded-none z-10 mt-1 md:mt-0" />
-                  <div className="md:w-5/12 pl-12 md:pl-8 font-display text-sm text-[#050505] tracking-widest font-bold">
-                    2023
-                  </div>
-                </div>
+                {TIMELINE_YEARS.map((item, idx) => {
+                  const isLeft = item.align === 'left'
 
-                {/* Item 2: 2024 */}
-                <div className="relative flex flex-col md:flex-row-reverse items-start md:items-center justify-between">
-                  <div className="md:w-5/12 pl-12 md:pl-8 space-y-2">
-                    <span className="font-display text-[10px] text-[#888888] tracking-widest block uppercase">
-                      TECH FOUNDATION
-                    </span>
-                    <h3 className="font-display text-2xl text-[#050505] uppercase">
-                      CORE ENGINE PIPELINE
-                    </h3>
-                    <p className="text-xs md:text-sm text-[#444444] leading-relaxed">
-                      Integration of advanced Unity Engine physics pipelines, procedural high-poly Blender assets, and ElevenLabs dynamic voice synthesis for high-tension spatial realism.
-                    </p>
-                  </div>
-                  <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-3 h-3 bg-[#050505] border-2 border-[#FFFFFF] rounded-none z-10 mt-1 md:mt-0" />
-                  <div className="md:w-5/12 pl-12 md:pl-0 md:text-right font-display text-sm text-[#050505] tracking-widest font-bold">
-                    2024
-                  </div>
-                </div>
+                  return (
+                    <div
+                      key={item.year}
+                      className={`relative flex flex-col items-start md:items-center justify-between ${
+                        isLeft ? 'md:flex-row' : 'md:flex-row-reverse'
+                      }`}
+                      style={{ transitionDelay: `${idx * 120}ms` }}
+                    >
+                      <div
+                        className={`md:w-5/12 pl-12 space-y-2 ${
+                          isLeft ? 'md:pl-0 md:text-right' : 'md:pl-8'
+                        }`}
+                      >
+                        <span className="font-display text-[10px] text-[#888888] tracking-widest block uppercase">
+                          {item.era}
+                        </span>
+                        <h3 className="font-display text-2xl text-[#050505] uppercase">
+                          {item.title}
+                        </h3>
+                        <p className="text-xs md:text-sm text-[#444444] leading-relaxed">
+                          {item.desc}
+                        </p>
+                      </div>
 
-                {/* Item 4: 2025 */}
-                <div className="relative flex flex-col md:flex-row-reverse items-start md:items-center justify-between">
-                  <div className="md:w-5/12 pl-12 md:pl-8 space-y-2">
-                    <span className="font-display text-[10px] text-[#888888] tracking-widest block uppercase">
-                      FLAGSHIP PRODUCTION
-                    </span>
-                    <h3 className="font-display text-2xl text-[#050505] uppercase">
-                      ECHOES OF DESOLATION
-                    </h3>
-                    <p className="text-xs md:text-sm text-[#444444] leading-relaxed">
-                      Investigation into Elysium Asylum; psychological single-player survival horror with brutal combat encounters and unsparing narrative literacy.
-                    </p>
-                  </div>
-                  <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-3 h-3 bg-[#050505] border-2 border-[#FFFFFF] rounded-none z-10 mt-1 md:mt-0" />
-                  <div className="md:w-5/12 pl-12 md:pl-0 md:text-right font-display text-sm text-[#050505] tracking-widest font-bold">
-                    2025
-                  </div>
-                </div>
+                      {/* Timeline Node Reticle Point */}
+                      <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-3 h-3 bg-[#050505] border-2 border-[#FFFFFF] rounded-none z-10 mt-1 md:mt-0 transition-transform duration-300 hover:scale-150 cursor-pointer" />
 
-                {/* Item 5: 2026 & Beyond */}
-                <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between">
-                  <div className="md:w-5/12 pl-12 md:pl-0 md:text-right space-y-2">
-                    <span className="font-display text-[10px] text-[#888888] tracking-widest block uppercase">
-                      GAUNTLET EXTRACTION
-                    </span>
-                    <h3 className="font-display text-2xl text-[#050505] uppercase">
-                      ASHES OF ESCAPE
-                    </h3>
-                    <p className="text-xs md:text-sm text-[#444444] leading-relaxed">
-                      High-stakes survival action gauntlet spanning three brutal environments, testing wave endurance, spatial discipline, and tactical extraction.
-                    </p>
-                  </div>
-                  <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-3 h-3 bg-[#050505] border-2 border-[#FFFFFF] rounded-none z-10 mt-1 md:mt-0" />
-                  <div className="md:w-5/12 pl-12 md:pl-8 font-display text-sm text-[#050505] tracking-widest font-bold">
-                    2026
-                  </div>
-                </div>
+                      <div
+                        className={`md:w-5/12 pl-12 font-display text-sm text-[#050505] tracking-widest font-bold ${
+                          isLeft ? 'md:pl-8' : 'md:pl-0 md:text-right'
+                        }`}
+                      >
+                        {item.year}
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
             </div>
           </div>

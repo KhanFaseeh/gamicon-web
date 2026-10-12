@@ -17,6 +17,7 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
     const expectedPasscode = import.meta.env.VITE_ADMIN_PASSCODE || 'gamicon2026'
 
     if (passcode.trim() === expectedPasscode.trim() || passcode.trim() === 'anamorphic2026') {
+      sessionStorage.setItem('anamorphic_admin_auth', 'authenticated')
       sessionStorage.setItem('gamicon_admin_auth', 'authenticated')
       onLoginSuccess()
     } else {

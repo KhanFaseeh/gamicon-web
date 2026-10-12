@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import ScrambleText from '../components/ScrambleText'
+import LiveTimecode from '../components/LiveTimecode'
 import { supabase, type StudioInfo } from '../lib/supabaseClient'
 
 const DEFAULT_STUDIO_INFO: StudioInfo = {
@@ -46,6 +48,33 @@ const DISPATCHES: Dispatch[] = [
   },
 ]
 
+const PRESS_KIT_ASSETS = [
+  {
+    title: 'VECTOR BRAND ASSETS (2.39:1)',
+    spec: 'SVG / EPS / VECTOR MASTER',
+    size: '14.2 MB',
+    desc: 'High-res monochromatic aperture lockups, favicon packs, and typography specifications.',
+  },
+  {
+    title: 'ECHOES OF DESOLATION 4K KEY ART',
+    spec: 'TIFF / EXR / UNCOMPRESSED',
+    size: '188 MB',
+    desc: 'Direct cinematic renders from Blender & Unity Engine showing Elysium Asylum biomes.',
+  },
+  {
+    title: 'ATMOSPHERIC AUDIO SAMPLER',
+    spec: '24-BIT / 96KHZ FLAC',
+    size: '62 MB',
+    desc: 'Binaural ElevenLabs spatial voice transmissions and diegetic environmental reverb loops.',
+  },
+  {
+    title: 'STUDIO WHITE PAPER & DOSSIER',
+    spec: 'PDF // SPEC_2026.04',
+    size: '4.8 MB',
+    desc: 'Full studio executive philosophy, technical pipeline benchmarks, and founder interview transcripts.',
+  },
+]
+
 export default function Press() {
   const [studioInfo, setStudioInfo] = useState<StudioInfo>(DEFAULT_STUDIO_INFO)
   const [activeDispatch, setActiveDispatch] = useState<Dispatch | null>(null)
@@ -81,12 +110,13 @@ export default function Press() {
         <section className="px-6 md:px-16 pt-8 pb-16 border-b border-[#444748]/30">
           <div className="flex flex-wrap items-center justify-between gap-y-2 mb-4 pb-2 border-b border-[#444748]/20 font-display text-[10px] text-[#8e9192] tracking-widest uppercase">
             <div className="flex items-center gap-3">
-              <span className="inline-block w-2 h-2 bg-white" />
-              <span className="text-[#e5e2e1]">SYS_BUILD: 2025.REL_04</span>
+              <span className="inline-block w-2 h-2 bg-white telemetry-indicator" />
+              <span className="text-[#e5e2e1]">SYS_BUILD: 2026.REL_04</span>
               <span className="text-[#444748]">/</span>
               <span>PROTOCOL 100% INDEPENDENT</span>
             </div>
-            <div>
+            <div className="flex items-center gap-4">
+              <LiveTimecode prefix="UTC_FEED:" />
               <span>PESHAWAR LAB // PAKISTAN</span>
             </div>
           </div>
@@ -104,7 +134,8 @@ export default function Press() {
               <span className="text-[10px] text-[#8e9192] tracking-widest uppercase">
                 COMMUNICATIONS STATUS
               </span>
-              <span className="text-xs text-white tracking-widest uppercase">
+              <span className="text-xs text-white tracking-widest uppercase flex items-center gap-2">
+                <span className="w-1.5 h-1.5 bg-white inline-block animate-pulse" />
                 ALL CHANNELS ACTIVE
               </span>
               <a
@@ -118,40 +149,52 @@ export default function Press() {
         </section>
 
         {/* ========================================================================= */}
-        {/* Architectural Studio Contextual Imagery Strip                             */}
+        {/* Architectural Studio Contextual Imagery Strip (Live REC Indicator)        */}
         {/* ========================================================================= */}
         <section className="border-b border-[#444748]/30 bg-[#131313]">
           <div className="px-6 md:px-16 py-4 grid grid-cols-1 md:grid-cols-12 gap-px bg-[#444748]/30">
             {/* Lab Environment Module */}
-            <div className="md:col-span-7 bg-[#0e0e0e] p-4 flex flex-col justify-between group">
+            <div className="md:col-span-7 bg-[#0e0e0e] p-4 flex flex-col justify-between group viewfinder-card">
               <div className="flex items-center justify-between text-[#8e9192] font-display text-[10px] mb-2 uppercase tracking-widest">
                 <span>LAB CAM 01 // PESHAWAR DEV FLOOR</span>
-                <span className="text-white flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 bg-white inline-block animate-pulse" /> REC
+                <span className="text-white flex items-center gap-1.5 font-bold">
+                  <span className="w-2 h-2 bg-red-600 inline-block animate-ping" /> REC [LIVE]
                 </span>
               </div>
-              <div className="w-full aspect-[21/9] overflow-hidden bg-[#201f1f]">
+              <div className="relative w-full aspect-[21/9] overflow-hidden bg-[#201f1f]">
+                <div className="viewfinder-corner-tl" />
+                <div className="viewfinder-corner-tr" />
+                <div className="viewfinder-corner-bl" />
+                <div className="viewfinder-corner-br" />
+                <div className="media-scan-sweep" />
+
                 <img
-                  className="w-full h-full object-cover filter grayscale contrast-125 group-hover:grayscale-0 transition-all duration-300"
+                  className="w-full h-full object-cover filter grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
                   alt="ANAMORPHIC Peshawar Dev Floor"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2cOOxbCilaHe97REcOuuPeAOtdQvXV9AmGHYCoRw_TFUfvlN2Ci2DU2qgd4jhGk5HYWNXtV8y6uGYgBecfX69OhSMJzA9nJQjAAan_oJgwbzNwtP-ksKksZfq2wG4CoDWoWLsrkQ-iqq2kmiCm_HbMvqsjF68p-zbZ2xhnlD28ULzCh5xsaWbb5Xdz_OXVhS1z_5Bz-1RaR_LmmxvOkuU5JqTuqKf-TI6It1jMrTTPxGlhC4kFk2J"
                 />
               </div>
               <div className="mt-2 flex justify-between text-[#8e9192] font-display text-[10px] uppercase tracking-widest">
                 <span>DIRECTOR & COMBAT ENGINEERING WORKFLOW</span>
-                <span>23:41 EST</span>
+                <LiveTimecode prefix="FEED:" />
               </div>
             </div>
 
             {/* Combat Art Preview Module */}
-            <div className="md:col-span-5 bg-[#0e0e0e] p-4 flex flex-col justify-between group">
+            <div className="md:col-span-5 bg-[#0e0e0e] p-4 flex flex-col justify-between group viewfinder-card">
               <div className="flex items-center justify-between text-[#8e9192] font-display text-[10px] mb-2 uppercase tracking-widest">
                 <span>PROJECT: ECHOES OF DESOLATION // ASSET PREVIEW</span>
                 <span>KEY ARTWORK</span>
               </div>
-              <div className="w-full aspect-[21/9] overflow-hidden bg-[#201f1f]">
+              <div className="relative w-full aspect-[21/9] overflow-hidden bg-[#201f1f]">
+                <div className="viewfinder-corner-tl" />
+                <div className="viewfinder-corner-tr" />
+                <div className="viewfinder-corner-bl" />
+                <div className="viewfinder-corner-br" />
+                <div className="media-scan-sweep" />
+
                 <img
-                  className="w-full h-full object-cover filter grayscale contrast-125 group-hover:grayscale-0 transition-all duration-300"
+                  className="w-full h-full object-cover filter grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
                   alt="Echoes of Desolation Key Art"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUqrBiEbtQ9z9K5SEojag5pJIoM2QysO2Slf7Fzm7-m-jHdleNbpGaEiGCJUyR9yCJUuqwiFDLzeZm2QWTc1atIxMay_vT3mpX4WJp32ab5efbwQxMOfDZ-Fgol9Fie8r5NzJ40fV8VNeHV9a7DMzDc4zVqnigDsxw64XSRUGfBOGdk3CCLdlurwanYP_0lzqRD8WoK6Rp68Bu1M64pkTlSXfxB8NqhYKVJEa8rWtLG2eWy-anw7iJ"
                 />
@@ -165,7 +208,7 @@ export default function Press() {
         </section>
 
         {/* ========================================================================= */}
-        {/* News & Studio Dispatches (Asymmetric Hairline Grid)                        */}
+        {/* News & Studio Dispatches                                                  */}
         {/* ========================================================================= */}
         <section className="px-6 md:px-16 py-16" id="dispatches">
           <div className="flex items-baseline justify-between mb-8 pb-2 border-b border-[#444748]/30">
@@ -174,7 +217,7 @@ export default function Press() {
                 SECTION 01 // ARCHIVE
               </span>
               <h2 className="font-display text-2xl md:text-3xl text-white uppercase tracking-tight">
-                Recent Studio Dispatches
+                <ScrambleText text="Recent Studio Dispatches" scrambleOnHover={true} />
               </h2>
             </div>
             <span className="hidden md:inline font-display text-[10px] text-[#8e9192] tracking-widest uppercase">
@@ -219,7 +262,67 @@ export default function Press() {
         </section>
 
         {/* ========================================================================= */}
-        {/* Stripped-Down Contact Directory Grid (Technical Spec Style)               */}
+        {/* PRESS KIT ASSET CARDS (4 Modules with Viewfinder Brackets)                */}
+        {/* ========================================================================= */}
+        <section className="px-6 md:px-16 py-16 bg-[#0a0a0a] border-t border-[#444748]/30" id="press-kit">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-3 border-b border-[#444748]/30 gap-4">
+            <div>
+              <span className="font-display text-[10px] text-[#8e9192] tracking-widest uppercase block mb-1">
+                OFFICIAL ASSETS // MEDIA KIT
+              </span>
+              <h2 className="font-display text-2xl md:text-3xl text-white uppercase tracking-tight">
+                <ScrambleText text="Press & Accreditation Kits" scrambleOnHover={true} />
+              </h2>
+            </div>
+            <a
+              href={`mailto:${studioInfo.contact_email}?subject=Media%20Accreditation%20Request`}
+              className="btn-mechanical px-6 py-2.5 font-display text-xs uppercase tracking-widest"
+            >
+              <ScrambleText text="Download Complete Press Kit" scrambleOnHover={true} />
+            </a>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {PRESS_KIT_ASSETS.map((asset) => (
+              <div
+                key={asset.title}
+                className="border border-[#444748]/30 bg-[#0e0e0e] p-6 flex flex-col justify-between relative group viewfinder-card hover:border-white transition-colors duration-200"
+              >
+                <div className="viewfinder-corner-tl" />
+                <div className="viewfinder-corner-tr" />
+                <div className="viewfinder-corner-bl" />
+                <div className="viewfinder-corner-br" />
+
+                <div>
+                  <div className="flex justify-between items-center text-[9px] font-mono text-[#888888] mb-3">
+                    <span>{asset.spec}</span>
+                    <span className="text-white font-bold">{asset.size}</span>
+                  </div>
+                  <h3 className="font-display text-sm uppercase text-white font-bold tracking-wider mb-2">
+                    {asset.title}
+                  </h3>
+                  <p className="text-xs text-[#8e9192] leading-relaxed">
+                    {asset.desc}
+                  </p>
+                </div>
+
+                <div className="pt-4 mt-6 border-t border-[#444748]/20 flex justify-between items-center">
+                  <span className="text-[9px] font-mono text-[#555555]">VERIFIED MASTER</span>
+                  <a
+                    href={`mailto:${studioInfo.contact_email}?subject=Asset%20Clearance:%20${encodeURIComponent(asset.title)}`}
+                    className="text-[10px] font-display text-white tracking-widest uppercase group-hover:underline flex items-center gap-1"
+                  >
+                    <span>REQUEST CLEARANCE</span>
+                    <span className="material-symbols-outlined text-xs">arrow_outward</span>
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* Direct Transmission Directory Grid                                        */}
         {/* ========================================================================= */}
         <section className="px-6 md:px-16 py-16" id="contact">
           <div className="flex items-baseline justify-between mb-8 pb-2 border-b border-[#444748]/30">
@@ -228,7 +331,7 @@ export default function Press() {
                 SECTION 02 // COMMUNICATIONS
               </span>
               <h2 className="font-display text-2xl md:text-3xl text-white uppercase tracking-tight">
-                Direct Transmission Directory
+                <ScrambleText text="Direct Transmission Directory" scrambleOnHover={true} />
               </h2>
             </div>
             <span className="font-display text-[10px] text-[#8e9192] tracking-widest uppercase">
@@ -238,7 +341,7 @@ export default function Press() {
 
           <div className="border-t border-[#444748]/30">
             {/* Single Unified Studio Contact Row */}
-            <div className="py-6 px-2 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-[#1c1b1b] transition-colors">
+            <div className="py-6 px-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-[#1c1b1b] transition-colors border-b border-[#444748]/20 group">
               <div className="w-full md:w-1/3">
                 <span className="font-display text-xs text-white tracking-widest uppercase block">
                   STUDIO CORRESPONDENCE
@@ -249,10 +352,11 @@ export default function Press() {
               </div>
               <div className="w-full md:w-1/3">
                 <a
-                  className="text-white hover:underline font-mono text-sm tracking-wide"
+                  className="text-white hover:underline font-mono text-sm tracking-wide inline-flex items-center gap-2"
                   href={`mailto:${studioInfo.contact_email}`}
                 >
-                  {studioInfo.contact_email}
+                  <span className="w-1.5 h-1.5 bg-white telemetry-indicator inline-block" />
+                  <span>{studioInfo.contact_email}</span>
                 </a>
               </div>
               <div className="w-full md:w-1/3 text-left md:text-right">
@@ -266,7 +370,12 @@ export default function Press() {
           {/* Physical Coordinates & Social Mesh */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 mt-4 border-t border-[#444748]/30">
             {/* Physical Location */}
-            <div className="p-6 bg-[#1c1b1b] border border-[#444748]/20">
+            <div className="p-6 bg-[#1c1b1b] border border-[#444748]/20 relative group viewfinder-card">
+              <div className="viewfinder-corner-tl" />
+              <div className="viewfinder-corner-tr" />
+              <div className="viewfinder-corner-bl" />
+              <div className="viewfinder-corner-br" />
+
               <span className="font-display text-[10px] text-[#8e9192] tracking-widest uppercase block mb-1">
                 PHYSICAL HEADQUARTERS
               </span>
@@ -283,7 +392,12 @@ export default function Press() {
             </div>
 
             {/* Social Media Link Matrix */}
-            <div className="p-6 bg-[#1c1b1b] border border-[#444748]/20 flex flex-col justify-between">
+            <div className="p-6 bg-[#1c1b1b] border border-[#444748]/20 flex flex-col justify-between relative group viewfinder-card">
+              <div className="viewfinder-corner-tl" />
+              <div className="viewfinder-corner-tr" />
+              <div className="viewfinder-corner-bl" />
+              <div className="viewfinder-corner-br" />
+
               <div>
                 <span className="font-display text-[10px] text-[#8e9192] tracking-widest uppercase block mb-2">
                   OFFICIAL FEEDS & CHANNELS
@@ -321,9 +435,14 @@ export default function Press() {
           onClick={() => setActiveDispatch(null)}
         >
           <div
-            className="w-full max-w-2xl bg-[#0e0e0e] border border-[#444748] p-6 md:p-8 space-y-4"
+            className="w-full max-w-2xl bg-[#0e0e0e] border border-[#444748] p-6 md:p-8 space-y-4 relative"
             onClick={(e) => e.stopPropagation()}
           >
+            <div className="viewfinder-corner-tl" />
+            <div className="viewfinder-corner-tr" />
+            <div className="viewfinder-corner-bl" />
+            <div className="viewfinder-corner-br" />
+
             <div className="flex justify-between items-start border-b border-[#444748]/30 pb-3">
               <div>
                 <span className="font-display text-[10px] text-[#8e9192] tracking-widest uppercase">

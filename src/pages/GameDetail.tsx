@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import ScrambleText from '../components/ScrambleText'
+import LiveTimecode from '../components/LiveTimecode'
 import { supabase, parseGameRecord, type Game } from '../lib/supabaseClient'
 
 export default function GameDetail() {
@@ -9,41 +11,51 @@ export default function GameDetail() {
   const [game, setGame] = useState<Game | null>(null)
   const [companionGames, setCompanionGames] = useState<Game[]>([])
   const [loading, setLoading] = useState(true)
+  const [scrubberProgress, setScrubberProgress] = useState(0)
 
   useEffect(() => {
     window.scrollTo(0, 0)
-    async function loadGame() {
-      if (!slug) {
-        setLoading(false)
-        return
-      }
+    // Animate 1px playback scrubber bar on load from 0% to 100% over 1.2s
+    setScrubberProgress(0)
+    const timer = setTimeout(() => {
+      setScrubberProgress(100)
+    }, 100)
+    return () => clearTimeout(timer)
+  }, [slug])
 
+  useEffect(() => {
+    async function loadGame() {
       setLoading(true)
       try {
+        if (!slug) {
+          setGame(null)
+          setLoading(false)
+          return
+        }
+
         const { data, error } = await supabase
           .from('games')
           .select('*')
           .eq('slug', slug)
           .single()
 
-        if (!error && data) {
+        if (error || !data) {
+          setGame(null)
+        } else {
           setGame(parseGameRecord(data))
 
-          // Fetch other parallel productions from Supabase
-          const { data: others } = await supabase
+          const { data: compData } = await supabase
             .from('games')
             .select('*')
             .neq('slug', slug)
             .limit(2)
 
-          if (others) {
-            setCompanionGames(others.map(parseGameRecord))
+          if (compData) {
+            setCompanionGames(compData.map(parseGameRecord))
           }
-        } else {
-          setGame(null)
         }
       } catch (err) {
-        console.warn('Game load error from Supabase', err)
+        console.warn('Supabase game detail error', err)
         setGame(null)
       } finally {
         setLoading(false)
@@ -84,13 +96,13 @@ export default function GameDetail() {
           <div className="pt-4 flex gap-4">
             <Link
               to="/#games"
-              className="px-6 py-2.5 border border-white bg-white text-black font-display text-xs uppercase tracking-widest hover:bg-neutral-200 transition-colors font-bold"
+              className="btn-mechanical-solid px-6 py-2.5 font-display text-xs uppercase tracking-widest font-bold"
             >
               ← Catalog
             </Link>
             <Link
               to="/admin"
-              className="px-6 py-2.5 border border-[#444748]/60 text-white font-display text-xs uppercase tracking-widest hover:border-white transition-colors"
+              className="btn-mechanical px-6 py-2.5 font-display text-xs uppercase tracking-widest"
             >
               CMS Admin
             </Link>
@@ -108,9 +120,17 @@ export default function GameDetail() {
       <Header />
 
       {/* =========================================================================
-             HERO CINEMATIC KEYFRAME (Full High-Resolution Image Presentation)
+             HERO CINEMATIC KEYFRAME & ANIMATED 1PX PLAYBACK SCRUBBER
              ========================================================================= */}
       <section className="relative w-full h-[85vh] bg-[#050505] flex flex-col justify-between overflow-hidden pt-20" id="hero-display">
+        {/* Animated 1px Scrubber Bar at very top */}
+        <div className="absolute top-20 inset-x-0 h-[1px] bg-[#222222] z-30">
+          <div
+            className="h-full bg-white transition-all duration-[1200ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
+            style={{ width: `${scrubberProgress}%` }}
+          />
+        </div>
+
         {/* Backdrop Image */}
         <div className="absolute inset-0 z-0">
           <img
@@ -126,9 +146,9 @@ export default function GameDetail() {
         <div className="relative z-10 w-full px-6 md:px-16 pt-6 flex justify-between items-start pointer-events-none">
           <div className="flex flex-col space-y-1">
             <div className="flex items-center space-x-2">
-              <span className="w-1.5 h-1.5 bg-white rounded-none inline-block animate-pulse" />
+              <span className="w-1.5 h-1.5 bg-white telemetry-indicator" />
               <span className="font-display text-[10px] text-white tracking-widest uppercase">
-                EXHIBITION // VISUAL ARCHIVE // {game.slug.toUpperCase()}
+                EXHIBITION // CINEMATIC REEL // {game.slug.toUpperCase()}
               </span>
             </div>
             <span className="font-display text-[10px] text-neutral-400">
@@ -136,8 +156,9 @@ export default function GameDetail() {
             </span>
           </div>
           <div className="hidden sm:flex items-center space-x-4 text-right">
+            <LiveTimecode prefix="REEL_TC:" />
             <span className="font-display text-[10px] text-neutral-400 border border-[#444748]/30 px-2 py-1">
-              21:9 RATIO
+              2.39:1 CINEMATIC
             </span>
             <span className="font-display text-[10px] text-white border border-white/50 px-2 py-1">
               AUTEUR PRODUCTION
@@ -157,7 +178,10 @@ export default function GameDetail() {
 
         {/* Lower Telemetry Strip */}
         <div className="relative z-10 w-full px-6 md:px-16 pb-8 flex justify-between items-center text-[10px] font-display text-neutral-400 uppercase tracking-widest border-t border-[#444748]/30 pt-4">
-          <span>STATUS // PRODUCTION VERIFIED</span>
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 bg-white animate-pulse" />
+            <span>STATUS // PRODUCTION VERIFIED</span>
+          </div>
           <a href="#dossier" className="text-white hover:underline flex items-center gap-1">
             EXPLORE SPECIFICATIONS <span className="material-symbols-outlined text-sm">south</span>
           </a>
@@ -167,13 +191,13 @@ export default function GameDetail() {
       {/* =========================================================================
              HIGH-CONTRAST EXHIBITION GALLERY TRANSITION (Pristine White Canvas)
              ========================================================================= */}
-      <main className="w-full bg-[#FFFFFF] text-[#0A0A0A] py-16 md:py-28 px-6 md:px-16 transition-colors duration-200" id="dossier">
+      <main className="w-full bg-[#FFFFFF] text-[#0A0A0A] py-16 md:py-28 px-6 md:px-16 transition-colors duration-300" id="dossier">
         <div className="max-w-7xl mx-auto">
           {/* Monolithic Header Row */}
           <div className="border-b border-[#E5E5E5] pb-8 mb-16 flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
               <div className="font-display text-[10px] text-[#737373] tracking-widest uppercase mb-2">
-                ARCHIVE // PRODUCT DOSSIER // {game.slug.toUpperCase()}
+                <ScrambleText text={`ARCHIVE // PRODUCT DOSSIER // ${game.slug.toUpperCase()}`} scrambleOnHover={true} />
               </div>
               <h2 className="font-display text-4xl sm:text-6xl md:text-8xl tracking-tighter uppercase font-light text-[#0A0A0A] leading-none">
                 {game.title}
@@ -238,7 +262,7 @@ export default function GameDetail() {
                   to="/press#contact"
                   className="w-full sm:w-auto text-center border border-[#0A0A0A] bg-[#0A0A0A] text-[#FFFFFF] hover:bg-transparent hover:text-[#0A0A0A] px-8 py-4 font-display text-xs uppercase tracking-widest transition-all duration-150 font-bold"
                 >
-                  Contact Studio
+                  <ScrambleText text="Contact Studio" scrambleOnHover={true} />
                 </Link>
                 <Link
                   to="/#games"
@@ -282,10 +306,10 @@ export default function GameDetail() {
                     CORE SYSTEM TAGS
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {game.tags.map((tag, idx) => (
+                    {game.tags.map((tag) => (
                       <span
-                        key={idx}
-                        className="border border-[#CCCCCC] px-3 py-1 text-xs font-display uppercase tracking-widest text-[#0A0A0A]"
+                        key={tag}
+                        className="font-display text-[10px] text-[#0A0A0A] border border-[#0A0A0A] px-3 py-1 uppercase tracking-wider"
                       >
                         {tag}
                       </span>
@@ -293,8 +317,6 @@ export default function GameDetail() {
                   </div>
                 </div>
               )}
-
-
             </div>
           </div>
         </div>
@@ -320,17 +342,23 @@ export default function GameDetail() {
               </div>
             </div>
 
-            {/* Bento Showcase Grid */}
+            {/* Bento Showcase Grid with Viewfinder Brackets */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {companionGames.map((comp) => (
                 <article
                   key={comp.slug}
-                  className="bg-[#0A0A0A] border border-[#444748]/30 hover:border-white transition-all duration-150 flex flex-col group"
+                  className="bg-[#0A0A0A] border border-[#444748]/30 hover:border-white transition-all duration-150 flex flex-col group viewfinder-card"
                 >
                   <div className="relative aspect-video overflow-hidden border-b border-[#444748]/30 bg-[#1c1b1b]">
+                    <div className="viewfinder-corner-tl" />
+                    <div className="viewfinder-corner-tr" />
+                    <div className="viewfinder-corner-bl" />
+                    <div className="viewfinder-corner-br" />
+                    <div className="media-scan-sweep" />
+
                     {comp.image_url ? (
                       <img
-                        className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-300"
+                        className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
                         alt={comp.title}
                         src={comp.image_url}
                       />
@@ -339,7 +367,7 @@ export default function GameDetail() {
                         NO IMAGE ATTACHED
                       </div>
                     )}
-                    <div className="absolute top-4 left-4 font-display text-[10px] text-white bg-[#050505]/80 px-2 py-1 border border-[#444748]/30">
+                    <div className="absolute top-4 left-4 font-display text-[10px] text-white bg-[#050505]/80 px-2 py-1 border border-[#444748]/30 z-10">
                       {comp.tags?.[0] || 'PRODUCTION'}
                     </div>
                   </div>
@@ -359,7 +387,7 @@ export default function GameDetail() {
                       to={`/game/${comp.slug}`}
                       className="pt-4 border-t border-[#444748]/20 flex items-center justify-between font-display text-[10px] text-neutral-400 group-hover:text-white transition-colors"
                     >
-                      <span>EXPLORE DOSSIER</span>
+                      <ScrambleText text="EXPLORE DOSSIER" scrambleOnHover={true} />
                       <span className="material-symbols-outlined text-base">east</span>
                     </Link>
                   </div>
