@@ -2,17 +2,17 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import VideoModal from '../components/VideoModal'
 import { supabase, type Game } from '../lib/supabaseClient'
 
-// Curated fallback data matching the Stitch UI design in case database is not yet seeded
+// Curated showcase products with image and description focus
 const DEFAULT_GAMES: Game[] = [
   {
     id: '1',
     title: 'NEON PROTOCOL',
     slug: 'neon-protocol',
     release_date: '2024-11-15',
-    youtube_id: 'dQw4w9WgXcQ', // default placeholder or trailer
+    image_url:
+      'https://lh3.googleusercontent.com/aida/AEtjO1W8l1YFBtH3X_E6WY4GiitT_RiPH7iW_0qgptlmrSoiJlCDizxfzPe_pKkQ74OO4aeaCBUxJ1tcaohW4f8bv2EuPO7vC2vJArRHJlcFt_9NBqdWTQSKw8LMOmJbOagJYNhEOzrPgAP3Q5OXc4lOtxJ48ySUKuXWGRauto2aDR8ERVxBO7mZ6AWbbF2-sqh81Yt7aql18eMW6NSwwxD42RDuIQSjKPGKqAvoPs5ZtxyJP54Rx8f2VL9FJ2c',
     description:
       'High-octane tactical cyber-action in a vertical megacity. Navigate corporate warfare with lethal cybernetic loadouts. Every encounter is a fast-twitch puzzle of momentum, spatial ballistic calculations, and consequence.',
     tags: ['Cyberpunk RPG', 'Available Now', 'Unreal Engine 5'],
@@ -22,7 +22,8 @@ const DEFAULT_GAMES: Game[] = [
     title: 'RUNEBOUND: OBLIVION',
     slug: 'runebound-oblivion',
     release_date: '2025-05-20',
-    youtube_id: 'dQw4w9WgXcQ',
+    image_url:
+      'https://lh3.googleusercontent.com/aida/AEtjO1UpxOajIDGPHIMZhXK7qHEht7POwCTiErEsrqDLUdkS0CPcFt7oxdJPjRRpliYp7mIb_-O9TkUo3s8uVkaNYdUkhn4v_boUK3hDb7nvFfL1WktMDugUmOd-xhyVuHQG4XRLTJJPZFdUfuukoTC_P1QFcYF7S0KFZr6W8DD6-st_BhRSTQVm7byKicNL1tK3rcorW7Ta0gEksbkRQEhZigkDrp9ZznNZK-pNPLyZCD5DF9l73PUvUwvMYT4',
     description:
       'Unforgiving dungeon delving into forbidden subterranean monoliths. Decipher ancient runes and harvest elder power. Designed for total player spatial agency with permadeath systems that enforce ruthless precision.',
     tags: ['Dark Fantasy Roguelike', 'Closed Alpha Q2 2025', 'PC // PS5'],
@@ -32,7 +33,8 @@ const DEFAULT_GAMES: Game[] = [
     title: 'IRON TALON: 2184',
     slug: 'iron-talon-2184',
     release_date: '2025-10-30',
-    youtube_id: 'dQw4w9WgXcQ',
+    image_url:
+      'https://lh3.googleusercontent.com/aida/AEtjO1UJMRZzH5hkjwGYbhPftm1WQxBVgPZhhN-1HNr-hozj8Rwg67e0k9Hu6kaiMr1EHPHAeqq5bTM6kVLpri8Sv3bVG76Xc6ksXCwe8ZGzpyPu8y050ns3BjCQpo5oPvLJGXrxbuWhGihn3V5eUYn_aUZpcvSHAXc7SkkaXR0ncFL47P4S-Pf74EEFu2GT5BFFyPU7hoPg14OUNZNJDFRX-vbpMa_62lIMqfPSdXqchfq_kXD593V3jfhVarw',
     description:
       'Squad-based mechanized warfare across ravaged frontier wastelands. Master modular ballistic platforms and tactical positioning in real-time calculated atmospheric environments.',
     tags: ['Tactical Mech Warfare', 'Co-Op & PvP', 'Active Prototype'],
@@ -41,7 +43,6 @@ const DEFAULT_GAMES: Game[] = [
 
 export default function Home() {
   const [games, setGames] = useState<Game[]>(DEFAULT_GAMES)
-  const [selectedVideo, setSelectedVideo] = useState<{ id: string; title: string } | null>(null)
   const [emailInput, setEmailInput] = useState('')
   const [subscribeStatus, setSubscribeStatus] = useState<string | null>(null)
 
@@ -73,7 +74,6 @@ export default function Home() {
     }, 6000)
   }
 
-  // Pick first 3 games or use defaults
   const game1 = games[0] || DEFAULT_GAMES[0]
   const game2 = games[1] || DEFAULT_GAMES[1]
   const game3 = games[2] || DEFAULT_GAMES[2]
@@ -89,8 +89,7 @@ export default function Home() {
           <div
             className="absolute inset-0 bg-cover bg-center filter saturate-75 brightness-75 scale-105 transition-transform duration-1000 ease-out"
             style={{
-              backgroundImage:
-                "url('https://lh3.googleusercontent.com/aida/AEtjO1W8l1YFBtH3X_E6WY4GiitT_RiPH7iW_0qgptlmrSoiJlCDizxfzPe_pKkQ74OO4aeaCBUxJ1tcaohW4f8bv2EuPO7vC2vJArRHJlcFt_9NBqdWTQSKw8LMOmJbOagJYNhEOzrPgAP3Q5OXc4lOtxJ48ySUKuXWGRauto2aDR8ERVxBO7mZ6AWbbF2-sqh81Yt7aql18eMW6NSwwxD42RDuIQSjKPGKqAvoPs5ZtxyJP54Rx8f2VL9FJ2c')",
+              backgroundImage: `url('${game1.image_url || DEFAULT_GAMES[0].image_url}')`,
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0e0e0e] via-[#0e0e0e]/60 to-[#0e0e0e]/40" />
@@ -121,7 +120,7 @@ export default function Home() {
           </h1>
 
           <p className="mt-8 text-base md:text-xl text-[#c4c7c8] max-w-2xl font-light leading-relaxed">
-            We architect unforgiving worlds for players who demand mastery. Physics, narrative literacy, and visceral design.
+            We architect unforgiving worlds for players who demand mastery. High visual fidelity, physics, and visceral narrative design.
           </p>
 
           <div className="mt-12 flex flex-col sm:flex-row gap-4 items-center justify-center">
@@ -129,14 +128,14 @@ export default function Home() {
               href="#games"
               className="border border-white px-8 py-3 font-display text-xs tracking-widest uppercase text-white hover:bg-white hover:text-black transition-all duration-150 ease-linear"
             >
-              Explore Works
+              Explore Products
             </a>
-            <button
-              onClick={() => setSelectedVideo({ id: game1.youtube_id, title: game1.title })}
+            <Link
+              to={`/game/${game1.slug}`}
               className="border border-[#444748]/60 px-8 py-3 font-display text-xs tracking-widest uppercase text-[#c7c6c6] hover:text-white hover:border-white transition-all duration-150 ease-linear"
             >
-              Latest Trailer
-            </button>
+              View Flagship Dossier
+            </Link>
           </div>
         </div>
 
@@ -149,11 +148,11 @@ export default function Home() {
             href="#games"
             className="flex items-center gap-1 font-display text-[10px] uppercase tracking-widest text-[#c7c6c6] hover:text-white transition-colors duration-150"
           >
-            <span>SCROLL DOWN</span>
+            <span>DISCOVER WORKS</span>
             <span className="material-symbols-outlined text-sm">south</span>
           </a>
           <div className="font-display text-[10px] tracking-widest hidden sm:block">
-            <span>100% SELF-OWNED EQUITY</span>
+            <span>100% INDEPENDENT PRODUCTION</span>
           </div>
         </div>
       </section>
@@ -178,7 +177,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SHOWCASE SECTION 1: NEON PROTOCOL */}
+      {/* SHOWCASE SECTION 1: PRODUCT ARCHIVE 01 */}
       <section className="py-20 md:py-28 px-6 md:px-16 border-b border-[#444748]/20" id="games">
         <div className="max-w-7xl mx-auto">
           {/* Section Tag & Index */}
@@ -186,7 +185,7 @@ export default function Home() {
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 bg-white" />
               <span className="font-display text-xs uppercase tracking-widest text-white">
-                PROJECT ARCHIVE // 01
+                PRODUCT ARCHIVE // 01
               </span>
             </div>
             <span className="font-display text-xs text-[#8e9192] uppercase tracking-widest">
@@ -194,22 +193,16 @@ export default function Home() {
             </span>
           </div>
 
-          {/* Cinematic Frame */}
-          <div
-            onClick={() => setSelectedVideo({ id: game1.youtube_id, title: game1.title })}
-            className="relative w-full aspect-[21/9] md:aspect-[2.35/1] overflow-hidden border border-[#444748]/40 bg-[#1c1b1b] group cursor-pointer"
+          {/* Cinematic Image Frame */}
+          <Link
+            to={`/game/${game1.slug}`}
+            className="block relative w-full aspect-[21/9] md:aspect-[2.35/1] overflow-hidden border border-[#444748]/40 bg-[#1c1b1b] group"
           >
             <img
-              alt={`${game1.title} cinematic key art`}
+              alt={`${game1.title} key art`}
               className="w-full h-full object-cover object-center filter grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out"
-              src="https://lh3.googleusercontent.com/aida/AEtjO1W8l1YFBtH3X_E6WY4GiitT_RiPH7iW_0qgptlmrSoiJlCDizxfzPe_pKkQ74OO4aeaCBUxJ1tcaohW4f8bv2EuPO7vC2vJArRHJlcFt_9NBqdWTQSKw8LMOmJbOagJYNhEOzrPgAP3Q5OXc4lOtxJ48ySUKuXWGRauto2aDR8ERVxBO7mZ6AWbbF2-sqh81Yt7aql18eMW6NSwwxD42RDuIQSjKPGKqAvoPs5ZtxyJP54Rx8f2VL9FJ2c"
+              src={game1.image_url || DEFAULT_GAMES[0].image_url}
             />
-            {/* Play Button Overlay */}
-            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40">
-              <div className="w-16 h-16 rounded-full border border-white flex items-center justify-center bg-black/60">
-                <span className="material-symbols-outlined text-white text-3xl">play_arrow</span>
-              </div>
-            </div>
 
             {/* Telemetry HUD Inset */}
             <div className="absolute top-4 left-4 pointer-events-none">
@@ -221,17 +214,17 @@ export default function Home() {
               </div>
             </div>
             <div className="absolute bottom-4 right-4 pointer-events-none hidden md:block">
-              <span className="font-display text-[10px] text-[#c4c7c8]/80 bg-[#0e0e0e]/80 backdrop-blur-sm px-3 py-1 border border-[#444748]/30">
-                FRAME RATE TARGET: 60-120 FPS // UNREAL ENGINE 5
+              <span className="font-display text-[10px] text-[#c4c7c8]/80 bg-[#0e0e0e]/80 backdrop-blur-sm px-3 py-1 border border-[#444748]/30 uppercase">
+                GRAPHICS TARGET: 60-120 FPS // HIGH-FIDELITY
               </span>
             </div>
-          </div>
+          </Link>
 
           {/* Dossier & Detail Technical Grid */}
           <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             <div className="lg:col-span-7">
               <span className="font-display text-xs text-[#8e9192] tracking-widest uppercase">
-                TITLE 01
+                PRODUCTION 01
               </span>
               <h2 className="font-display text-3xl md:text-5xl uppercase text-white mt-1 mb-4 tracking-tight">
                 {game1.title}
@@ -240,17 +233,11 @@ export default function Home() {
                 {game1.description}
               </p>
               <div className="mt-8 flex flex-wrap gap-4">
-                <button
-                  onClick={() => setSelectedVideo({ id: game1.youtube_id, title: game1.title })}
-                  className="border border-white px-6 py-2.5 font-display text-xs uppercase tracking-widest text-white hover:bg-white hover:text-black transition-all duration-150"
-                >
-                  Watch Trailer
-                </button>
                 <Link
                   to={`/game/${game1.slug}`}
-                  className="border border-[#444748]/50 px-6 py-2.5 font-display text-xs uppercase tracking-widest text-[#c7c6c6] hover:border-white hover:text-white transition-all duration-150 inline-block"
+                  className="border border-white bg-white text-black px-6 py-2.5 font-display text-xs uppercase tracking-widest hover:bg-neutral-200 transition-all duration-150 inline-block font-bold"
                 >
-                  View Dossier
+                  View Full Product Dossier →
                 </Link>
               </div>
             </div>
@@ -266,26 +253,26 @@ export default function Home() {
                 <span className="uppercase tracking-widest text-white">PC • NEXT-GEN CONSOLES</span>
               </div>
               <div className="flex justify-between items-center py-2 border-b border-[#444748]/20">
-                <span className="uppercase tracking-widest text-[#8e9192]">DIRECTED BY</span>
-                <span className="uppercase tracking-widest text-white">GAMICON CORE</span>
+                <span className="uppercase tracking-widest text-[#8e9192]">STUDIO DIVISION</span>
+                <span className="uppercase tracking-widest text-white">GAMICON CORE LAB</span>
               </div>
               <div className="flex justify-between items-center py-2 border-b border-[#444748]/20">
                 <span className="uppercase tracking-widest text-[#8e9192]">STATUS</span>
-                <span className="uppercase tracking-widest text-white">LIVE IN PRODUCTION</span>
+                <span className="uppercase tracking-widest text-white">ACTIVE RELEASE</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* SHOWCASE SECTION 2: RUNEBOUND: OBLIVION */}
+      {/* SHOWCASE SECTION 2: PRODUCT ARCHIVE 02 */}
       <section className="py-20 md:py-28 px-6 md:px-16 border-b border-[#444748]/20 bg-[#131313]">
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-baseline mb-4 border-b border-[#444748]/20 pb-2">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 bg-white" />
               <span className="font-display text-xs uppercase tracking-widest text-white">
-                PROJECT ARCHIVE // 02
+                PRODUCT ARCHIVE // 02
               </span>
             </div>
             <span className="font-display text-xs text-[#8e9192] uppercase tracking-widest">
@@ -296,20 +283,15 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Towering Key Visual Side */}
             <div className="lg:col-span-7 order-2 lg:order-1">
-              <div
-                onClick={() => setSelectedVideo({ id: game2.youtube_id, title: game2.title })}
-                className="relative w-full aspect-[16/10] overflow-hidden border border-[#444748]/40 bg-[#1c1b1b] group cursor-pointer"
+              <Link
+                to={`/game/${game2.slug}`}
+                className="block relative w-full aspect-[16/10] overflow-hidden border border-[#444748]/40 bg-[#1c1b1b] group"
               >
                 <img
-                  alt={`${game2.title} monolith key visual`}
+                  alt={`${game2.title} key visual`}
                   className="w-full h-full object-cover filter contrast-125 grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out"
-                  src="https://lh3.googleusercontent.com/aida/AEtjO1UpxOajIDGPHIMZhXK7qHEht7POwCTiErEsrqDLUdkS0CPcFt7oxdJPjRRpliYp7mIb_-O9TkUo3s8uVkaNYdUkhn4v_boUK3hDb7nvFfL1WktMDugUmOd-xhyVuHQG4XRLTJJPZFdUfuukoTC_P1QFcYF7S0KFZr6W8DD6-st_BhRSTQVm7byKicNL1tK3rcorW7Ta0gEksbkRQEhZigkDrp9ZznNZK-pNPLyZCD5DF9l73PUvUwvMYT4"
+                  src={game2.image_url || DEFAULT_GAMES[1].image_url}
                 />
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40">
-                  <div className="w-16 h-16 rounded-full border border-white flex items-center justify-center bg-black/60">
-                    <span className="material-symbols-outlined text-white text-3xl">play_arrow</span>
-                  </div>
-                </div>
                 <div className="absolute top-4 left-4">
                   <span className="font-display text-[10px] text-white uppercase tracking-widest bg-[#0e0e0e]/90 px-3 py-1 border border-[#444748]/40">
                     CLOSED ALPHA Q2 2025
@@ -320,7 +302,7 @@ export default function Home() {
                     TARGET HARDWARE: PC // PLAYSTATION 5
                   </span>
                 </div>
-              </div>
+              </Link>
             </div>
 
             {/* Editorial Dossier Side */}
@@ -348,22 +330,16 @@ export default function Home() {
                 </div>
                 <div className="flex justify-between text-[#8e9192]">
                   <span>PLAYTEST ENROLLMENT:</span>
-                  <span className="text-white uppercase">OPEN ALPHA REGISTRATION</span>
+                  <span className="text-white uppercase">OPEN REGISTRATION</span>
                 </div>
               </div>
 
               <div className="pt-4 flex gap-4">
-                <button
-                  onClick={() => setSelectedVideo({ id: game2.youtube_id, title: game2.title })}
-                  className="border border-white px-6 py-2.5 font-display text-xs uppercase tracking-widest text-white hover:bg-white hover:text-black transition-all duration-150"
-                >
-                  Watch Alpha Trailer
-                </button>
                 <Link
                   to={`/game/${game2.slug}`}
-                  className="border border-[#444748]/50 px-6 py-2.5 font-display text-xs uppercase tracking-widest text-[#c7c6c6] hover:border-white hover:text-white transition-all duration-150"
+                  className="border border-white bg-white text-black px-6 py-2.5 font-display text-xs uppercase tracking-widest hover:bg-neutral-200 transition-all duration-150 font-bold"
                 >
-                  View Dossier
+                  Explore Dossier →
                 </Link>
               </div>
             </div>
@@ -371,14 +347,14 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SHOWCASE SECTION 3: IRON TALON: 2184 */}
+      {/* SHOWCASE SECTION 3: PRODUCT ARCHIVE 03 */}
       <section className="py-20 md:py-28 px-6 md:px-16 border-b border-[#444748]/20">
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-baseline mb-4 border-b border-[#444748]/20 pb-2">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 bg-white" />
               <span className="font-display text-xs uppercase tracking-widest text-white">
-                PROJECT ARCHIVE // 03
+                PRODUCT ARCHIVE // 03
               </span>
             </div>
             <span className="font-display text-xs text-[#8e9192] uppercase tracking-widest">
@@ -387,20 +363,15 @@ export default function Home() {
           </div>
 
           {/* Cinematic Frame */}
-          <div
-            onClick={() => setSelectedVideo({ id: game3.youtube_id, title: game3.title })}
-            className="relative w-full aspect-[21/9] md:aspect-[2.4/1] overflow-hidden border border-[#444748]/40 bg-[#1c1b1b] group cursor-pointer"
+          <Link
+            to={`/game/${game3.slug}`}
+            className="block relative w-full aspect-[21/9] md:aspect-[2.4/1] overflow-hidden border border-[#444748]/40 bg-[#1c1b1b] group"
           >
             <img
-              alt={`${game3.title} tactical mech key art`}
+              alt={`${game3.title} key art`}
               className="w-full h-full object-cover filter contrast-125 grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out"
-              src="https://lh3.googleusercontent.com/aida/AEtjO1UJMRZzH5hkjwGYbhPftm1WQxBVgPZhhN-1HNr-hozj8Rwg67e0k9Hu6kaiMr1EHPHAeqq5bTM6kVLpri8Sv3bVG76Xc6ksXCwe8ZGzpyPu8y050ns3BjCQpo5oPvLJGXrxbuWhGihn3V5eUYn_aUZpcvSHAXc7SkkaXR0ncFL47P4S-Pf74EEFu2GT5BFFyPU7hoPg14OUNZNJDFRX-vbpMa_62lIMqfPSdXqchfq_kXD593V3jfhVarw"
+              src={game3.image_url || DEFAULT_GAMES[2].image_url}
             />
-            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40">
-              <div className="w-16 h-16 rounded-full border border-white flex items-center justify-center bg-black/60">
-                <span className="material-symbols-outlined text-white text-3xl">play_arrow</span>
-              </div>
-            </div>
             <div className="absolute inset-0 bg-gradient-to-t from-[#0e0e0e]/90 via-transparent to-transparent flex flex-col justify-end p-6 md:p-8">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
                 <div>
@@ -421,7 +392,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-          </div>
+          </Link>
 
           {/* Three-Column Spec Grid */}
           <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-8 border-t border-[#444748]/20 pt-8">
@@ -451,17 +422,11 @@ export default function Home() {
                 </p>
               </div>
               <div className="pt-4 flex gap-3">
-                <button
-                  onClick={() => setSelectedVideo({ id: game3.youtube_id, title: game3.title })}
-                  className="border border-[#444748]/60 hover:border-white text-[#c7c6c6] hover:text-white px-4 py-2 font-display text-xs uppercase tracking-widest transition-all"
-                >
-                  Watch Feed -&gt;
-                </button>
                 <Link
                   to={`/game/${game3.slug}`}
-                  className="border border-white hover:bg-white hover:text-black text-white px-4 py-2 font-display text-xs uppercase tracking-widest transition-all"
+                  className="border border-white hover:bg-white hover:text-black text-white px-6 py-2 font-display text-xs uppercase tracking-widest transition-all"
                 >
-                  Dossier
+                  View Dossier →
                 </Link>
               </div>
             </div>
@@ -556,7 +521,7 @@ export default function Home() {
                 MONTREAL STUDIO LAB
               </h3>
               <p className="text-sm md:text-base text-[#c4c7c8] font-light leading-relaxed">
-                Our atelier houses high-throughput workstations, dedicated motion simulation gear, and localized build clusters. We maintain complete autonomy over every frame rendered.
+                Our atelier houses high-throughput workstations, dedicated motion simulation gear, and localized build clusters. We maintain complete autonomy over every project developed.
               </p>
               <div className="pt-4 space-y-2 font-display text-xs text-[#8e9192] border-t border-[#444748]/20">
                 <div className="flex justify-between">
@@ -651,14 +616,6 @@ export default function Home() {
       </section>
 
       <Footer />
-
-      {/* Interactive Video Modal for YouTube Trailers */}
-      <VideoModal
-        isOpen={Boolean(selectedVideo)}
-        youtubeId={selectedVideo?.id || ''}
-        title={selectedVideo?.title || ''}
-        onClose={() => setSelectedVideo(null)}
-      />
     </div>
   )
 }

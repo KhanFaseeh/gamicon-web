@@ -8,7 +8,8 @@ export interface Game {
   title: string
   slug: string
   release_date: string
-  youtube_id: string
+  youtube_id?: string
+  image_url?: string
   description: string
   tags: string[]
   created_at?: string
@@ -18,7 +19,7 @@ export interface StudioInfo {
   id: number
   manifesto: string
   contact_email: string
-  press_kit_url: string
+  press_kit_url?: string
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)

@@ -20,7 +20,7 @@ export default function Header() {
           </span>
         </Link>
 
-        {/* Universal Desktop Nav Links: Games, About, Press */}
+        {/* Universal Desktop Nav Links: Games, About, Contact */}
         <nav className="hidden md:flex items-center gap-8 font-display text-xs tracking-widest uppercase">
           <Link
             to="/#games"
@@ -50,17 +50,17 @@ export default function Header() {
                 : 'text-[#c7c6c6] hover:text-white'
             }`}
           >
-            Press
+            Contact & Intel
           </Link>
         </nav>
 
         {/* Trailing Action */}
         <div className="flex items-center gap-4">
           <Link
-            to="/game/neon-protocol"
+            to="/#games"
             className="hidden sm:inline-flex items-center justify-center border border-white/60 px-4 py-1.5 text-white font-display text-xs uppercase tracking-widest hover:bg-white hover:text-black transition-all duration-150 ease-linear"
           >
-            Latest Trailer
+            Our Catalog
           </Link>
           <button
             aria-label="Toggle Navigation"
@@ -94,7 +94,7 @@ export default function Header() {
             onClick={() => setMobileMenuOpen(false)}
             className="text-white hover:text-neutral-400 py-1"
           >
-            Press
+            Contact & Intel
           </Link>
         </div>
       )}

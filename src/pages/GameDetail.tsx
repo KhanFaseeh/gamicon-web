@@ -2,10 +2,8 @@ import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import VideoModal from '../components/VideoModal'
 import { supabase, type Game } from '../lib/supabaseClient'
 
-// Curated games metadata database fallback
 const FALLBACK_GAMES: Record<string, {
   game: Game
   engine: string
@@ -13,6 +11,7 @@ const FALLBACK_GAMES: Record<string, {
   director: string
   audio: string
   heroImage: string
+  galleryImages: string[]
   tenets: { num: string; title: string; desc: string }[]
   companions: { title: string; slug: string; year: string; genre: string; desc: string; img: string }[]
 }> = {
@@ -22,7 +21,8 @@ const FALLBACK_GAMES: Record<string, {
       title: 'NEON PROTOCOL',
       slug: 'neon-protocol',
       release_date: '2024-11-15',
-      youtube_id: 'dQw4w9WgXcQ',
+      image_url:
+        'https://lh3.googleusercontent.com/aida-public/AB6AXuBPDot2E_OV1D-vLdPARlhiiTmL9DFIXeS6qb3wDjw3xfq_Z0Qv-L8rIwrPl6bp88_emkbMejDOSSqzrnTWCVwKOSqSl6EDYPR3TmqFJOjJ8HaOoLzPENJsk2Q95af_QeQYCI4gknuBfg4BX35f_Hj08zKBE7-aVwtTUw7IflkFe1-QqQRZ7XVxbdb3VREFZAdTQhCBvcRq_XzhUdugkokgLlEljJVq093KrwA_9vSe-HPPj1vSAVVv',
       description:
         'High-octane tactical cyber-action in a vertical megacity. Navigate corporate warfare with lethal cybernetic loadouts. Every encounter is a fast-twitch puzzle of momentum, spatial ballistic calculations, and consequence.',
       tags: ['Cyberpunk RPG', 'Available Now', 'Unreal Engine 5.4'],
@@ -33,6 +33,10 @@ const FALLBACK_GAMES: Record<string, {
     audio: 'Spatial Ambisonics 3D Object Audio',
     heroImage:
       'https://lh3.googleusercontent.com/aida-public/AB6AXuBPDot2E_OV1D-vLdPARlhiiTmL9DFIXeS6qb3wDjw3xfq_Z0Qv-L8rIwrPl6bp88_emkbMejDOSSqzrnTWCVwKOSqSl6EDYPR3TmqFJOjJ8HaOoLzPENJsk2Q95af_QeQYCI4gknuBfg4BX35f_Hj08zKBE7-aVwtTUw7IflkFe1-QqQRZ7XVxbdb3VREFZAdTQhCBvcRq_XzhUdugkokgLlEljJVq093KrwA_9vSe-HPPj1vSAVVv',
+    galleryImages: [
+      'https://lh3.googleusercontent.com/aida/AEtjO1W8l1YFBtH3X_E6WY4GiitT_RiPH7iW_0qgptlmrSoiJlCDizxfzPe_pKkQ74OO4aeaCBUxJ1tcaohW4f8bv2EuPO7vC2vJArRHJlcFt_9NBqdWTQSKw8LMOmJbOagJYNhEOzrPgAP3Q5OXc4lOtxJ48ySUKuXWGRauto2aDR8ERVxBO7mZ6AWbbF2-sqh81Yt7aql18eMW6NSwwxD42RDuIQSjKPGKqAvoPs5ZtxyJP54Rx8f2VL9FJ2c',
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuCkKPggWPasFAWGnfXcSt2AbgsrEmshC7EkE1aMz4BH8bVu3fEWLEwlgH2HQiKA_ArCsLrAI0NbhgsBEC2avH8nuLCERIhvjRArI0aFNEjsc-p1VEibvCZQSN4TLDu4EtXvBs00-eHSsa-hQz7oPI012vI-6bXqG5EKkLIjfI-A3fbAxxFTmT9a3uF4vIpcsNq2CLBNZcNQFWNayt02rgtdLsCFdSJjTTZU0gVDhFE17egvrsLye3Ns',
+    ],
     tenets: [
       {
         num: '01',
@@ -75,7 +79,8 @@ const FALLBACK_GAMES: Record<string, {
       title: 'IRON TALON: 2184',
       slug: 'iron-talon-2184',
       release_date: '2025-10-30',
-      youtube_id: 'dQw4w9WgXcQ',
+      image_url:
+        'https://lh3.googleusercontent.com/aida-public/AB6AXuCHN47rmROJicK9klFUzbZOudT2MB8wkdW4Sc5lg89-Fa7pHTtPM21oWvvq1ruet7SAZMoFjmpDBK3ohT8Y64Cy3VlG1m9VFmeNuKplkRrlTDNlj0w1NFAgUSwqzpwEwPy5RgQdlQvsilgrNaxUjKoJF4cRalK9CuKuWtsLkZpjkhCJNROTziIe65CYgf2Nl9NhSeg2xywl_-erVzbEE308FLHVOm655w5ArTikC_UYtesRwz1Dh8i5',
       description:
         'Heavy armor warfare across scorched outer colonies. Ballistic resource management and realistic hydraulic recoil simulation in real-time calculated atmospheric environments.',
       tags: ['Tactical Mech Warfare', 'Release 2025', 'Active Prototype'],
@@ -86,6 +91,10 @@ const FALLBACK_GAMES: Record<string, {
     audio: 'Dynamic Acoustic Impulse Calibration',
     heroImage:
       'https://lh3.googleusercontent.com/aida-public/AB6AXuCHN47rmROJicK9klFUzbZOudT2MB8wkdW4Sc5lg89-Fa7pHTtPM21oWvvq1ruet7SAZMoFjmpDBK3ohT8Y64Cy3VlG1m9VFmeNuKplkRrlTDNlj0w1NFAgUSwqzpwEwPy5RgQdlQvsilgrNaxUjKoJF4cRalK9CuKuWtsLkZpjkhCJNROTziIe65CYgf2Nl9NhSeg2xywl_-erVzbEE308FLHVOm655w5ArTikC_UYtesRwz1Dh8i5',
+    galleryImages: [
+      'https://lh3.googleusercontent.com/aida/AEtjO1UJMRZzH5hkjwGYbhPftm1WQxBVgPZhhN-1HNr-hozj8Rwg67e0k9Hu6kaiMr1EHPHAeqq5bTM6kVLpri8Sv3bVG76Xc6ksXCwe8ZGzpyPu8y050ns3BjCQpo5oPvLJGXrxbuWhGihn3V5eUYn_aUZpcvSHAXc7SkkaXR0ncFL47P4S-Pf74EEFu2GT5BFFyPU7hoPg14OUNZNJDFRX-vbpMa_62lIMqfPSdXqchfq_kXD593V3jfhVarw',
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuBUqrBiEbtQ9z9K5SEojag5pJIoM2QysO2Slf7Fzm7-m-jHdleNbpGaEiGCJUyR9yCJUuqwiFDLzeZm2QWTc1atIxMay_vT3mpX4WJp32ab5efbwQxMOfDZ-Fgol9Fie8r5NzJ40fV8VNeHV9a7DMzDc4zVqnigDsxw64XSRUGfBOGdk3CCLdlurwanYP_0lzqRD8WoK6Rp68Bu1M64pkTlSXfxB8NqhYKVJEa8rWtLG2eWy-anw7iJ',
+    ],
     tenets: [
       {
         num: '01',
@@ -128,7 +137,8 @@ const FALLBACK_GAMES: Record<string, {
       title: 'RUNEBOUND: OBLIVION',
       slug: 'runebound-oblivion',
       release_date: '2025-05-20',
-      youtube_id: 'dQw4w9WgXcQ',
+      image_url:
+        'https://lh3.googleusercontent.com/aida-public/AB6AXuAai-OizVRHKUSAm2aoxw-gFfJsk1MRGE4oeLy5EaLH2zFv_L1K2dBv3y4MsoPPOrO_S6vHOyqpvlN57kUophNrJodfMX8v-FDTPIRkNufDnQDMwXv-7Dgf6l9wmJnSEuan8Tu6Ks6swgED7kVeWxRfya0zd_vjJYkSKAbV8KHmSdqDB6BNfUph3LDXBBv4AxH8E92LSgw2Ls1D9k_cPcNzEQboDAbTcIUr8fmsqZBrcHzjh_wzcn31',
       description:
         'Unforgiving dungeon delving into forbidden subterranean monoliths. Decipher ancient runes and harvest elder power with permadeath systems that enforce ruthless precision.',
       tags: ['Dark Fantasy Roguelike', 'Alpha Q2 2025', 'PC // PS5'],
@@ -139,6 +149,9 @@ const FALLBACK_GAMES: Record<string, {
     audio: 'Binaural Tomb Reverberation Profile',
     heroImage:
       'https://lh3.googleusercontent.com/aida-public/AB6AXuAai-OizVRHKUSAm2aoxw-gFfJsk1MRGE4oeLy5EaLH2zFv_L1K2dBv3y4MsoPPOrO_S6vHOyqpvlN57kUophNrJodfMX8v-FDTPIRkNufDnQDMwXv-7Dgf6l9wmJnSEuan8Tu6Ks6swgED7kVeWxRfya0zd_vjJYkSKAbV8KHmSdqDB6BNfUph3LDXBBv4AxH8E92LSgw2Ls1D9k_cPcNzEQboDAbTcIUr8fmsqZBrcHzjh_wzcn31',
+    galleryImages: [
+      'https://lh3.googleusercontent.com/aida/AEtjO1UpxOajIDGPHIMZhXK7qHEht7POwCTiErEsrqDLUdkS0CPcFt7oxdJPjRRpliYp7mIb_-O9TkUo3s8uVkaNYdUkhn4v_boUK3hDb7nvFfL1WktMDugUmOd-xhyVuHQG4XRLTJJPZFdUfuukoTC_P1QFcYF7S0KFZr6W8DD6-st_BhRSTQVm7byKicNL1tK3rcorW7Ta0gEksbkRQEhZigkDrp9ZznNZK-pNPLyZCD5DF9l73PUvUwvMYT4',
+    ],
     tenets: [
       {
         num: '01',
@@ -183,9 +196,6 @@ export default function GameDetail() {
   const fallback = FALLBACK_GAMES[activeSlug] || FALLBACK_GAMES['neon-protocol']
 
   const [game, setGame] = useState<Game>(fallback.game)
-  const [isVideoModalOpen, setIsVideoModalOpen] = useState(false)
-  const [isPlayingInline, setIsPlayingInline] = useState(false)
-  const [isAudioMuted, setIsAudioMuted] = useState(false)
 
   useEffect(() => {
     window.scrollTo(0, 0)
@@ -207,31 +217,23 @@ export default function GameDetail() {
     loadGame()
   }, [activeSlug])
 
+  const currentImage = game.image_url || fallback.heroImage
+
   return (
     <div className="bg-[#050505] text-[#e5e2e1] antialiased min-h-screen selection:bg-white selection:text-black">
       <Header />
 
       {/* =========================================================================
-             HERO CINEMATIC LETTERBOX PLAYER (100vh Fullscreen Viewport)
+             HERO CINEMATIC KEYFRAME (Full High-Resolution Image Presentation)
              ========================================================================= */}
-      <section className="relative w-full h-screen bg-[#050505] flex flex-col justify-between overflow-hidden pt-20" id="hero-player">
-        {/* Video / Backdrop Layer */}
+      <section className="relative w-full h-[85vh] bg-[#050505] flex flex-col justify-between overflow-hidden pt-20" id="hero-display">
+        {/* Backdrop Image */}
         <div className="absolute inset-0 z-0">
-          {isPlayingInline ? (
-            <iframe
-              className="w-full h-full object-cover"
-              src={`https://www.youtube-nocookie.com/embed/${game.youtube_id}?autoplay=1&controls=1&rel=0`}
-              title={game.title}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          ) : (
-            <img
-              className="w-full h-full object-cover object-center filter brightness-[0.78] contrast-[1.12]"
-              alt={`${game.title} cinematic letterbox backdrop`}
-              src={fallback.heroImage}
-            />
-          )}
+          <img
+            className="w-full h-full object-cover object-center filter brightness-[0.85] contrast-[1.15]"
+            alt={`${game.title} visual artwork`}
+            src={currentImage}
+          />
           {/* Top and bottom letterbox falloff */}
           <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/70 via-transparent to-[#050505] pointer-events-none" />
         </div>
@@ -242,117 +244,63 @@ export default function GameDetail() {
             <div className="flex items-center space-x-2">
               <span className="w-1.5 h-1.5 bg-white rounded-none inline-block animate-pulse" />
               <span className="font-display text-[10px] text-white tracking-widest uppercase">
-                EXHIBITION // CINEMATIC REEL // {game.slug.toUpperCase()}
+                EXHIBITION // VISUAL ARCHIVE // {game.slug.toUpperCase()}
               </span>
             </div>
             <span className="font-display text-[10px] text-neutral-400">
-              SOURCE: {fallback.engine} (NATIVE 4K)
+              SOURCE: {fallback.engine} (HIGH RESOLUTION DISPLAY)
             </span>
           </div>
           <div className="hidden sm:flex items-center space-x-4 text-right">
             <span className="font-display text-[10px] text-neutral-400 border border-[#444748]/30 px-2 py-1">
-              21:9 LETTERBOX
+              21:9 RATIO
             </span>
             <span className="font-display text-[10px] text-white border border-white/50 px-2 py-1">
-              SPATIAL AMBISONICS
+              AUTEUR PRODUCTION
             </span>
           </div>
         </div>
 
-        {/* Center Play Action */}
-        {!isPlayingInline && (
-          <div className="relative z-10 self-center my-auto flex flex-col items-center">
-            <button
-              aria-label="Play Cinematic Trailer"
-              onClick={() => setIsVideoModalOpen(true)}
-              className="group w-20 h-20 md:w-24 md:h-24 rounded-none border border-white/80 hover:border-white bg-[#050505]/40 backdrop-blur-sm flex items-center justify-center transition-all duration-150 hover:bg-white text-white hover:text-[#050505]"
-              id="play-button"
-            >
-              <span className="material-symbols-outlined text-4xl group-hover:scale-110 transition-transform duration-150">
-                play_arrow
-              </span>
-            </button>
-            <span className="mt-4 font-display text-[10px] tracking-widest text-white/80 uppercase">
-              WATCH REVEAL TRAILER
-            </span>
-          </div>
-        )}
+        {/* Center Title Badge */}
+        <div className="relative z-10 self-center my-auto flex flex-col items-center text-center px-4">
+          <span className="px-3 py-1 bg-black/60 border border-[#444748]/60 text-white font-display text-[10px] uppercase tracking-widest mb-3">
+            TITLE SPECIFICATION
+          </span>
+          <h1 className="font-display text-4xl sm:text-6xl md:text-7xl uppercase text-white tracking-tight drop-shadow-md">
+            {game.title}
+          </h1>
+        </div>
 
-        {/* Letterbox Lower Telemetry & Playback Controls Bar */}
-        <div className="relative z-10 w-full px-6 md:px-16 pb-8 space-y-3">
-          {/* 1px Precision Scrubber Bar */}
-          <div
-            onClick={() => setIsVideoModalOpen(true)}
-            className="w-full bg-[#444748]/30 h-[2px] cursor-pointer group relative"
-          >
-            <div className="bg-white h-full w-[49.6%] relative">
-              <span className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-white" />
-            </div>
-          </div>
-
-          {/* Playback Telemetry Control Row */}
-          <div className="flex items-center justify-between font-display text-[10px] text-neutral-400">
-            <div className="flex items-center space-x-6">
-              <button
-                onClick={() => setIsPlayingInline(!isPlayingInline)}
-                aria-label="Pause/Play"
-                className="text-white hover:text-white transition-colors flex items-center space-x-1"
-              >
-                <span className="material-symbols-outlined text-lg">
-                  {isPlayingInline ? 'pause' : 'play_arrow'}
-                </span>
-              </button>
-              <div className="tracking-widest tabular-nums text-white">
-                02:14 <span className="text-neutral-500">/ 04:30</span>
-              </div>
-              <span className="hidden md:inline-block text-neutral-500">CODEC // AV1 4320p HDR10</span>
-            </div>
-            <div className="flex items-center space-x-6">
-              <button
-                onClick={() => setIsAudioMuted(!isAudioMuted)}
-                aria-label="Audio Toggle"
-                className="hover:text-white transition-colors flex items-center space-x-1"
-              >
-                <span className="material-symbols-outlined text-lg">
-                  {isAudioMuted ? 'volume_off' : 'volume_up'}
-                </span>
-                <span className="hidden sm:inline font-display text-[10px]">
-                  SPATIAL: {isAudioMuted ? 'MUTED' : 'ACTIVE'}
-                </span>
-              </button>
-              <button
-                onClick={() => setIsVideoModalOpen(true)}
-                aria-label="Fullscreen"
-                className="hover:text-white transition-colors flex items-center"
-              >
-                <span className="material-symbols-outlined text-lg">fullscreen</span>
-              </button>
-            </div>
-          </div>
+        {/* Lower Telemetry Strip */}
+        <div className="relative z-10 w-full px-6 md:px-16 pb-8 flex justify-between items-center text-[10px] font-display text-neutral-400 uppercase tracking-widest border-t border-[#444748]/30 pt-4">
+          <span>STATUS // PRODUCTION VERIFIED</span>
+          <a href="#dossier" className="text-white hover:underline flex items-center gap-1">
+            EXPLORE SPECIFICATIONS <span className="material-symbols-outlined text-sm">south</span>
+          </a>
         </div>
       </section>
 
       {/* =========================================================================
              HIGH-CONTRAST EXHIBITION GALLERY TRANSITION (Pristine White Canvas)
              ========================================================================= */}
-      <main className="w-full bg-[#FFFFFF] text-[#0A0A0A] py-16 md:py-28 px-6 md:px-16 transition-colors duration-200">
+      <main className="w-full bg-[#FFFFFF] text-[#0A0A0A] py-16 md:py-28 px-6 md:px-16 transition-colors duration-200" id="dossier">
         <div className="max-w-7xl mx-auto">
           {/* Monolithic Header Row */}
           <div className="border-b border-[#E5E5E5] pb-8 mb-16 flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
               <div className="font-display text-[10px] text-[#737373] tracking-widest uppercase mb-2">
-                ARCHIVE // TITLE DOSSIER // {game.slug.toUpperCase()}
+                ARCHIVE // PRODUCT DOSSIER // {game.slug.toUpperCase()}
               </div>
-              <h1 className="font-display text-4xl sm:text-6xl md:text-8xl tracking-tighter uppercase font-light text-[#0A0A0A] leading-none">
+              <h2 className="font-display text-4xl sm:text-6xl md:text-8xl tracking-tighter uppercase font-light text-[#0A0A0A] leading-none">
                 {game.title}
-              </h1>
+              </h2>
             </div>
             <div className="text-left md:text-right">
               <span className="font-display text-xs text-[#0A0A0A] tracking-widest uppercase block">
                 {game.release_date}
               </span>
               <span className="font-display text-[10px] text-[#737373] uppercase tracking-widest">
-                Worldwide Release
+                Target Release Window
               </span>
             </div>
           </div>
@@ -392,7 +340,7 @@ export default function GameDetail() {
                     </dd>
                   </div>
                   <div className="py-3 flex justify-between items-baseline">
-                    <dt className="font-display text-[10px] text-[#737373] uppercase">Audio</dt>
+                    <dt className="font-display text-[10px] text-[#737373] uppercase">Audio Pipeline</dt>
                     <dd className="font-display text-[10px] text-[#0A0A0A] text-right">
                       {fallback.audio}
                     </dd>
@@ -402,18 +350,17 @@ export default function GameDetail() {
 
               {/* Exhibition Actions */}
               <div className="flex flex-col sm:flex-row gap-4 pt-4 border-t border-[#E5E5E5]">
-                <a
-                  className="w-full sm:w-auto text-center border border-[#0A0A0A] bg-[#0A0A0A] text-[#FFFFFF] hover:bg-transparent hover:text-[#0A0A0A] px-8 py-4 font-display text-xs uppercase tracking-widest transition-all duration-150"
-                  href="#hero-player"
-                  onClick={() => setIsVideoModalOpen(true)}
-                >
-                  Watch In Native 4K
-                </a>
                 <Link
-                  to="/press"
+                  to="/press#contact"
+                  className="w-full sm:w-auto text-center border border-[#0A0A0A] bg-[#0A0A0A] text-[#FFFFFF] hover:bg-transparent hover:text-[#0A0A0A] px-8 py-4 font-display text-xs uppercase tracking-widest transition-all duration-150 font-bold"
+                >
+                  Contact Studio
+                </Link>
+                <Link
+                  to="/#games"
                   className="w-full sm:w-auto text-center border border-[#CCCCCC] bg-transparent text-[#0A0A0A] hover:border-[#0A0A0A] px-8 py-4 font-display text-xs uppercase tracking-widest transition-all duration-150 flex items-center justify-center space-x-2"
                 >
-                  <span>Press Kit (4K)</span>
+                  <span>All Products</span>
                   <span className="material-symbols-outlined text-base">arrow_forward</span>
                 </Link>
               </div>
@@ -426,18 +373,18 @@ export default function GameDetail() {
                     AUTEUR DISPATCH
                   </div>
                   <p className="text-xs text-[#737373] leading-relaxed">
-                    Full tactile dual-sense integration, custom spatial audio impulse profiles, and ultra-wide telemetry verified for high-resolution gallery master rigs.
+                    Designed for total tactile player agency, high physical fidelity, and uncompromising atmospheric immersion.
                   </p>
                 </div>
               </div>
             </div>
 
-            {/* RIGHT COLUMN: Curated Provenance Description, Core Tenets, Edge Quote */}
+            {/* RIGHT COLUMN: Curated Provenance Description & Core Tenets */}
             <div className="lg:col-span-7 flex flex-col space-y-16 lg:pl-8">
               {/* Curated Lead Description */}
               <div className="space-y-6">
                 <div className="font-display text-[10px] text-[#737373] tracking-widest uppercase">
-                  PROVENANCE & SYNOPSIS
+                  PRODUCT SYNOPSIS & VISION
                 </div>
                 <p className="text-lg md:text-xl text-[#171717] font-light leading-relaxed">
                   {game.description}
@@ -490,41 +437,9 @@ export default function GameDetail() {
       </main>
 
       {/* =========================================================================
-             STUDIO WORKSPACE ATMOSPHERE (Interlude Section)
-             ========================================================================= */}
-      <section className="w-full bg-[#0E0E0E] py-20 px-6 md:px-16 border-t border-[#444748]/30">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-4 space-y-4">
-            <div className="flex items-center space-x-2">
-              <span className="w-1.5 h-1.5 bg-white rounded-none inline-block" />
-              <span className="font-display text-[10px] text-neutral-400 uppercase tracking-widest">
-                FACILITY TELEMETRY
-              </span>
-            </div>
-            <h2 className="font-display text-3xl font-light text-white tracking-tight">
-              BUILT BY THE CORE UNIT
-            </h2>
-            <p className="text-sm text-neutral-400 leading-relaxed">
-              Gamicon operates as an uncompromising research cluster. Concept artists, low-level engine architects, and sound designers build synchronously in an open acoustic bay.
-            </p>
-          </div>
-          <div className="lg:col-span-8 border border-[#444748]/30 relative">
-            <img
-              className="w-full h-80 sm:h-96 object-cover filter grayscale contrast-125 hover:grayscale-0 transition-all duration-300"
-              alt="Gamicon Montreal Studio Soundstage"
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuCo7tE8fY0KSEERP9D_Y1H8DYxB1-4lulvgOvIjKkgB6_gfshAxTwBPOBYflXmb5AJyX3cEAqzy7iee_wk5l223sOedFZy3w6XIy5PZyJs0SNWurZVaMti2o_0iZWjuX-ULF905PmHvW_-WXUlOUYL6gynHtUO0J_nhP3ua_Ww0OqlCDUzRML_7RxFwWM-YJkPgkM4jylSxnAAZ_Z5MAvLkgtLH9LxIsc-JQqRb3to4429y6eR1AOaq"
-            />
-            <div className="absolute bottom-4 left-4 font-display text-[10px] text-white bg-[#050505]/80 backdrop-blur-sm px-3 py-1.5 border border-[#444748]/40">
-              STUDIO SOUNDSTAGE // SECTOR 04
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
              COMPANION GALLERY ARCHIVE (Bottom Showcase)
              ========================================================================= */}
-      <section className="w-full bg-[#050505] py-20 px-6 md:px-16 border-t border-[#444748]/30" id="games">
+      <section className="w-full bg-[#050505] py-20 px-6 md:px-16 border-t border-[#444748]/30">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-[#444748]/30 pb-6 gap-4">
             <div>
@@ -582,14 +497,6 @@ export default function GameDetail() {
       </section>
 
       <Footer />
-
-      {/* Video Modal Player */}
-      <VideoModal
-        isOpen={isVideoModalOpen}
-        youtubeId={game.youtube_id}
-        title={game.title}
-        onClose={() => setIsVideoModalOpen(false)}
-      />
     </div>
   )
 }

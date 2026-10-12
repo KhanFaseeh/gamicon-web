@@ -14,16 +14,16 @@ export default function Footer() {
           </span>
         </div>
 
-        {/* Links Spectrum: Games, Ethos (About), Press Kit & Contact */}
+        {/* Links Spectrum */}
         <nav className="flex flex-wrap items-center gap-6 text-xs font-display tracking-widest uppercase">
           <Link to="/#games" className="text-[#c7c6c6] hover:text-white transition-colors">
-            Games
+            Products
           </Link>
           <Link to="/about" className="text-[#c7c6c6] hover:text-white transition-colors">
-            Ethos
+            Studio Vision
           </Link>
           <Link to="/press" className="text-[#c7c6c6] hover:text-white transition-colors">
-            Press Kit
+            Dispatches
           </Link>
           <Link to="/press#contact" className="text-white hover:text-neutral-300 transition-colors">
             Contact
