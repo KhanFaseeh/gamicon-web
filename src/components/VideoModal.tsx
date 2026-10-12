@@ -20,7 +20,6 @@ export default function VideoModal({ isOpen, youtubeId, title, onClose }: VideoM
         {/* Header bar */}
         <div className="flex items-center justify-between px-4 py-3 bg-[#131313] border-b border-[#444748]/40">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 bg-white inline-block animate-pulse"></span>
             <span className="font-display text-xs uppercase tracking-widest text-white">
               SIGNAL FEED // {title}
             </span>

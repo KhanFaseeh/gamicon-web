@@ -81,7 +81,6 @@ export default function Press() {
         <section className="px-6 md:px-16 pt-8 pb-16 border-b border-[#444748]/30">
           <div className="flex flex-wrap items-center justify-between gap-y-2 mb-4 pb-2 border-b border-[#444748]/20 font-display text-[10px] text-[#8e9192] tracking-widest uppercase">
             <div className="flex items-center gap-3">
-              <span className="inline-block w-2 h-2 bg-white" />
               <span className="text-[#e5e2e1]">SYS_BUILD: 2025.REL_04</span>
               <span className="text-[#444748]">/</span>
               <span>PROTOCOL 100% INDEPENDENT</span>
@@ -126,8 +125,8 @@ export default function Press() {
             <div className="md:col-span-7 bg-[#0e0e0e] p-4 flex flex-col justify-between group">
               <div className="flex items-center justify-between text-[#8e9192] font-display text-[10px] mb-2 uppercase tracking-widest">
                 <span>LAB CAM 01 // PESHAWAR DEV FLOOR</span>
-                <span className="text-white flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 bg-white inline-block animate-pulse" /> REC
+                <span className="text-white font-bold">
+                  REC
                 </span>
               </div>
               <div className="w-full aspect-[21/9] overflow-hidden bg-[#201f1f]">

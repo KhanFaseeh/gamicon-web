@@ -126,7 +126,6 @@ export default function GameDetail() {
         <div className="relative z-10 w-full px-6 md:px-16 pt-6 flex justify-between items-start pointer-events-none">
           <div className="flex flex-col space-y-1">
             <div className="flex items-center space-x-2">
-              <span className="w-1.5 h-1.5 bg-white rounded-none inline-block animate-pulse" />
               <span className="font-display text-[10px] text-white tracking-widest uppercase">
                 EXHIBITION // VISUAL ARCHIVE // {game.slug.toUpperCase()}
               </span>

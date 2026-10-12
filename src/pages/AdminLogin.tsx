@@ -33,7 +33,6 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
             <MonogramIcon className="w-12 h-12" animated={true} />
           </div>
           <div className="inline-flex items-center gap-2 px-2.5 py-1 bg-[#1c1b1b] border border-[#444748]/40 font-mono text-[10px] text-[#8e9192] uppercase tracking-widest">
-            <span className="w-1.5 h-1.5 bg-white inline-block animate-pulse" />
             <span>TERMINAL ACCESS // SECTOR 04</span>
           </div>
           <h1 className="font-display text-2xl uppercase tracking-[0.2em] text-white font-bold pl-[0.1em]">

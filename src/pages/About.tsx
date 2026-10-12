@@ -76,7 +76,6 @@ export default function About() {
             {/* Tenet 01 */}
             <div className="space-y-3">
               <div className="font-display text-[10px] text-white tracking-widest flex items-center gap-2 uppercase">
-                <span className="w-1.5 h-1.5 bg-white inline-block" />
                 01 // PHYSICAL INTEGRITY
               </div>
               <p className="text-xs md:text-sm text-[#8e9192] leading-relaxed">
@@ -86,7 +85,6 @@ export default function About() {
             {/* Tenet 02 */}
             <div className="space-y-3">
               <div className="font-display text-[10px] text-white tracking-widest flex items-center gap-2 uppercase">
-                <span className="w-1.5 h-1.5 bg-white inline-block" />
                 02 // DIEGETIC IMMERSION
               </div>
               <p className="text-xs md:text-sm text-[#8e9192] leading-relaxed">
@@ -96,7 +94,6 @@ export default function About() {
             {/* Tenet 03 */}
             <div className="space-y-3">
               <div className="font-display text-[10px] text-white tracking-widest flex items-center gap-2 uppercase">
-                <span className="w-1.5 h-1.5 bg-white inline-block" />
                 03 // OPEN PLAYTEST LOOPS
               </div>
               <p className="text-xs md:text-sm text-[#8e9192] leading-relaxed">

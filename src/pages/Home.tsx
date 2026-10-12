@@ -46,8 +46,7 @@ export default function Home() {
 
         {/* Telemetry Overhead Bar */}
         <div className="relative z-10 w-full px-6 md:px-16 pt-8 flex justify-between items-center text-[#8e9192] font-display text-[11px] tracking-widest">
-          <div className="flex items-center gap-2">
-            <span className="inline-block w-1.5 h-1.5 bg-white" />
+          <div>
             <span>PESHAWAR LAB // PAKISTAN</span>
           </div>
           <div className="hidden sm:block">
@@ -147,11 +146,9 @@ export default function Home() {
           <section className="py-28 px-6 md:px-16 border-b border-[#444748]/20 bg-[#0e0e0e]">
             <div className="max-w-4xl mx-auto border border-[#444748]/40 p-12 bg-[#131313]/30 text-center space-y-6">
               <div className="flex items-center justify-center gap-2">
-                <span className="w-2 h-2 bg-neutral-500" />
                 <span className="font-display text-xs uppercase tracking-widest text-[#8e9192]">
                   TRANSMISSION STATUS // ARCHIVE EMPTY
                 </span>
-                <span className="w-2 h-2 bg-neutral-500" />
               </div>
 
               <h2 className="font-display text-3xl md:text-5xl uppercase text-white tracking-tight">
@@ -188,7 +185,6 @@ export default function Home() {
                   {/* Section Tag & Index */}
                   <div className="flex justify-between items-baseline mb-4 border-b border-[#444748]/20 pb-2">
                     <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 bg-white" />
                       <span className="font-display text-xs uppercase tracking-widest text-white">
                         PRODUCT ARCHIVE // {archiveNum}
                       </span>
@@ -223,7 +219,6 @@ export default function Home() {
 
                         <div className="absolute top-4 left-4 pointer-events-none">
                           <div className="inline-flex items-center gap-2 bg-[#0e0e0e]/90 backdrop-blur-sm border border-[#444748]/40 px-3 py-1">
-                            <span className="inline-block w-2 h-2 bg-white animate-pulse" />
                             <span className="font-display text-[10px] text-white uppercase tracking-widest">
                               ACTIVE TRANSMISSION
                             </span>

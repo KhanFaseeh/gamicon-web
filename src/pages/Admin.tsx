@@ -563,7 +563,6 @@ export default function Admin() {
             <div className="border border-[#444748]/40 bg-[#0e0e0e]">
               <div className="px-4 py-3 border-b border-[#444748]/40 flex items-center justify-between bg-[#1c1b1b]">
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 bg-white" />
                   <h2 className="font-display text-xs uppercase tracking-widest text-white font-bold">
                     PRODUCT CATALOG & VISUALS
                   </h2>
@@ -739,7 +738,6 @@ export default function Admin() {
           <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-[#0e0e0e] border border-[#444748] p-6 md:p-8 space-y-6 shadow-2xl">
             <div className="flex justify-between items-center border-b border-[#444748]/40 pb-4">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-white" />
                 <h3 className="font-display text-lg text-white uppercase tracking-tight font-bold">
                   {editingGameId ? 'EDIT PRODUCT ENTRY' : 'ADD NEW PRODUCT'}
                 </h3>
@@ -959,7 +957,6 @@ export default function Admin() {
           <div className="w-full max-w-2xl bg-[#0e0e0e] border border-[#444748] p-6 md:p-8 space-y-6">
             <div className="flex justify-between items-center border-b border-[#444748]/40 pb-4">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-white" />
                 <h3 className="font-display text-lg text-white uppercase tracking-tight font-bold">
                   EDIT STUDIO INFO (ID = 1)
                 </h3>

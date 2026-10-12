@@ -163,7 +163,6 @@ export default function Logo({
             <span className="wordmark-tracked text-xs font-bold uppercase tracking-[0.28em] text-white">
               ANAMORPHIC
             </span>
-            {animated && <span className="w-1.5 h-1.5 bg-white telemetry-indicator inline-block" />}
           </div>
           <span className="font-mono text-[8px] text-[#666666] tracking-wider leading-none mt-0.5">
             [ SYS // ANM-01 ]
@@ -227,7 +226,6 @@ export default function Logo({
           ANAMORPHIC
         </h2>
         <div className="flex items-center gap-2 mt-2 font-mono text-[10px] text-[#888888] tracking-widest">
-          {animated && <span className="w-1.5 h-1.5 bg-white telemetry-indicator inline-block" />}
           <span>[ SYS // ANM-01 // 2.39:1 ]</span>
           <span className="text-[#444444]">•</span>
           <span>EST. 2026</span>
