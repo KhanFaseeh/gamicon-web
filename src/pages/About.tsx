@@ -48,7 +48,7 @@ export default function About() {
           {/* Studio Telemetry Coordinates Header */}
           <div className="flex flex-col md:flex-row md:items-center justify-between text-[#8e9192] border-b border-[#444748]/20 pb-4 gap-2 font-display text-[10px] tracking-widest">
             <div className="text-[#c7c6c6]">
-              EST. 2019 // MONTREAL LAB // 45.5017° N, 73.5673° W // 100% SELF-OWNED EQUITY
+              EST. 2023 // PESHAWAR LAB // PAKISTAN // 100% SELF-OWNED EQUITY
             </div>
             <div className="text-[#8e9192]">
               AUTEUR SPECIFICATION // SPEC-092
@@ -142,7 +142,7 @@ export default function About() {
 
           {/* Letterbox Bottom Bar */}
           <div className="w-full bg-[#000000] py-3 px-6 md:px-16 flex justify-between items-center text-[#8e9192] border-t border-[#444748]/20 font-display text-[10px] tracking-widest">
-            <span>MONTREAL PRODUCTION UNIT // SECTOR 04</span>
+            <span>PESHAWAR PRODUCTION UNIT // SECTOR 04</span>
             <span>TIME CODE: 01:44:28:12</span>
           </div>
         </section>
@@ -198,7 +198,7 @@ export default function About() {
               <div className="border border-[#444748]/30 p-2 bg-[#1c1b1b]">
                 <div className="relative overflow-hidden aspect-[4/3]">
                   <img
-                    alt="Montreal Soundstage & Engineering Lab"
+                    alt="Peshawar Soundstage & Engineering Lab"
                     className="w-full h-full object-cover filter contrast-110"
                     src="https://lh3.googleusercontent.com/aida/AEtjO1X8gVDzQKeN1xnNu8yH5hqMwFVSf2tgib-RrN4qRR4hYfMl1W1K84GlSKWbF0bCtfapCBy75RgVw9rATVOsigq89QNtmXDugvbaXFOC9wAq6I0iCDdcZcFx4jVjZhwbsp3B7bvutYI3lt0ZGkoF19qWlev-tk3rDCALHDrL8Et0daLsjCKEjSy9vr0fudlrSAaMt_g1GO8wLvg6Ua1DGh0Ss2NmAle4pFz2_R2WwvLr2qcyJh0haDvSHZ0"
                   />
@@ -206,7 +206,7 @@ export default function About() {
                 </div>
                 {/* Metadata Strip below image */}
                 <div className="mt-3 pt-3 border-t border-[#444748]/20 flex flex-wrap justify-between items-center font-display text-[10px] text-[#8e9192]">
-                  <span>FACILITY: MONTREAL LAB 01</span>
+                  <span>FACILITY: PESHAWAR LAB 01</span>
                   <span>CREW: 28 VETERAN ENGINEERS</span>
                   <span>RIG: DUAL-SIMULATION SOUNDSTAGE</span>
                 </div>
@@ -223,13 +223,13 @@ export default function About() {
             {/* Timeline Header */}
             <div className="text-center mb-16 space-y-3">
               <span className="font-display text-[10px] text-[#777777] tracking-widest uppercase inline-block">
-                CHRONOLOGICAL ARCHIVE // 2019 — BEYOND
+                CHRONOLOGICAL ARCHIVE // 2023 — BEYOND
               </span>
               <h2 className="font-display text-3xl md:text-5xl uppercase text-[#050505] tracking-tight">
                 THE CHRONOLOGY OF AUTEUR DEV
               </h2>
               <p className="text-sm md:text-base text-[#555555] max-w-lg mx-auto leading-relaxed">
-                From an independent sanctuary in Montreal to uncompromising global recognition.
+                From an independent sanctuary in Peshawar to uncompromising global recognition.
               </p>
             </div>
 
@@ -239,26 +239,26 @@ export default function About() {
               <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[1px] bg-[#D4D4D4] transform md:-translate-x-1/2" />
 
               <div className="space-y-16">
-                {/* Item 1: 2019 */}
+                {/* Item 1: 2023 */}
                 <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between">
                   <div className="md:w-5/12 pl-12 md:pl-0 md:text-right space-y-2">
                     <span className="font-display text-[10px] text-[#888888] tracking-widest block uppercase">
                       FOUNDING ERA
                     </span>
                     <h3 className="font-display text-2xl text-[#050505] uppercase">
-                      GENESIS // MONTREAL
+                      GENESIS // PESHAWAR
                     </h3>
                     <p className="text-xs md:text-sm text-[#444444] leading-relaxed">
-                      Founded as a tight-knit collective of veteran developers and engineers. 100% self-owned equity secured to guarantee permanent creative autonomy.
+                      Founded as an auteur studio collective uniting Blender 3D modeling, Unity Engine precision, and ElevenLabs audio architecture. 100% self-owned equity secured to guarantee permanent creative autonomy.
                     </p>
                   </div>
                   <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-3 h-3 bg-[#050505] border-2 border-[#FFFFFF] rounded-none z-10 mt-1 md:mt-0" />
                   <div className="md:w-5/12 pl-12 md:pl-8 font-display text-sm text-[#050505] tracking-widest font-bold">
-                    2019
+                    2023
                   </div>
                 </div>
 
-                {/* Item 2: 2021 */}
+                {/* Item 2: 2024 */}
                 <div className="relative flex flex-col md:flex-row-reverse items-start md:items-center justify-between">
                   <div className="md:w-5/12 pl-12 md:pl-8 space-y-2">
                     <span className="font-display text-[10px] text-[#888888] tracking-widest block uppercase">
@@ -268,31 +268,12 @@ export default function About() {
                       CORE ENGINE PIPELINE
                     </h3>
                     <p className="text-xs md:text-sm text-[#444444] leading-relaxed">
-                      Development of custom deterministic physics engine and spatial ambisonics 3D object audio architecture for sub-millisecond precision.
+                      Integration of advanced Unity Engine physics pipelines, procedural high-poly Blender assets, and ElevenLabs dynamic voice synthesis for high-tension spatial realism.
                     </p>
                   </div>
                   <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-3 h-3 bg-[#050505] border-2 border-[#FFFFFF] rounded-none z-10 mt-1 md:mt-0" />
                   <div className="md:w-5/12 pl-12 md:pl-0 md:text-right font-display text-sm text-[#050505] tracking-widest font-bold">
-                    2021
-                  </div>
-                </div>
-
-                {/* Item 3: 2023 */}
-                <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between">
-                  <div className="md:w-5/12 pl-12 md:pl-0 md:text-right space-y-2">
-                    <span className="font-display text-[10px] text-[#888888] tracking-widest block uppercase">
-                      PROTOTYPING
-                    </span>
-                    <h3 className="font-display text-2xl text-[#050505] uppercase">
-                      CHRONO MONOLITH
-                    </h3>
-                    <p className="text-xs md:text-sm text-[#444444] leading-relaxed">
-                      Conceptualization of dark fantasy exploration systems and tactical mech simulation suites under closed architectural prototypes.
-                    </p>
-                  </div>
-                  <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-3 h-3 bg-[#050505] border-2 border-[#FFFFFF] rounded-none z-10 mt-1 md:mt-0" />
-                  <div className="md:w-5/12 pl-12 md:pl-8 font-display text-sm text-[#050505] tracking-widest font-bold">
-                    2023
+                    2024
                   </div>
                 </div>
 

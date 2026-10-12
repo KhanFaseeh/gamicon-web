@@ -8,8 +8,6 @@ import { supabase, parseGameRecord, type Game } from '../lib/supabaseClient'
 export default function Home() {
   const [games, setGames] = useState<Game[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [emailInput, setEmailInput] = useState('')
-  const [subscribeStatus, setSubscribeStatus] = useState<string | null>(null)
 
   useEffect(() => {
     async function fetchGames() {
@@ -34,16 +32,6 @@ export default function Home() {
     }
     fetchGames()
   }, [])
-
-  const handlePlaytestSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!emailInput) return
-    setSubscribeStatus('TRANSMISSION RECEIVED // CLEARANCE PENDING ENCRYPTION')
-    setEmailInput('')
-    setTimeout(() => {
-      setSubscribeStatus(null)
-    }, 6000)
-  }
 
   const flagshipGame = games[0] || null
 
@@ -75,7 +63,7 @@ export default function Home() {
         <div className="relative z-10 w-full px-6 md:px-16 pt-8 flex justify-between items-center text-[#8e9192] font-display text-[11px] tracking-widest">
           <div className="flex items-center gap-2">
             <span className="inline-block w-1.5 h-1.5 bg-white" />
-            <span>LAT 45.5017° N // LON 73.5673° W</span>
+            <span>PESHAWAR LAB // PAKISTAN</span>
           </div>
           <div className="hidden sm:block">
             <span>ARCHIVE REF: GMCN-AUTEUR-00</span>
@@ -129,7 +117,7 @@ export default function Home() {
         {/* Hero Base Telemetry Footer Indicator */}
         <div className="relative z-10 w-full px-6 md:px-16 pb-8 flex justify-between items-end text-[#8e9192] border-t border-[#444748]/20 pt-4">
           <div className="font-display text-[10px] tracking-widest">
-            <span>EST. 2019 // MONTREAL LAB</span>
+            <span>EST. 2023 // PESHAWAR LAB</span>
           </div>
           <a
             href="#games"
@@ -396,7 +384,7 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center border border-[#444748]/30 bg-[#131313]/30">
             <div className="lg:col-span-7 h-full">
               <img
-                alt="Gamicon Montreal Studio Lab Workstations"
+                alt="Gamicon Peshawar Studio Lab Workstations"
                 className="w-full h-full object-cover min-h-[360px] filter grayscale contrast-125"
                 src="https://lh3.googleusercontent.com/aida/AEtjO1X8gVDzQKeN1xnNu8yH5hqMwFVSf2tgib-RrN4qRR4hYfMl1W1K84GlSKWbF0bCtfapCBy75RgVw9rATVOsigq89QNtmXDugvbaXFOC9wAq6I0iCDdcZcFx4jVjZhwbsp3B7bvutYI3lt0ZGkoF19qWlev-tk3rDCALHDrL8Et0daLsjCKEjSy9vr0fudlrSAaMt_g1GO8wLvg6Ua1DGh0Ss2NmAle4pFz2_R2WwvLr2qcyJh0haDvSHZ0"
               />
@@ -406,7 +394,7 @@ export default function Home() {
                 PHYSICAL FACILITY
               </span>
               <h3 className="font-display text-2xl uppercase text-white font-normal">
-                MONTREAL STUDIO LAB
+                PESHAWAR STUDIO LAB
               </h3>
               <p className="text-sm md:text-base text-[#c4c7c8] font-light leading-relaxed">
                 Our atelier houses high-throughput workstations, dedicated motion simulation gear, and localized build clusters. We maintain complete autonomy over every project developed.
@@ -414,7 +402,7 @@ export default function Home() {
               <div className="pt-4 space-y-2 font-display text-xs text-[#8e9192] border-t border-[#444748]/20">
                 <div className="flex justify-between">
                   <span>LOCATION:</span>
-                  <span className="text-white">MONTREAL, QC (45.5017° N, 73.5673° W)</span>
+                  <span className="text-white">PESHAWAR, PAKISTAN</span>
                 </div>
                 <div className="flex justify-between">
                   <span>PERSONNEL:</span>
@@ -445,60 +433,6 @@ export default function Home() {
             <span className="font-display text-xs text-[#8e9192] uppercase tracking-widest">
               EDGE MAGAZINE // ISSUE 391
             </span>
-          </div>
-        </div>
-      </section>
-
-      {/* PLAYTEST TERMINAL & SIGNUP */}
-      <section className="py-20 md:py-28 px-6 md:px-16 bg-[#0e0e0e] border-b border-[#444748]/20" id="contact">
-        <div className="max-w-4xl mx-auto border border-[#444748]/40 p-8 md:p-12 bg-[#131313]/20">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8 pb-4 border-b border-[#444748]/20">
-            <div>
-              <span className="font-display text-xs uppercase tracking-widest text-[#8e9192]">
-                DIRECT ACCESS PROTOCOL
-              </span>
-              <h3 className="font-display text-2xl uppercase text-white mt-1">
-                JOIN CLOSED PLAYTEST PIPELINE
-              </h3>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="w-2 h-2 bg-white" />
-              <span className="font-display text-xs uppercase tracking-widest text-[#c7c6c6]">
-                ACCEPTING ALPHA COHORTS
-              </span>
-            </div>
-          </div>
-
-          <p className="text-sm md:text-base text-[#c4c7c8] font-light mb-8">
-            Receive unreleased development builds directly via private launcher branches. All playtesters are subject to strict NDA provisions and required telemetry upload.
-          </p>
-
-          <form className="flex flex-col sm:flex-row gap-3" onSubmit={handlePlaytestSubmit}>
-            <input
-              type="email"
-              value={emailInput}
-              onChange={(e) => setEmailInput(e.target.value)}
-              placeholder="OPERATOR_EMAIL@DOMAIN.COM"
-              required
-              className="flex-1 bg-[#0e0e0e] border border-[#444748]/50 focus:border-white text-white font-display text-xs uppercase px-4 py-3 placeholder:text-[#8e9192]/60 focus:ring-0 focus:outline-none"
-            />
-            <button
-              type="submit"
-              className="border border-white bg-white text-black hover:bg-transparent hover:text-white px-8 py-3 font-display text-xs uppercase tracking-widest transition-all duration-150"
-            >
-              Request Clearance
-            </button>
-          </form>
-
-          {subscribeStatus && (
-            <div className="mt-4 p-3 border border-white/40 bg-white/5 font-display text-xs text-white tracking-widest uppercase">
-              {subscribeStatus}
-            </div>
-          )}
-
-          <div className="mt-6 flex flex-col sm:flex-row justify-between items-center text-[#8e9192] font-display text-[10px] gap-2">
-            <span>ENCRYPTION: 4096-BIT TLS</span>
-            <span>NO MARKETING DISPATCHES // RAW BUILDS ONLY</span>
           </div>
         </div>
       </section>

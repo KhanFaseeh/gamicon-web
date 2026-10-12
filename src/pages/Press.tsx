@@ -96,7 +96,7 @@ export default function Press() {
               <span>PROTOCOL 100% INDEPENDENT</span>
             </div>
             <div>
-              <span>MONTREAL LAB [45.5017° N, 73.5673° W]</span>
+              <span>PESHAWAR LAB // PAKISTAN</span>
             </div>
           </div>
 
@@ -134,7 +134,7 @@ export default function Press() {
             {/* Lab Environment Module */}
             <div className="md:col-span-7 bg-[#0e0e0e] p-4 flex flex-col justify-between group">
               <div className="flex items-center justify-between text-[#8e9192] font-display text-[10px] mb-2 uppercase tracking-widest">
-                <span>LAB CAM 01 // MONTREAL DEV FLOOR</span>
+                <span>LAB CAM 01 // PESHAWAR DEV FLOOR</span>
                 <span className="text-white flex items-center gap-1">
                   <span className="w-1.5 h-1.5 bg-white inline-block animate-pulse" /> REC
                 </span>
@@ -142,7 +142,7 @@ export default function Press() {
               <div className="w-full aspect-[21/9] overflow-hidden bg-[#201f1f]">
                 <img
                   className="w-full h-full object-cover filter grayscale contrast-125 group-hover:grayscale-0 transition-all duration-300"
-                  alt="Gamicon Montreal Dev Floor"
+                  alt="Gamicon Peshawar Dev Floor"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2cOOxbCilaHe97REcOuuPeAOtdQvXV9AmGHYCoRw_TFUfvlN2Ci2DU2qgd4jhGk5HYWNXtV8y6uGYgBecfX69OhSMJzA9nJQjAAan_oJgwbzNwtP-ksKksZfq2wG4CoDWoWLsrkQ-iqq2kmiCm_HbMvqsjF68p-zbZ2xhnlD28ULzCh5xsaWbb5Xdz_OXVhS1z_5Bz-1RaR_LmmxvOkuU5JqTuqKf-TI6It1jMrTTPxGlhC4kFk2J"
                 />
               </div>
@@ -330,10 +330,10 @@ export default function Press() {
                 PHYSICAL HEADQUARTERS
               </span>
               <p className="font-display text-xs text-white uppercase tracking-widest">
-                MONTREAL LAB SECTOR 04, QC, CANADA
+                PESHAWAR LAB SECTOR 04, PAKISTAN
               </p>
               <p className="font-mono text-xs text-[#c7c6c6] mt-1">
-                COORDINATES: 45.5017° N, 73.5673° W
+                LOCATION: PESHAWAR, PAKISTAN
               </p>
               <div className="mt-4 pt-3 border-t border-[#444748]/20 flex items-center justify-between text-[#8e9192] font-display text-[10px] uppercase">
                 <span>FACILITY ACCESS</span>
