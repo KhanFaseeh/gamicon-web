@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { MonogramIcon } from '../components/Logo'
 
 interface AdminLoginProps {
   onLoginSuccess: () => void
@@ -27,12 +28,15 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
     <div className="min-h-screen bg-[#050505] text-[#e5e2e1] flex items-center justify-center p-6 font-sans selection:bg-white selection:text-black">
       <div className="w-full max-w-md bg-[#0e0e0e] border border-[#444748] p-8 md:p-10 space-y-8">
         {/* Terminal Header */}
-        <div className="text-center space-y-2 border-b border-[#444748]/40 pb-6">
+        <div className="text-center space-y-3 border-b border-[#444748]/40 pb-6">
+          <div className="flex justify-center mb-1">
+            <MonogramIcon className="w-12 h-12" animated={true} />
+          </div>
           <div className="inline-flex items-center gap-2 px-2.5 py-1 bg-[#1c1b1b] border border-[#444748]/40 font-mono text-[10px] text-[#8e9192] uppercase tracking-widest">
             <span className="w-1.5 h-1.5 bg-white inline-block animate-pulse" />
             <span>TERMINAL ACCESS // SECTOR 04</span>
           </div>
-          <h1 className="font-display text-2xl uppercase tracking-widest text-white font-bold">
+          <h1 className="font-display text-2xl uppercase tracking-[0.2em] text-white font-bold pl-[0.1em]">
             GAMICON // CMS GATEWAY
           </h1>
           <p className="text-xs text-[#8e9192] font-mono">

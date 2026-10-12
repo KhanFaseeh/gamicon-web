@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import Logo from './Logo'
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -8,16 +9,9 @@ export default function Header() {
   return (
     <header className="fixed top-0 left-0 w-full z-50 bg-[#0e0e0e]/90 backdrop-blur-md border-b border-[#444748]/30 transition-colors duration-150">
       <div className="flex justify-between items-center w-full px-6 md:px-16 h-20">
-        {/* Studio Wordmark / Brand Logo */}
+        {/* Studio Monogram / Brand Logo */}
         <Link to="/" className="flex items-center gap-3 group">
-          <img
-            alt="GAMICON Studio Logo"
-            className="h-6 w-auto object-contain brightness-125"
-            src="https://lh3.googleusercontent.com/aida/AEtjO1VaPmqYGDkTcOyXsLHMze3dfA9FLN7oUQeYSvB6otuJikohHt_mmmeU7BlbnsfEdlvf-9jYJB3Bwb16XwSCStgohRtk2fNGWKzArFPB3o7II1-nkfnvFkjd0S-FjmVqjH7JGjXcV3LACMkMzeYOI3kl62JUuZODWkotSS84rDFf6ZywZPhajfeUA-4wJJ0mJOZmU0Ds1TEVYtSxmAzCSOqv2U2E8XPJoHDnLnnfbNpp-2GF8aw6U5_IRQ"
-          />
-          <span className="font-display text-2xl tracking-tighter uppercase font-normal text-white">
-            GAMICON
-          </span>
+          <Logo variant="primary" iconSize="md" animated={true} />
         </Link>
 
         {/* Universal Desktop Nav Links: Games, About, Contact */}

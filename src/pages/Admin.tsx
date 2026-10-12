@@ -8,6 +8,7 @@ import {
   type StudioInfo,
 } from '../lib/supabaseClient'
 import AdminLogin from './AdminLogin'
+import { MonogramIcon } from '../components/Logo'
 
 const DEFAULT_STUDIO: StudioInfo = {
   id: 1,
@@ -405,15 +406,13 @@ export default function Admin() {
       <aside className="fixed left-0 top-0 h-screen w-64 bg-[#0e0e0e] border-r border-[#444748]/40 flex flex-col justify-between p-4 z-40">
         <div>
           <div className="flex items-center justify-between pb-4 border-b border-[#444748]/40 mb-4">
-            <Link to="/" className="flex items-center gap-2 group">
-              <div className="w-7 h-7 bg-white text-black flex items-center justify-center font-bold font-display text-xs">
-                G
-              </div>
+            <Link to="/" className="flex items-center gap-2.5 group">
+              <MonogramIcon className="w-7 h-7" animated={true} />
               <div>
-                <span className="font-display tracking-widest text-white uppercase font-bold text-sm leading-none block">
+                <span className="font-display tracking-[0.2em] text-white uppercase font-bold text-sm leading-none block group-hover:text-neutral-300 transition-colors">
                   GAMICON
                 </span>
-                <span className="font-display text-[9px] uppercase tracking-widest text-[#8e9192] block mt-0.5">
+                <span className="font-mono text-[8px] uppercase tracking-widest text-[#8e9192] block mt-1">
                   CMS // PRODUCT MANAGER
                 </span>
               </div>

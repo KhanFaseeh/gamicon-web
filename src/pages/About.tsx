@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import { MonogramIcon } from '../components/Logo'
 import { supabase, type StudioInfo } from '../lib/supabaseClient'
 
 const DEFAULT_STUDIO_INFO: StudioInfo = {
@@ -56,6 +57,9 @@ export default function About() {
 
           {/* Core Philosophical Anchor */}
           <div className="my-16 max-w-5xl mx-auto text-center flex flex-col items-center">
+            <div className="mb-6">
+              <MonogramIcon className="w-16 h-16 md:w-20 md:h-20" animated={true} />
+            </div>
             <span className="font-display text-[10px] text-[#8e9192] tracking-widest uppercase mb-6 inline-block">
               STUDIO MANIFESTO // VOL. 01
             </span>

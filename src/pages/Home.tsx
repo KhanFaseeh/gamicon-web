@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import { MonogramIcon } from '../components/Logo'
 import { supabase, parseGameRecord, type Game } from '../lib/supabaseClient'
 
 export default function Home() {
@@ -83,10 +84,13 @@ export default function Home() {
 
         {/* Centered Hero Focal Hierarchy */}
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-16 my-auto text-center flex flex-col items-center">
-          <div className="inline-block border border-[#444748]/60 px-4 py-1 mb-8">
-            <span className="font-display text-[11px] tracking-widest uppercase text-[#c7c6c6]">
-              GAMICON / INDEPENDENT AUTEUR PRODUCTION
-            </span>
+          <div className="flex flex-col items-center gap-4 mb-6">
+            <MonogramIcon className="w-16 h-16 md:w-20 md:h-20" animated={true} />
+            <div className="inline-block border border-[#444748]/60 px-4 py-1">
+              <span className="font-display text-[11px] tracking-widest uppercase text-[#c7c6c6]">
+                GAMICON // INDEPENDENT AUTEUR PRODUCTION
+              </span>
+            </div>
           </div>
 
           <h1 className="font-display text-4xl sm:text-6xl md:text-8xl uppercase text-white tracking-tight max-w-5xl leading-none">
