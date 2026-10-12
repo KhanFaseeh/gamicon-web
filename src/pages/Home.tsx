@@ -41,23 +41,8 @@ export default function Home() {
 
       {/* HERO SECTION: FULL BLEED CINEMATIC IMMERSION */}
       <section className="relative min-h-screen w-full flex flex-col justify-between pt-20 overflow-hidden bg-[#0e0e0e]">
-        {/* Ambient Edge Backdrop with Deep Vignette */}
-        <div className="absolute inset-0 z-0">
-          {flagshipGame?.image_url ? (
-            <div
-              className="absolute inset-0 bg-cover bg-center filter saturate-75 brightness-75 scale-105 transition-transform duration-1000 ease-out"
-              style={{
-                backgroundImage: `url('${flagshipGame.image_url}')`,
-              }}
-            />
-          ) : (
-            <div className="absolute inset-0 bg-[#0e0e0e] flex items-center justify-center">
-              <div className="w-[800px] h-[800px] bg-white/[0.02] rounded-full blur-3xl pointer-events-none" />
-            </div>
-          )}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0e0e0e] via-[#0e0e0e]/70 to-[#0e0e0e]/50" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0e0e0e]/95 via-transparent to-[#0e0e0e]/95" />
-        </div>
+        {/* Clean Blank Backdrop */}
+        <div className="absolute inset-0 z-0 bg-[#0e0e0e]" />
 
         {/* Telemetry Overhead Bar */}
         <div className="relative z-10 w-full px-6 md:px-16 pt-8 flex justify-between items-center text-[#8e9192] font-display text-[11px] tracking-widest">
