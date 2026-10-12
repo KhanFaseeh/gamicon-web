@@ -662,7 +662,7 @@ export default function Admin() {
                   type="text"
                   value={formTags}
                   onChange={(e) => setFormTags(e.target.value)}
-                  placeholder="e.g. Cyberpunk RPG, Unreal Engine 5, Available Now"
+                  placeholder="e.g. Unity Engine, Blender 3D, ElevenLabs Audio, Survival Horror"
                   className="w-full bg-[#131313] border border-[#444748]/40 text-white text-xs px-3 py-2 font-mono"
                 />
               </div>

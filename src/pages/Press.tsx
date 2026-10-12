@@ -40,9 +40,9 @@ const DISPATCHES: Dispatch[] = [
     date: '2025.01.14',
     code: 'STUDIO DISPATCH',
     tag: 'MANIFESTO',
-    title: 'FOUNDER MANIFESTO: ON ZERO HITSCAN COMPROMISES AND AUTEUR DESIGN',
-    desc: 'Studio Head Kenji Sato reflects on two years of independent autonomy, rejecting market-driven live-service retention tricks in pursuit of uncompromising narrative architecture and authoritative creative singular vision.',
-    dept: 'DIRECTION // K. SATO',
+    title: 'FOUNDER MANIFESTO: ON BLENDER MODELING, UNITY ARCHITECTURE & AUTEUR DESIGN',
+    desc: 'CEO Mian Faseeh Ur Rehman and partner Muhammad Tayyab outline Gamicon\'s development philosophy, utilizing Blender for tactile 3D assets, Unity Engine for high-speed deterministic mechanics, and ElevenLabs for atmospheric vocal narration.',
+    dept: 'EXECUTIVE DIRECTION // M. F. UR REHMAN & M. TAYYAB',
   },
   {
     date: '2024.11.20',
@@ -154,18 +154,18 @@ export default function Press() {
             {/* Combat Art Preview Module */}
             <div className="md:col-span-5 bg-[#0e0e0e] p-4 flex flex-col justify-between group">
               <div className="flex items-center justify-between text-[#8e9192] font-display text-[10px] mb-2 uppercase tracking-widest">
-                <span>PROJECT: IRON TALON // ASSET PREVIEW</span>
+                <span>PROJECT: ECHOES OF DESOLATION // ASSET PREVIEW</span>
                 <span>KEY ARTWORK</span>
               </div>
               <div className="w-full aspect-[21/9] overflow-hidden bg-[#201f1f]">
                 <img
                   className="w-full h-full object-cover filter grayscale contrast-125 group-hover:grayscale-0 transition-all duration-300"
-                  alt="Iron Talon Key Art"
+                  alt="Echoes of Desolation Key Art"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUqrBiEbtQ9z9K5SEojag5pJIoM2QysO2Slf7Fzm7-m-jHdleNbpGaEiGCJUyR9yCJUuqwiFDLzeZm2QWTc1atIxMay_vT3mpX4WJp32ab5efbwQxMOfDZ-Fgol9Fie8r5NzJ40fV8VNeHV9a7DMzDc4zVqnigDsxw64XSRUGfBOGdk3CCLdlurwanYP_0lzqRD8WoK6Rp68Bu1M64pkTlSXfxB8NqhYKVJEa8rWtLG2eWy-anw7iJ"
                 />
               </div>
               <div className="mt-2 flex justify-between text-[#8e9192] font-display text-[10px] uppercase tracking-widest">
-                <span>UNREAL 5.4 CUSTOM PHYSICS MESH</span>
+                <span>BLENDER 3D MESH // UNITY HIGH-PERFORMANCE ENGINE</span>
                 <span>HIGH FIDELITY</span>
               </div>
             </div>

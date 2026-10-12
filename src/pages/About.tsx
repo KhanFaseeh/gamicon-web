@@ -131,7 +131,7 @@ export default function About() {
                 THE EMBODIED SPIRIT OF GAMICON
               </div>
               <p className="text-xs md:text-sm text-[#c4c7c8] max-w-lg font-light leading-relaxed">
-                Atmospheric psychological survival horror and grotesque tactical encounters crafted in Unreal Engine 5.
+                Atmospheric psychological survival horror modeled in Blender, engineered in Unity Engine, and voiced with ElevenLabs audio.
               </p>
             </div>
           </div>
@@ -151,32 +151,40 @@ export default function About() {
             {/* Statement Left Column */}
             <div className="lg:col-span-6 space-y-6">
               <div className="font-display text-[10px] tracking-widest text-[#8e9192] uppercase">
-                DIRECTOR DISPATCH // SATO DIRECTIVE
+                EXECUTIVE DISPATCH // FOUNDER DIRECTIVE
               </div>
               <h2 className="font-display text-3xl md:text-4xl text-white uppercase tracking-tight">
-                A MESSAGE FROM THE STUDIO HEAD // KENJI SATO
+                A MESSAGE FROM CEO MIAN FASEEH UR REHMAN & PARTNER MUHAMMAD TAYYAB
               </h2>
               <div className="space-y-4 text-sm md:text-base text-[#c4c7c8] leading-relaxed font-light">
                 <p>
-                  "Games are not passive entertainment; they are interactive architecture. When we founded Gamicon in Montreal, our goal was singular: create a sanctuary where engineering rigor and uncompromising narrative artistry exist as one."
+                  "Games are not passive entertainment; they are interactive architecture. When we founded Gamicon, our goal was singular: create a sanctuary where high-fidelity Blender 3D modeling, Unity Engine technical precision, and immersive ElevenLabs audio storytelling exist as one."
                 </p>
                 <p>
-                  "We do not design games to be consumed in haste; we build worlds to be inhabited, analyzed, and mastered. Every frame, every acoustic reverberation, every ballistic curve is crafted by hand."
+                  "We do not design games to be consumed in haste; we build worlds to be inhabited, analyzed, and mastered. Every model sculpted in Blender, every frame simulated in Unity, and every voice engineered with ElevenLabs is crafted with uncompromising creative intent."
                 </p>
               </div>
 
-              {/* Auteur Signoff */}
-              <div className="pt-6 border-t border-[#444748]/20 flex items-center justify-between">
-                <div>
+              {/* Founder Signoff */}
+              <div className="pt-6 border-t border-[#444748]/20 flex flex-wrap items-center justify-between gap-4">
+                <div className="space-y-1">
                   <div className="font-display text-xs text-white tracking-widest uppercase">
-                    KENJI SATO
+                    MIAN FASEEH UR REHMAN
                   </div>
-                  <div className="font-display text-[10px] text-[#8e9192] tracking-widest">
-                    FOUNDER & CREATIVE DIRECTOR
+                  <div className="font-display text-[10px] text-[#8e9192] tracking-widest uppercase">
+                    CHIEF EXECUTIVE OFFICER & FOUNDER
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <div className="font-display text-xs text-white tracking-widest uppercase">
+                    MUHAMMAD TAYYAB
+                  </div>
+                  <div className="font-display text-[10px] text-[#8e9192] tracking-widest uppercase">
+                    STUDIO PARTNER & CO-FOUNDER
                   </div>
                 </div>
                 <div className="font-display text-[10px] text-[#c7c6c6] tracking-widest border border-[#444748] px-3 py-1 uppercase">
-                  AUTEUR PRIVILEGE
+                  LEADERSHIP
                 </div>
               </div>
             </div>

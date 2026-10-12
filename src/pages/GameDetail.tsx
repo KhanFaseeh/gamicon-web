@@ -27,10 +27,10 @@ const FALLBACK_GAMES: Record<string, {
         'Following classified reports of illegal human experimentation inside Elysium Asylum, a lone detective enters the facility to uncover the truth. Trapped within its walls alongside patients mutated into grotesque monsters, you must fight through the horrors of the ward, confront the mutated mastermind Dr. Voss, and survive long enough to escape.',
       tags: ['Survival Horror', 'Action', 'Single-Player'],
     },
-    engine: 'Unreal Engine 5.4 Lumen / Nanite Pipeline',
-    platforms: 'PC • PlayStation 5 • Xbox Series X',
-    director: 'Gamicon Core Unit // Direction',
-    audio: 'Spatial Ambisonics 3D Object Audio & Heartbeat Feedback',
+    engine: 'Unity Engine // Assets Sculpted in Blender',
+    platforms: 'PC • Next-Gen Platforms',
+    director: 'Mian Faseeh Ur Rehman (CEO) & Muhammad Tayyab (Partner)',
+    audio: 'ElevenLabs Voice Engine & Spatial Ambisonics 3D Audio',
     heroImage:
       'https://lh3.googleusercontent.com/aida-public/AB6AXuBPDot2E_OV1D-vLdPARlhiiTmL9DFIXeS6qb3wDjw3xfq_Z0Qv-L8rIwrPl6bp88_emkbMejDOSSqzrnTWCVwKOSqSl6EDYPR3TmqFJOjJ8HaOoLzPENJsk2Q95af_QeQYCI4gknuBfg4BX35f_Hj08zKBE7-aVwtTUw7IflkFe1-QqQRZ7XVxbdb3VREFZAdTQhCBvcRq_XzhUdugkokgLlEljJVq093KrwA_9vSe-HPPj1vSAVVv',
     galleryImages: [
@@ -77,10 +77,10 @@ const FALLBACK_GAMES: Record<string, {
         'A relentless gauntlet across three distinct, hostile environments. Fight through waves of enemies across shifting combat zones and carve a path to extraction before you are overrun.',
       tags: ['Action', 'Combat', 'Survival'],
     },
-    engine: 'Gamicon High-Throughput Combat Framework',
+    engine: 'Unity Engine // 3D Assets Sculpted in Blender',
     platforms: 'PC • Next-Gen Platforms',
-    director: 'Gamicon Combat Systems Unit',
-    audio: 'Dynamic Multi-Zone Combat Mix Profile',
+    director: 'Mian Faseeh Ur Rehman (CEO) & Muhammad Tayyab (Partner)',
+    audio: 'ElevenLabs Voice Synthesis & Dynamic Combat Mix Profile',
     heroImage:
       'https://lh3.googleusercontent.com/aida/AEtjO1UJMRZzH5hkjwGYbhPftm1WQxBVgPZhhN-1HNr-hozj8Rwg67e0k9Hu6kaiMr1EHPHAeqq5bTM6kVLpri8Sv3bVG76Xc6ksXCwe8ZGzpyPu8y050ns3BjCQpo5oPvLJGXrxbuWhGihn3V5eUYn_aUZpcvSHAXc7SkkaXR0ncFL47P4S-Pf74EEFu2GT5BFFyPU7hoPg14OUNZNJDFRX-vbpMa_62lIMqfPSdXqchfq_kXD593V3jfhVarw',
     galleryImages: [
