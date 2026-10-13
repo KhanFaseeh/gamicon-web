@@ -185,7 +185,7 @@ export default function Press() {
             {DISPATCHES.map((d) => (
               <article
                 key={d.title}
-                className="p-8 border-r border-b border-[#444748]/30 bg-[#0e0e0e] hover:bg-[#1c1b1b] transition-colors duration-150 flex flex-col justify-between group"
+                className="card-highlighter p-8 border-r border-b border-[#444748]/30 bg-[#0e0e0e] hover:bg-[#1c1b1b] transition-colors duration-150 flex flex-col justify-between group"
               >
                 <div>
                   <div className="flex items-center justify-between gap-4 mb-4">

@@ -343,3 +343,61 @@ body {
 .emblem-group:hover .emblem-top { transform: translateY(-2px); }
 .emblem-group:hover .emblem-bottom { transform: translateY(2px); }
 
+/* =========================================================================
+   CINEMATIC CARD HIGHLIGHTER ANIMATION
+   Starts from the top-right corner on both sides (clockwise & counter-clockwise)
+   and completes at the bottom-left corner of the card.
+   ========================================================================= */
+.card-highlighter {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Branch 1: Top-Right -> Top-Left -> Bottom-Left */
+.card-highlighter::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-top: 1px solid transparent;
+  border-left: 1px solid transparent;
+  pointer-events: none;
+  z-index: 20;
+  transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+              height 0.25s cubic-bezier(0.16, 1, 0.3, 1) 0.25s,
+              border-color 0.1s linear;
+}
+
+/* Branch 2: Top-Right -> Bottom-Right -> Bottom-Left */
+.card-highlighter::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-right: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  pointer-events: none;
+  z-index: 20;
+  transition: height 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+              width 0.25s cubic-bezier(0.16, 1, 0.3, 1) 0.25s,
+              border-color 0.1s linear;
+}
+
+.card-highlighter:hover::before {
+  width: 100%;
+  height: 100%;
+  border-top-color: #FFFFFF;
+  border-left-color: #FFFFFF;
+}
+
+.card-highlighter:hover::after {
+  width: 100%;
+  height: 100%;
+  border-right-color: #FFFFFF;
+  border-bottom-color: #FFFFFF;
+}
+

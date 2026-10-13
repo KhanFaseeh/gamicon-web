@@ -324,7 +324,7 @@ export default function GameDetail() {
               {companionGames.map((comp) => (
                 <article
                   key={comp.slug}
-                  className="bg-[#0A0A0A] border border-[#444748]/30 hover:border-white transition-all duration-150 flex flex-col group"
+                  className="card-highlighter bg-[#0A0A0A] border border-[#444748]/30 hover:border-white transition-all duration-150 flex flex-col group"
                 >
                   <div className="relative aspect-video overflow-hidden border-b border-[#444748]/30 bg-[#1c1b1b]">
                     {comp.image_url ? (

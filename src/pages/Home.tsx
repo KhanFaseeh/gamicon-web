@@ -287,7 +287,7 @@ export default function Home() {
 
           {/* Tenets Bento Row */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            <div className="border border-[#444748]/30 p-8 bg-[#131313]/40 flex flex-col justify-between hover:border-white/60 transition-colors duration-150">
+            <div className="card-highlighter border border-[#444748]/30 p-8 bg-[#131313]/40 flex flex-col justify-between hover:border-white/60 transition-colors duration-150">
               <div>
                 <span className="font-display text-xs uppercase tracking-widest text-white block mb-6">
                   01 / MECHANICS FIRST
@@ -304,7 +304,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="border border-[#444748]/30 p-8 bg-[#131313]/40 flex flex-col justify-between hover:border-white/60 transition-colors duration-150">
+            <div className="card-highlighter border border-[#444748]/30 p-8 bg-[#131313]/40 flex flex-col justify-between hover:border-white/60 transition-colors duration-150">
               <div>
                 <span className="font-display text-xs uppercase tracking-widest text-white block mb-6">
                   02 / NARRATIVE DEPTH
@@ -321,7 +321,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="border border-[#444748]/30 p-8 bg-[#131313]/40 flex flex-col justify-between hover:border-white/60 transition-colors duration-150">
+            <div className="card-highlighter border border-[#444748]/30 p-8 bg-[#131313]/40 flex flex-col justify-between hover:border-white/60 transition-colors duration-150">
               <div>
                 <span className="font-display text-xs uppercase tracking-widest text-white block mb-6">
                   03 / COMMUNITY DRIVEN
