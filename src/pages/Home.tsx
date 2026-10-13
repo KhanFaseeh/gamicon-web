@@ -44,16 +44,6 @@ export default function Home() {
         {/* Clean Blank Backdrop */}
         <div className="absolute inset-0 z-0 bg-[#0e0e0e]" />
 
-        {/* Telemetry Overhead Bar */}
-        <div className="relative z-10 w-full px-6 md:px-16 pt-8 flex justify-between items-center text-[#8e9192] font-display text-[11px] tracking-widest">
-          <div>
-            <span>PESHAWAR LAB // PAKISTAN</span>
-          </div>
-          <div className="hidden sm:block">
-            <span>ARCHIVE REF: GMCN-AUTEUR-00</span>
-          </div>
-        </div>
-
         {/* Centered Hero Focal Hierarchy */}
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-16 my-auto text-center flex flex-col items-center">
           <div className="flex flex-col items-center gap-4 mb-6">
@@ -93,11 +83,8 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Hero Base Telemetry Footer Indicator */}
-        <div className="relative z-10 w-full px-6 md:px-16 pb-8 flex justify-between items-end text-[#8e9192] border-t border-[#444748]/20 pt-4">
-          <div className="font-display text-[10px] tracking-widest">
-            <span>EST. 2023 // PESHAWAR LAB</span>
-          </div>
+        {/* Hero Base Indicator */}
+        <div className="relative z-10 w-full px-6 md:px-16 pb-8 flex justify-center items-center text-[#8e9192] border-t border-[#444748]/20 pt-4">
           <a
             href="#games"
             className="flex items-center gap-1 font-display text-[10px] uppercase tracking-widest text-[#c7c6c6] hover:text-white transition-colors duration-150"
@@ -105,9 +92,6 @@ export default function Home() {
             <span>DISCOVER WORKS</span>
             <span className="material-symbols-outlined text-sm">south</span>
           </a>
-          <div className="font-display text-[10px] tracking-widest hidden sm:block">
-            <span>100% INDEPENDENT PRODUCTION</span>
-          </div>
         </div>
       </section>
 
