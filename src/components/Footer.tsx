@@ -23,10 +23,10 @@ export default function Footer() {
             {/* Clean Understated Email Link */}
             <div className="pt-1">
               <a
-                href="mailto:contact@anamorphic.studio"
+                href="mailto:anamorphiicc@gmail.com"
                 className="group/email inline-flex items-center text-sm font-sans text-[#888888] hover:text-white transition-colors duration-200 tracking-wide font-normal relative"
               >
-                <span>contact@anamorphic.studio</span>
+                <span>anamorphiicc@gmail.com</span>
                 <span className="absolute left-0 bottom-[-2px] w-0 h-[1px] bg-white transition-all duration-200 ease-out group-hover/email:w-full" />
               </a>
             </div>

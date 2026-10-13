@@ -8,7 +8,7 @@ const DEFAULT_STUDIO_INFO: StudioInfo = {
   id: 1,
   manifesto:
     'ANAMORPHIC is an independent studio forging mechanics-driven, narrative-rich titles built without creative compromise. We reject automated formulas and safety-first design paradigms. We architect unforgiving worlds for players who demand mastery, physics, narrative literacy, and visceral design.',
-  contact_email: 'contact@anamorphic.studio',
+  contact_email: 'anamorphiicc@gmail.com',
   press_kit_url: 'https://anamorphic.studio/press-kit.zip',
 }
 

@@ -7,7 +7,7 @@ const DEFAULT_STUDIO_INFO: StudioInfo = {
   id: 1,
   manifesto:
     'ANAMORPHIC is an independent studio forging mechanics-driven, narrative-rich titles built without creative compromise. We reject automated formulas and safety-first design paradigms.',
-  contact_email: 'contact@anamorphic.studio',
+  contact_email: 'anamorphiicc@gmail.com',
 }
 
 interface Dispatch {

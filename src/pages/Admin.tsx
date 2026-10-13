@@ -14,7 +14,7 @@ const DEFAULT_STUDIO: StudioInfo = {
   id: 1,
   manifesto:
     'ANAMORPHIC is an independent studio forging mechanics-driven, narrative-rich titles built without creative compromise. We reject automated formulas and safety-first design paradigms. We architect unforgiving worlds for players who demand mastery, physics, narrative literacy, and visceral design.',
-  contact_email: 'contact@anamorphic.studio',
+  contact_email: 'anamorphiicc@gmail.com',
 }
 
 function extractYouTubeId(urlOrId: string): string {
@@ -979,7 +979,7 @@ export default function Admin() {
                   required
                   value={studioEmail}
                   onChange={(e) => setStudioEmail(e.target.value)}
-                  placeholder="contact@anamorphic.studio"
+                  placeholder="anamorphiicc@gmail.com"
                   className="w-full bg-[#131313] border border-[#444748]/40 text-white text-xs px-3 py-2 font-mono"
                 />
               </div>
