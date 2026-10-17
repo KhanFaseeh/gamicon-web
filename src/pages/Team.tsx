@@ -1,5 +1,7 @@
+import { useState, useEffect } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import { normalizeImageUrl, getDriveFallbackUrl } from '../lib/supabaseClient'
 
 interface TeamMember {
   name: string
@@ -97,6 +99,79 @@ const TEAM_MEMBERS: TeamMember[] = [
 ]
 
 export default function Team() {
+  const [members, setMembers] = useState<TeamMember[]>(() => {
+    try {
+      const saved = localStorage.getItem('anamorphic_team')
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed.map((m: any, idx: number) => ({
+            name: m.name,
+            role: m.role,
+            leadTag: `Principal 0${idx + 1}`,
+            disciplineTag: m.role.split('/')[0]?.trim() || 'Engineering Leadership',
+            disciplineSub: m.focus || 'Full-Stack Custody',
+            bio: m.bio,
+            chips: m.chips || [],
+            imageUrl: m.imageUrl,
+            badgeText: idx === 1 ? 'CTO · Principal 02' : `Principal 0${idx + 1}`,
+            badgeBg:
+              idx === 0
+                ? 'bg-[#F6A6CF] text-primary'
+                : idx === 1
+                ? 'bg-[#FF5B5B] text-white'
+                : idx === 2
+                ? 'bg-[#74BE9C] text-primary'
+                : 'bg-[#e3dfff] text-secondary font-bold',
+            inverted: idx % 2 === 1,
+            linkedInUrl: m.linkedInUrl || 'https://linkedin.com',
+            email: 'anamorphiicc@gmail.com',
+          }))
+        }
+      }
+    } catch {
+      // ignore
+    }
+    return TEAM_MEMBERS
+  })
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('anamorphic_team')
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setMembers(
+            parsed.map((m: any, idx: number) => ({
+              name: m.name,
+              role: m.role,
+              leadTag: `Principal 0${idx + 1}`,
+              disciplineTag: m.role.split('/')[0]?.trim() || 'Engineering Leadership',
+              disciplineSub: m.focus || 'Full-Stack Custody',
+              bio: m.bio,
+              chips: m.chips || [],
+              imageUrl: m.imageUrl,
+              badgeText: idx === 1 ? 'CTO · Principal 02' : `Principal 0${idx + 1}`,
+              badgeBg:
+                idx === 0
+                  ? 'bg-[#F6A6CF] text-primary'
+                  : idx === 1
+                  ? 'bg-[#FF5B5B] text-white'
+                  : idx === 2
+                  ? 'bg-[#74BE9C] text-primary'
+                  : 'bg-[#e3dfff] text-secondary font-bold',
+              inverted: idx % 2 === 1,
+              linkedInUrl: m.linkedInUrl || 'https://linkedin.com',
+              email: 'anamorphiicc@gmail.com',
+            }))
+          )
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }, [])
+
   return (
     <div className="bg-background text-on-surface antialiased selection:bg-secondary selection:text-on-secondary min-h-screen flex flex-col font-body-md text-body-md overflow-x-hidden">
       {/* Top Editorial Header */}
@@ -182,11 +257,11 @@ export default function Team() {
         {/* ========================================================================= */}
         <section className="w-full px-margin md:px-margin-desktop py-space-xl md:py-space-xxl">
           <div className="max-w-7xl mx-auto flex flex-col gap-24 md:gap-36">
-            {TEAM_MEMBERS.map((member, index) => (
+            {members.map((member, index) => (
               <article
                 key={member.name}
                 className={`grid grid-cols-1 md:grid-cols-12 gap-y-8 md:gap-gutter-desktop items-center ${
-                  index !== TEAM_MEMBERS.length - 1 ? 'border-b border-on-surface/10 pb-20 md:pb-28' : ''
+                  index !== members.length - 1 ? 'border-b border-on-surface/10 pb-20 md:pb-28' : ''
                 }`}
               >
                 {/* 4:5 Portrait Image Column */}
@@ -199,7 +274,19 @@ export default function Team() {
                     <img
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                       alt={member.name}
-                      src={member.imageUrl}
+                      src={normalizeImageUrl(member.imageUrl)}
+                      referrerPolicy="no-referrer"
+                      onError={(e) => {
+                        const target = e.currentTarget
+                        if (member.imageUrl) {
+                          const fallback = getDriveFallbackUrl(member.imageUrl)
+                          if (target.src !== fallback) {
+                            target.src = fallback
+                            return
+                          }
+                        }
+                        target.src = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80'
+                      }}
                     />
                     <div className="absolute top-4 left-4">
                       <span

@@ -1234,9 +1234,21 @@ export default function Admin() {
                     <div className="flex items-center gap-4">
                       <span className="material-symbols-outlined text-outline cursor-grab">drag_indicator</span>
                       <img
-                        src={m.imageUrl || 'https://via.placeholder.com/80'}
+                        src={normalizeImageUrl(m.imageUrl) || 'https://via.placeholder.com/80'}
+                        referrerPolicy="no-referrer"
                         alt=""
-                        className="w-12 h-12 rounded-full object-cover border border-outline-variant/20"
+                        className="w-12 h-12 rounded-full object-cover border border-outline-variant/20 bg-surface-container"
+                        onError={(e) => {
+                          const target = e.currentTarget
+                          if (m.imageUrl) {
+                            const fallback = getDriveFallbackUrl(m.imageUrl)
+                            if (target.src !== fallback) {
+                              target.src = fallback
+                              return
+                            }
+                          }
+                          target.src = 'https://via.placeholder.com/80'
+                        }}
                       />
                       <div>
                         <div className="flex items-center gap-2">
@@ -1405,13 +1417,23 @@ export default function Admin() {
                       onChange={(e) => {
                         const f = e.target.files?.[0]
                         if (f) {
-                          const newAsset = {
-                            name: f.name,
-                            dims: 'Custom Upload',
-                            url: URL.createObjectURL(f),
+                          if (f.size > 2 * 1024 * 1024) {
+                            showNotification('Image size exceeds 2MB limit. Please choose a smaller image.', 'error')
+                            return
                           }
-                          setMediaItems([newAsset, ...mediaItems])
-                          showNotification('Asset added to library.')
+                          const reader = new FileReader()
+                          reader.onload = () => {
+                            if (typeof reader.result === 'string') {
+                              const newAsset = {
+                                name: f.name,
+                                dims: 'Custom Upload',
+                                url: reader.result,
+                              }
+                              setMediaItems([newAsset, ...mediaItems])
+                              showNotification('Asset added to library.')
+                            }
+                          }
+                          reader.readAsDataURL(f)
                         }
                       }}
                     />
@@ -2013,12 +2035,87 @@ export default function Admin() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-on-surface mb-1 uppercase">Photo URL</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-xs font-semibold text-on-surface uppercase">Photo Image</label>
+                    <label className="text-xs font-semibold text-secondary hover:underline cursor-pointer flex items-center gap-1">
+                      <span className="material-symbols-outlined text-[14px]">upload_file</span>
+                      <span>Upload local photo</span>
+                      <input
+                        type="file"
+                        accept="image/png,image/jpeg,image/webp,image/gif"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0]
+                          if (!file) return
+                          if (file.size > 2 * 1024 * 1024) {
+                            showNotification('Image size exceeds 2MB limit. Please choose a smaller image.', 'error')
+                            return
+                          }
+                          const reader = new FileReader()
+                          reader.onload = () => {
+                            if (typeof reader.result === 'string') {
+                              setEditingMember({ ...editingMember, imageUrl: reader.result })
+                              showNotification('Photo attached successfully!')
+                            }
+                          }
+                          reader.readAsDataURL(file)
+                        }}
+                      />
+                    </label>
+                  </div>
                   <input
                     value={editingMember.imageUrl}
                     onChange={(e) => setEditingMember({ ...editingMember, imageUrl: e.target.value })}
+                    placeholder="Paste direct image URL (Imgur, Postimages) or Google Drive link"
                     className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-xs font-mono"
                   />
+                  <div className="mt-2 space-y-1 bg-surface-container/60 p-2.5 rounded-lg border border-outline-variant/15 text-[11px] text-on-surface-variant font-mono">
+                    <div className="flex items-start gap-1.5 font-semibold text-on-surface">
+                      <span className="material-symbols-outlined text-[14px] text-secondary shrink-0 mt-0.5">help</span>
+                      <span>Image Upload Options:</span>
+                    </div>
+                    <p className="pl-5 text-[10px] leading-relaxed">
+                      • <strong>Upload from device</strong>: Click "Upload local photo" above to attach directly without any external host.<br/>
+                      • <strong>Postimages / Imgur</strong>: Paste any direct image link ending in <code>.jpg</code>, <code>.png</code>, or <code>.webp</code>.<br/>
+                      • <strong>Google Drive</strong>: Ensure sharing is set to <strong>"Anyone with the link can view"</strong> in Drive.
+                    </p>
+                  </div>
+                  {editingMember.imageUrl && (
+                    <div className="mt-2.5 flex items-center gap-4">
+                      <div className="w-20 h-24 rounded-lg border border-outline-variant/30 overflow-hidden bg-surface-container shrink-0 relative">
+                        <img
+                          src={normalizeImageUrl(editingMember.imageUrl)}
+                          referrerPolicy="no-referrer"
+                          alt="Preview"
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            const target = e.currentTarget
+                            if (editingMember.imageUrl) {
+                              const fallback = getDriveFallbackUrl(editingMember.imageUrl)
+                              if (target.src !== fallback) {
+                                target.src = fallback
+                                return
+                              }
+                            }
+                            target.src = 'https://via.placeholder.com/160'
+                          }}
+                        />
+                      </div>
+                      <div className="text-[11px] text-outline font-mono truncate max-w-xs space-y-1">
+                        <div className="text-[10px] font-bold text-on-surface">Photo Preview:</div>
+                        <div className="text-[10px] text-primary break-all line-clamp-2">
+                          {editingMember.imageUrl.startsWith('data:') ? 'Local file attached (Base64 Data URI)' : normalizeImageUrl(editingMember.imageUrl)}
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setEditingMember({ ...editingMember, imageUrl: '' })}
+                          className="text-xs text-red-600 hover:underline block"
+                        >
+                          Clear photo
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -2026,11 +2123,15 @@ export default function Admin() {
             <div className="pt-6 border-t border-outline-variant/15 flex justify-end">
               <button
                 onClick={() => {
-                  const exists = teamMembers.find((m) => m.id === editingMember.id)
+                  const normalized = {
+                    ...editingMember,
+                    imageUrl: normalizeImageUrl(editingMember.imageUrl),
+                  }
+                  const exists = teamMembers.find((m) => m.id === normalized.id)
                   if (exists) {
-                    setTeamMembers(teamMembers.map((m) => (m.id === editingMember.id ? editingMember : m)))
+                    setTeamMembers(teamMembers.map((m) => (m.id === normalized.id ? normalized : m)))
                   } else {
-                    setTeamMembers([...teamMembers, editingMember])
+                    setTeamMembers([...teamMembers, normalized])
                   }
                   setIsMemberSlideOpen(false)
                   showNotification('Team member saved.')
