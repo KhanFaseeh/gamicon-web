@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import { getDriveFallbackUrl } from '../lib/supabaseClient'
+import { supabase, parseGameRecord, normalizeImageUrl, getDriveFallbackUrl, type Game } from '../lib/supabaseClient'
 
 interface Project {
   id: string
@@ -184,11 +184,64 @@ const PROJECTS: Project[] = [
 
 export default function Work() {
   const [filter, setFilter] = useState<string>('all')
+  const [games, setGames] = useState<Game[]>([])
+
+  useEffect(() => {
+    async function fetchGames() {
+      try {
+        const { data, error } = await supabase
+          .from('games')
+          .select('*')
+          .order('created_at', { ascending: false })
+
+        if (!error && data) {
+          setGames(data.map(parseGameRecord))
+        }
+      } catch (e) {
+        console.warn('Could not fetch projects in Work.tsx', e)
+      }
+    }
+    fetchGames()
+  }, [])
+
+  // If DB projects exist, merge them with or prioritize them over static projects
+  const allProjects: Project[] =
+    games.length > 0
+      ? games.map((g, idx) => {
+          const catTag = (g.tags?.[0] || 'Web & SaaS').toLowerCase()
+          let category = 'web-saas'
+          if (catTag.includes('mobile') || catTag.includes('app')) category = 'mobile'
+          else if (catTag.includes('ai') || catTag.includes('vision') || catTag.includes('automation')) category = 'ai-automation'
+          else if (catTag.includes('open')) category = 'open-source'
+
+          return {
+            id: g.slug,
+            num: String(idx + 1).padStart(2, '0'),
+            subCategory: g.tags?.[0] || 'Production Systems',
+            category,
+            title: g.title,
+            statusBadge: g.release_date || 'Live in production',
+            statusBadgeClass:
+              idx % 4 === 0
+                ? 'bg-[#74BE9C] text-[#1B1A17]'
+                : idx % 4 === 1
+                ? 'bg-secondary-fixed text-on-secondary-fixed'
+                : idx % 4 === 2
+                ? 'bg-[#F6A6CF] text-[#1B1A17]'
+                : 'bg-surface-container-highest text-on-surface',
+            description: g.description,
+            tags: g.tags || ['Production'],
+            imageUrl: g.image_url || '',
+            aspect: idx % 3 === 1 ? 'aspect-[4/5]' : 'aspect-[16/10]',
+            colSpan: idx % 3 === 1 ? 'md:col-span-5' : idx % 3 === 0 ? 'md:col-span-7' : 'md:col-span-6',
+          }
+        })
+      : PROJECTS
 
   const filteredProjects =
     filter === 'all'
-      ? PROJECTS
-      : PROJECTS.filter((p) => p.category.includes(filter))
+      ? allProjects
+      : allProjects.filter((p) => p.category.includes(filter))
 
   return (
     <div className="bg-background text-on-surface antialiased selection:bg-secondary selection:text-on-secondary min-h-screen flex flex-col justify-between overflow-x-hidden">
@@ -350,18 +403,16 @@ export default function Work() {
                     <img
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       alt={p.title}
-                      src={p.imageUrl}
+                      src={normalizeImageUrl(p.imageUrl)}
                       referrerPolicy="no-referrer"
                       onError={(e) => {
                         const target = e.currentTarget
                         if (p.imageUrl) {
                           const fallback = getDriveFallbackUrl(p.imageUrl)
-                          if (target.src !== fallback) {
+                          if (target.src !== fallback && fallback !== target.src) {
                             target.src = fallback
-                            return
                           }
                         }
-                        target.src = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80'
                       }}
                     />
                     <div className="absolute top-4 left-4">

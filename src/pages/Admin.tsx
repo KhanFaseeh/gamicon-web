@@ -876,7 +876,7 @@ export default function Admin() {
                         >
                           <div className="flex items-center gap-3 min-w-0">
                             <img
-                              src={g.image_url || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=80&q=80'}
+                              src={normalizeImageUrl(g.image_url) || ''}
                               referrerPolicy="no-referrer"
                               alt=""
                               className="w-8 h-8 rounded object-cover border border-outline-variant/20 shrink-0 bg-surface-container"
@@ -884,12 +884,10 @@ export default function Admin() {
                                 const target = e.currentTarget
                                 if (g.image_url) {
                                   const fallback = getDriveFallbackUrl(g.image_url)
-                                  if (target.src !== fallback) {
+                                  if (target.src !== fallback && fallback !== target.src) {
                                     target.src = fallback
-                                    return
                                   }
                                 }
-                                target.src = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=80&q=80'
                               }}
                             />
                             <div className="min-w-0">
@@ -1005,7 +1003,7 @@ export default function Admin() {
                           <tr key={g.id} className="hover:bg-surface-container-low/50">
                             <td className="py-3 px-4 flex items-center gap-3">
                               <img
-                                src={g.image_url || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=120&q=80'}
+                                src={normalizeImageUrl(g.image_url) || ''}
                                 referrerPolicy="no-referrer"
                                 alt=""
                                 className="w-10 h-10 rounded object-cover border border-outline-variant/20 bg-surface-container"
@@ -1013,12 +1011,10 @@ export default function Admin() {
                                   const target = e.currentTarget
                                   if (g.image_url) {
                                     const fallback = getDriveFallbackUrl(g.image_url)
-                                    if (target.src !== fallback) {
+                                    if (target.src !== fallback && fallback !== target.src) {
                                       target.src = fallback
-                                      return
                                     }
                                   }
-                                  target.src = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=120&q=80'
                                 }}
                               />
                               <div>
@@ -1767,12 +1763,10 @@ export default function Admin() {
                             const target = e.currentTarget
                             if (formImageUrl) {
                               const fallback = getDriveFallbackUrl(formImageUrl)
-                              if (target.src !== fallback) {
+                              if (target.src !== fallback && fallback !== target.src) {
                                 target.src = fallback
-                                return
                               }
                             }
-                            target.src = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=120&q=80'
                           }}
                         />
                       </div>

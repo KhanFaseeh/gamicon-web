@@ -1,7 +1,122 @@
+import { useState, useEffect } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 
+interface ServiceBlock {
+  id: string
+  title: string
+  description: string
+  bullets: string[]
+  chips: string[]
+  accentColor: string
+}
+
+const DEFAULT_SERVICES: ServiceBlock[] = [
+  {
+    id: 'srv-1',
+    title: 'Game Development',
+    description:
+      'End-to-end game production from mechanic prototyping to multi-platform store pipelines.',
+    bullets: [
+      'Unity 2D & 3D gameplay programming and mechanics prototyping',
+      'Custom game systems, inventory engines, and state management',
+      'Mobile (iOS/Android) and PC/Steam build pipelines and memory optimization',
+      'Custom HLSL shaders, physics tuning, and release lifecycle management',
+    ],
+    chips: ['Unity', 'C#', 'HLSL Shaders', 'Steamworks SDK', 'Photon Realtime'],
+    accentColor: '#FF5B5B',
+  },
+  {
+    id: 'srv-2',
+    title: 'Web Platforms & SaaS',
+    description:
+      'Architecture engineered for high concurrency, zero unmanaged downtime, and rigorous backend reliability.',
+    bullets: [
+      'Production SaaS platforms, multi-tenant architectures, and role hierarchies',
+      'High-throughput REST & gRPC APIs on Node.js and Go microservices',
+      'Relational & document databases: PostgreSQL schemas, MongoDB aggregation, Redis caching',
+      'Real-time data streams, WebSockets, and RabbitMQ message queues',
+      'Front-ends in React and Next.js with sub-second page performance',
+      'Dockerized container orchestration, Prometheus telemetry, and Grafana monitoring',
+    ],
+    chips: ['React', 'Next.js', 'Node.js', 'Go', 'PostgreSQL', 'Redis', 'RabbitMQ', 'Docker'],
+    accentColor: '#74BE9C',
+  },
+  {
+    id: 'srv-3',
+    title: 'Mobile Apps & Interfaces',
+    description:
+      'Cross-platform mobile engineering with offline-first synchronization and hardware/edge integration.',
+    bullets: [
+      'Cross-platform iOS and Android apps engineered from one Flutter codebase',
+      'Offline-first SQLite/Isar synchronization with background reconcile workers',
+      'Background Bluetooth Low Energy (BLE) device pairing & telemetry',
+      'On-premise YOLOv8 edge machine vision inference integration',
+      'Fluid 60 FPS motion design, gesture handling, and tactile feedback',
+      'Enterprise MDM provisioning and app store deployment pipelines',
+    ],
+    chips: ['Flutter', 'Dart', 'Firebase', 'SQLite', 'YOLOv8', 'FastAPI'],
+    accentColor: '#2b00d1',
+  },
+]
+
 export default function Services() {
+  const [servicesList, setServicesList] = useState<ServiceBlock[]>(() => {
+    try {
+      const saved = localStorage.getItem('anamorphic_services')
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed
+      }
+    } catch {
+      // ignore
+    }
+    return DEFAULT_SERVICES
+  })
+
+  const [team, setTeam] = useState<{ name: string; role: string }[]>(() => {
+    try {
+      const saved = localStorage.getItem('anamorphic_team')
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed
+      }
+    } catch {
+      // ignore
+    }
+    return [
+      { name: 'Mian Faseeh Ur Rehman', role: 'CEO & Head of Games' },
+      { name: 'Muhammad Tayyab', role: 'CTO & Head of 3D' },
+      { name: 'Shah Fahad', role: 'Lead Backend Engineer' },
+      { name: 'Muhammad Ali', role: 'Mobile & Vision Systems' },
+    ]
+  })
+
+  useEffect(() => {
+    try {
+      const savedServices = localStorage.getItem('anamorphic_services')
+      if (savedServices) {
+        const parsed = JSON.parse(savedServices)
+        if (Array.isArray(parsed) && parsed.length > 0) setServicesList(parsed)
+      }
+      const savedTeam = localStorage.getItem('anamorphic_team')
+      if (savedTeam) {
+        const parsed = JSON.parse(savedTeam)
+        if (Array.isArray(parsed) && parsed.length > 0) setTeam(parsed)
+      }
+    } catch {
+      // ignore
+    }
+  }, [])
+
+  const s1 = servicesList[0] || DEFAULT_SERVICES[0]
+  const s2 = servicesList[1] || DEFAULT_SERVICES[1]
+  const s3 = servicesList[2] || DEFAULT_SERVICES[2]
+
+  const lead1 = team[0]?.name || 'Mian Faseeh Ur Rehman'
+  const lead2 = team.find((t) => t.name.toLowerCase().includes('fahad'))?.name || team[2]?.name || 'Shah Fahad'
+  const lead3 = team.find((t) => t.name.toLowerCase().includes('ali'))?.name || team[3]?.name || 'Muhammad Ali'
+
   return (
     <div className="bg-surface text-on-surface antialiased selection:bg-secondary selection:text-white font-body-md text-body-md overflow-x-hidden min-h-screen">
       <Header />
@@ -67,52 +182,36 @@ export default function Services() {
             {/* Sticky Text Column */}
             <div className="lg:col-span-5 lg:sticky lg:top-32 space-y-8">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-eyebrow text-label-eyebrow font-semibold">
-                <span>01 — Game Development</span>
+                <span>01 — {s1.title}</span>
               </div>
               <h2 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">
                 Engines, gameplay systems, and high-performance rendering.
               </h2>
               <div className="space-y-4 text-on-surface-variant font-body-md text-body-md leading-relaxed">
                 <p>
-                  Led by <strong className="text-on-surface font-semibold">Mian Faseeh Ur Rehman</strong>. End-to-end game production from mechanic prototyping to multi-platform store pipelines.
+                  Led by <strong className="text-on-surface font-semibold">{lead1}</strong>. {s1.description}
                 </p>
               </div>
 
               {/* Concrete Bullets */}
               <ul className="space-y-3 pt-2">
-                <li className="flex items-start gap-3">
-                  <span className="material-symbols-outlined text-on-tertiary-container text-[20px] mt-0.5">check_circle</span>
-                  <span className="font-body-md text-body-md text-on-surface">
-                    Unity 2D &amp; 3D gameplay programming and mechanics prototyping
-                  </span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="material-symbols-outlined text-on-tertiary-container text-[20px] mt-0.5">check_circle</span>
-                  <span className="font-body-md text-body-md text-on-surface">
-                    Custom game systems, inventory engines, and state management
-                  </span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="material-symbols-outlined text-on-tertiary-container text-[20px] mt-0.5">check_circle</span>
-                  <span className="font-body-md text-body-md text-on-surface">
-                    Mobile (iOS/Android) and PC/Steam build pipelines and memory optimization
-                  </span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="material-symbols-outlined text-on-tertiary-container text-[20px] mt-0.5">check_circle</span>
-                  <span className="font-body-md text-body-md text-on-surface">
-                    Custom HLSL shaders, physics tuning, and release lifecycle management
-                  </span>
-                </li>
+                {s1.bullets.map((bullet, idx) => (
+                  <li key={idx} className="flex items-start gap-3">
+                    <span className="material-symbols-outlined text-on-tertiary-container text-[20px] mt-0.5">check_circle</span>
+                    <span className="font-body-md text-body-md text-on-surface">
+                      {bullet}
+                    </span>
+                  </li>
+                ))}
               </ul>
 
               {/* Tech Chips */}
               <div className="flex flex-wrap gap-2 pt-4">
-                <span className="px-3 py-1 rounded-full border border-on-surface/15 text-xs font-medium text-on-surface bg-surface-container">Unity</span>
-                <span className="px-3 py-1 rounded-full border border-on-surface/15 text-xs font-medium text-on-surface bg-surface-container">C#</span>
-                <span className="px-3 py-1 rounded-full border border-on-surface/15 text-xs font-medium text-on-surface bg-surface-container">HLSL Shaders</span>
-                <span className="px-3 py-1 rounded-full border border-on-surface/15 text-xs font-medium text-on-surface bg-surface-container">Steamworks SDK</span>
-                <span className="px-3 py-1 rounded-full border border-on-surface/15 text-xs font-medium text-on-surface bg-surface-container">Photon Realtime</span>
+                {s1.chips.map((chip, idx) => (
+                  <span key={idx} className="px-3 py-1 rounded-full border border-on-surface/15 text-xs font-medium text-on-surface bg-surface-container">
+                    {chip}
+                  </span>
+                ))}
               </div>
 
               {/* Fused Pill CTA */}
@@ -266,67 +365,36 @@ export default function Services() {
             {/* Right Sticky Text Column */}
             <div className="lg:col-span-5 lg:sticky lg:top-32 space-y-8 order-1 lg:order-2">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#74BE9C]/25 text-on-surface font-label-eyebrow text-label-eyebrow font-semibold">
-                <span>02 — Web Development</span>
+                <span>02 — {s2.title}</span>
               </div>
               <h2 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">
                 Resilient web platforms and distributed APIs.
               </h2>
               <div className="space-y-4 text-on-surface-variant font-body-md text-body-md leading-relaxed">
                 <p>
-                  Led by <strong className="text-on-surface font-semibold">Shah Fahad</strong>. Architecture engineered for high concurrency, zero unmanaged downtime, and rigorous backend reliability.
+                  Led by <strong className="text-on-surface font-semibold">{lead2}</strong>. {s2.description}
                 </p>
               </div>
 
               {/* Concrete Bullets */}
               <ul className="space-y-3 pt-2">
-                <li className="flex items-start gap-3">
-                  <span className="material-symbols-outlined text-[#74BE9C] text-[20px] mt-0.5">check_circle</span>
-                  <span className="font-body-md text-body-md text-on-surface">
-                    Production SaaS platforms, multi-tenant architectures, and role hierarchies
-                  </span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="material-symbols-outlined text-[#74BE9C] text-[20px] mt-0.5">check_circle</span>
-                  <span className="font-body-md text-body-md text-on-surface">
-                    High-throughput REST &amp; gRPC APIs on Node.js and Go microservices
-                  </span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="material-symbols-outlined text-[#74BE9C] text-[20px] mt-0.5">check_circle</span>
-                  <span className="font-body-md text-body-md text-on-surface">
-                    Relational &amp; document databases: PostgreSQL schemas, MongoDB aggregation, Redis caching
-                  </span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="material-symbols-outlined text-[#74BE9C] text-[20px] mt-0.5">check_circle</span>
-                  <span className="font-body-md text-body-md text-on-surface">
-                    Real-time data streams, WebSockets, and RabbitMQ message queues
-                  </span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="material-symbols-outlined text-[#74BE9C] text-[20px] mt-0.5">check_circle</span>
-                  <span className="font-body-md text-body-md text-on-surface">
-                    Front-ends in React and Next.js with sub-second page performance
-                  </span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="material-symbols-outlined text-[#74BE9C] text-[20px] mt-0.5">check_circle</span>
-                  <span className="font-body-md text-body-md text-on-surface">
-                    Dockerized container orchestration, Prometheus telemetry, and Grafana monitoring
-                  </span>
-                </li>
+                {s2.bullets.map((bullet, idx) => (
+                  <li key={idx} className="flex items-start gap-3">
+                    <span className="material-symbols-outlined text-[#74BE9C] text-[20px] mt-0.5">check_circle</span>
+                    <span className="font-body-md text-body-md text-on-surface">
+                      {bullet}
+                    </span>
+                  </li>
+                ))}
               </ul>
 
               {/* Tech Chips */}
               <div className="flex flex-wrap gap-2 pt-4">
-                <span className="px-3 py-1 rounded-full border border-on-surface/15 text-xs font-medium text-on-surface bg-surface-container">React</span>
-                <span className="px-3 py-1 rounded-full border border-on-surface/15 text-xs font-medium text-on-surface bg-surface-container">Next.js</span>
-                <span className="px-3 py-1 rounded-full border border-on-surface/15 text-xs font-medium text-on-surface bg-surface-container">Node.js</span>
-                <span className="px-3 py-1 rounded-full border border-on-surface/15 text-xs font-medium text-on-surface bg-surface-container">Go</span>
-                <span className="px-3 py-1 rounded-full border border-on-surface/15 text-xs font-medium text-on-surface bg-surface-container">PostgreSQL</span>
-                <span className="px-3 py-1 rounded-full border border-on-surface/15 text-xs font-medium text-on-surface bg-surface-container">Redis</span>
-                <span className="px-3 py-1 rounded-full border border-on-surface/15 text-xs font-medium text-on-surface bg-surface-container">RabbitMQ</span>
-                <span className="px-3 py-1 rounded-full border border-on-surface/15 text-xs font-medium text-on-surface bg-surface-container">Docker</span>
+                {s2.chips.map((chip, idx) => (
+                  <span key={idx} className="px-3 py-1 rounded-full border border-on-surface/15 text-xs font-medium text-on-surface bg-surface-container">
+                    {chip}
+                  </span>
+                ))}
               </div>
 
               {/* Fused Pill CTA */}
@@ -352,53 +420,36 @@ export default function Services() {
             {/* Sticky Text Column */}
             <div className="lg:col-span-5 lg:sticky lg:top-32 space-y-8">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary text-surface font-label-eyebrow text-label-eyebrow font-semibold">
-                <span>03 — App Development</span>
+                <span>03 — {s3.title}</span>
               </div>
               <h2 className="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-surface">
                 Native performance from a single unified codebase.
               </h2>
               <div className="space-y-4 text-surface-variant font-body-md text-body-md leading-relaxed">
                 <p>
-                  Led by <strong className="text-surface font-semibold">Muhammad Ali</strong>. Cross-platform mobile engineering with offline-first synchronization and hardware/edge integration.
+                  Led by <strong className="text-surface font-semibold">{lead3}</strong>. {s3.description}
                 </p>
               </div>
 
               {/* Concrete Bullets */}
               <ul className="space-y-3 pt-2 text-surface">
-                <li className="flex items-start gap-3">
-                  <span className="material-symbols-outlined text-secondary-fixed text-[20px] mt-0.5">check_circle</span>
-                  <span className="font-body-md text-body-md">
-                    Cross-platform iOS and Android apps engineered from one Flutter codebase
-                  </span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="material-symbols-outlined text-secondary-fixed text-[20px] mt-0.5">check_circle</span>
-                  <span className="font-body-md text-body-md">
-                    Offline-first SQLite/Isar synchronization with background reconcile workers
-                  </span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="material-symbols-outlined text-secondary-fixed text-[20px] mt-0.5">check_circle</span>
-                  <span className="font-body-md text-body-md">
-                    Hardware integration: thermal printer ESC/POS, barcode scanners, and edge sensors
-                  </span>
-                </li>
-                <li className="flex items-start gap-3">
-                  <span className="material-symbols-outlined text-secondary-fixed text-[20px] mt-0.5">check_circle</span>
-                  <span className="font-body-md text-body-md">
-                    Firebase Auth, real-time Firestore pipelines, and App Store / Google Play compliance
-                  </span>
-                </li>
+                {s3.bullets.map((bullet, idx) => (
+                  <li key={idx} className="flex items-start gap-3">
+                    <span className="material-symbols-outlined text-secondary-fixed text-[20px] mt-0.5">check_circle</span>
+                    <span className="font-body-md text-body-md">
+                      {bullet}
+                    </span>
+                  </li>
+                ))}
               </ul>
 
               {/* Tech Chips */}
               <div className="flex flex-wrap gap-2 pt-4">
-                <span className="px-3 py-1 rounded-full border border-white/20 text-xs font-medium text-surface bg-white/5">Flutter</span>
-                <span className="px-3 py-1 rounded-full border border-white/20 text-xs font-medium text-surface bg-white/5">Dart</span>
-                <span className="px-3 py-1 rounded-full border border-white/20 text-xs font-medium text-surface bg-white/5">Firebase</span>
-                <span className="px-3 py-1 rounded-full border border-white/20 text-xs font-medium text-surface bg-white/5">SQLite</span>
-                <span className="px-3 py-1 rounded-full border border-white/20 text-xs font-medium text-surface bg-white/5">REST / gRPC</span>
-                <span className="px-3 py-1 rounded-full border border-white/20 text-xs font-medium text-surface bg-white/5">ESC/POS</span>
+                {s3.chips.map((chip, idx) => (
+                  <span key={idx} className="px-3 py-1 rounded-full border border-white/20 text-xs font-medium text-surface bg-white/5">
+                    {chip}
+                  </span>
+                ))}
               </div>
 
               {/* Fused Pill CTA on Dark Ground */}

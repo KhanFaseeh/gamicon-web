@@ -280,12 +280,10 @@ export default function Team() {
                         const target = e.currentTarget
                         if (member.imageUrl) {
                           const fallback = getDriveFallbackUrl(member.imageUrl)
-                          if (target.src !== fallback) {
+                          if (target.src !== fallback && fallback !== target.src) {
                             target.src = fallback
-                            return
                           }
                         }
-                        target.src = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80'
                       }}
                     />
                     <div className="absolute top-4 left-4">

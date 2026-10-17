@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import { supabase, parseGameRecord, getDriveFallbackUrl, type Game } from '../lib/supabaseClient'
+import { supabase, parseGameRecord, normalizeImageUrl, getDriveFallbackUrl, type Game } from '../lib/supabaseClient'
 
 // Default fallback projects with spec imagery if database is empty
 const DEFAULT_PROJECTS = [
@@ -56,16 +56,109 @@ const DEFAULT_PROJECTS = [
   },
 ]
 
-// Standard placeholder dummy images if no picture is uploaded
-const FALLBACK_DUMMY_IMAGES = [
-  'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=80',
-  'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80',
+interface HomeTeamMember {
+  id: string
+  name: string
+  role: string
+  focus: string
+  bio: string
+  chips: string[]
+  imageUrl: string
+  linkedInUrl?: string
+}
+
+const DEFAULT_TEAM: HomeTeamMember[] = [
+  {
+    id: 'member-1',
+    name: 'Mian Faseeh Ur Rehman',
+    role: 'CEO & Project Manager',
+    focus: 'Delivery · Unity · C# Architecture · Release Ops',
+    bio: 'Directs studio technical strategy, client scoping, project timetables, and quality governance. Leads the Unity game practice and release lifecycle pipelines.',
+    chips: ['Unity 3D', 'C#', 'HLSL Shaders', 'Sprint Scoping', 'Production CI/CD', 'Photon'],
+    imageUrl:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuASG0W42bY_gsxnnA3_k_vOaJMpMRkTnbhDtAgNMyxuQh16_1SD5oG3DFLMGGzfYquZBn77mMCbkLen4TsI-pHohdFb38m5tF-7OWAE2qAoDthPJcgjyj0eIM2PMtk2BXV6FlNUGfQLNNPMxqjg8A_bXAV6gbJzTxM2Z-SkBtj5gP47gG43tw_VKASueCNPcm97vUdgvjdpCM4rMbTrlN_TNQIR__WfpWZU5mFbqoDAcxiDXbsp3lPx',
+  },
+  {
+    id: 'member-2',
+    name: 'Muhammad Tayyab',
+    role: 'CTO & 3D Designer',
+    focus: 'Unity 6 · Blender 3D · Enemy AI · Gameplay Systems · Rigging',
+    bio: 'Leads technical architecture, Blender 3D modeling, rigging, enemy AI, and gameplay physics across Unity 6 and independent productions.',
+    chips: ['Unity 6', 'Blender', 'NavMesh AI', 'Cinemachine', 'Mixamo', 'URP'],
+    imageUrl:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuABKgk5aoLbkEjSO4kD0UHMS75Ss76wIMD7K923R0hYc269aXlE_Bqzb7EKyzDeSclq51KJF4dLIyapTX9NsLgB3r8kpK1wL4zZ9GcIRKdX4HpL2Rwcc0RMBBRjaDZ0lE2DEe_HVueLs-Py6rSnfJvvIx-Y0-AUvhSSxpoEwB1h1tjEnnKDHipkyFWvB1PgrIXzK7f1HRk30QBJl0TEJuvuP47F0uk7cV-ZkG9Uj66IpV-c5h872fN6',
+  },
+  {
+    id: 'member-3',
+    name: 'Shah Fahad',
+    role: 'Lead Backend Engineer',
+    focus: 'Node.js · Go · PostgreSQL · Redis · RabbitMQ · Docker',
+    bio: 'Architects distributed services and real-time data pipelines. Supervises uptime, security, and scalability across our five live production SaaS platforms.',
+    chips: ['Node.js', 'Go', 'PostgreSQL', 'Redis', 'RabbitMQ', 'Docker'],
+    imageUrl:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuCBH5memFcwy57yMTRXoHEsrveGfwU6jj5m6Vf26XA_SwYnI6ptJr0p8q7xX3wjNg1lv_IjsrK3kMX9h5WrEp9c84nbkXiiF6uubJN35EDdDLPOqBseJ68YrclzUTHNGrDKPvEnB45FbRzOHTTzjbRuDqKeSC4ka6ifHTJQlgh-c3KlrHhqSCgcpqwYEx45PgoBps8GuYR2FcbOgWUAJCI8dhDHLZ8120okauYr02FBXFymm1j1hDGu',
+  },
+  {
+    id: 'member-4',
+    name: 'Muhammad Ali',
+    role: 'Mobile & Full-Stack',
+    focus: 'Flutter / Dart · React · Python · YOLOv8 · Mobile Edge AI',
+    bio: 'Specializes in cross-platform mobile systems and edge computer vision. Developed the YOLOv8 factory counting pipeline and multi-platform architectures.',
+    chips: ['Flutter', 'React', 'Python', 'YOLOv8', 'FastAPI', 'WebSockets'],
+    imageUrl:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuAS9vtxytMp8uhLYQvS6-IxDx2v7Dj_yiJWU4ziCpq6ZfoWfGPhZDr7J9FSvqWOYiummnybNIyo6kzu2rR_4s1Y1N2vxpWLNBp0wHq3l9FdANDgCWQlBApN2gnoXDVNtH2LqNQjqqa2OYV2SIRhcSbuW-Xrh7AasPkHysJScBBVhN_4kVy2mCT2-Q8LVfUuBklBYqVkULSMDn14IVHmu17f3d4Fjm53zNeRDyTo9FssZ5sUgY4PXfvL',
+  },
 ]
 
 export default function Home() {
   const [games, setGames] = useState<Game[]>([])
+  const [team, setTeam] = useState<HomeTeamMember[]>(() => {
+    try {
+      const saved = localStorage.getItem('anamorphic_team')
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed
+      }
+    } catch {
+      // fallback
+    }
+    return DEFAULT_TEAM
+  })
+
+  const [settings, setSettings] = useState(() => {
+    try {
+      const saved = localStorage.getItem('anamorphic_settings')
+      if (saved) return JSON.parse(saved)
+    } catch {
+      // fallback
+    }
+    return {
+      heroHeadline: 'We engineer systems',
+      heroSubline: '',
+      stat1Val: '10+',
+      stat1Label: 'Commercial Shops Live',
+      stat2Val: '5',
+      stat2Label: 'Production SaaS Platforms',
+      stat3Val: '4',
+      stat3Label: 'Founding Principals',
+      stat4Val: '60 FPS',
+      stat4Label: 'Game Engine Benchmark',
+    }
+  })
+
+  useEffect(() => {
+    try {
+      const savedTeam = localStorage.getItem('anamorphic_team')
+      if (savedTeam) {
+        const parsed = JSON.parse(savedTeam)
+        if (Array.isArray(parsed) && parsed.length > 0) setTeam(parsed)
+      }
+      const savedSettings = localStorage.getItem('anamorphic_settings')
+      if (savedSettings) setSettings(JSON.parse(savedSettings))
+    } catch {
+      // ignore
+    }
+  }, [])
 
   useEffect(() => {
     async function fetchGames() {
@@ -106,7 +199,7 @@ export default function Home() {
           meta: g.release_date || 'ACTIVE',
           description: g.description,
           tags: g.tags || ['Systems', 'Production'],
-          imageUrl: g.image_url || FALLBACK_DUMMY_IMAGES[idx % FALLBACK_DUMMY_IMAGES.length],
+          imageUrl: g.image_url || '',
         }))
       : DEFAULT_PROJECTS
 
@@ -150,7 +243,7 @@ export default function Home() {
               <div className="md:col-span-7">
                 <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl leading-relaxed">
                   Independent game, web, and mobile engineering studio founded on production rigor. Led
-                  by Mian Faseeh Ur Rehman, Shah Fahad, and Muhammad Ali. We build fault-tolerant
+                  by {team.map((m) => m.name).join(', ')}. We build fault-tolerant
                   architectures that handle live commerce, industrial vision, and high-concurrency
                   systems.
                 </p>
@@ -350,18 +443,16 @@ export default function Home() {
                     <img
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       alt={proj.title}
-                      src={proj.imageUrl}
+                      src={normalizeImageUrl(proj.imageUrl)}
                       referrerPolicy="no-referrer"
                       onError={(e) => {
                         const target = e.currentTarget
                         if (proj.imageUrl) {
                           const fallback = getDriveFallbackUrl(proj.imageUrl)
-                          if (target.src !== fallback) {
+                          if (target.src !== fallback && fallback !== target.src) {
                             target.src = fallback
-                            return
                           }
                         }
-                        target.src = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80'
                       }}
                     />
                     <div className="absolute top-4 left-4">
@@ -434,36 +525,52 @@ export default function Home() {
             {/* 4 Concrete Metric Rows */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-gutter-desktop border-t border-[#F7F4EC]/15 pt-12">
               <div className="flex flex-col">
-                <span className="font-metric-huge text-metric-huge text-white mb-4">10+</span>
+                <span className="font-metric-huge text-metric-huge text-white mb-4">
+                  {settings.stat1Val || '10+'}
+                </span>
                 <div className="w-12 h-0.5 bg-secondary mb-4" />
-                <h4 className="font-headline-md text-body-lg text-white mb-2">Commercial Shops</h4>
+                <h4 className="font-headline-md text-body-lg text-white mb-2">
+                  {settings.stat1Label || 'Commercial Shops'}
+                </h4>
                 <p className="font-body-md text-body-md text-[#F7F4EC]/60">
                   Active daily on our POS &amp; accounting suite, executing real-time retail settlement.
                 </p>
               </div>
 
               <div className="flex flex-col">
-                <span className="font-metric-huge text-metric-huge text-white mb-4">5</span>
+                <span className="font-metric-huge text-metric-huge text-white mb-4">
+                  {settings.stat2Val || '5'}
+                </span>
                 <div className="w-12 h-0.5 bg-[#74BE9C] mb-4" />
-                <h4 className="font-headline-md text-body-lg text-white mb-2">Production SaaS</h4>
+                <h4 className="font-headline-md text-body-lg text-white mb-2">
+                  {settings.stat2Label || 'Production SaaS'}
+                </h4>
                 <p className="font-body-md text-body-md text-[#F7F4EC]/60">
                   Operating 24/7 with zero unmanaged downtime and sub-second queue offloading.
                 </p>
               </div>
 
               <div className="flex flex-col">
-                <span className="font-metric-huge text-metric-huge text-white mb-4">3</span>
+                <span className="font-metric-huge text-metric-huge text-white mb-4">
+                  {settings.stat3Val || '4'}
+                </span>
                 <div className="w-12 h-0.5 bg-[#F6A6CF] mb-4" />
-                <h4 className="font-headline-md text-body-lg text-white mb-2">Core Disciplines</h4>
+                <h4 className="font-headline-md text-body-lg text-white mb-2">
+                  {settings.stat3Label || 'Core Disciplines'}
+                </h4>
                 <p className="font-body-md text-body-md text-[#F7F4EC]/60">
                   Game engines, distributed web systems, and high-performance native apps.
                 </p>
               </div>
 
               <div className="flex flex-col">
-                <span className="font-metric-huge text-metric-huge text-[#FF5B5B] mb-4">0</span>
+                <span className="font-metric-huge text-metric-huge text-[#FF5B5B] mb-4">
+                  {settings.stat4Val || '60 FPS'}
+                </span>
                 <div className="w-12 h-0.5 bg-[#FF5B5B] mb-4" />
-                <h4 className="font-headline-md text-body-lg text-white mb-2">Vaporware</h4>
+                <h4 className="font-headline-md text-body-lg text-white mb-2">
+                  {settings.stat4Label || 'Game Engine Benchmark'}
+                </h4>
                 <p className="font-body-md text-body-md text-[#F7F4EC]/60">
                   Zero un-shipped prototypes, bloated layers, or phantom engineering commitments.
                 </p>
@@ -494,130 +601,61 @@ export default function Home() {
               </p>
             </div>
 
-            {/* 4 Founder & Principal Cards */}
+            {/* Dynamic Founder & Principal Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter-desktop">
-              {/* Founder 1 */}
-              <div className="bg-surface-container rounded-2xl p-6 crisp-stroke flex flex-col justify-between">
-                <div>
-                  <div className="aspect-square w-full rounded-xl overflow-hidden bg-surface-container-high mb-6 crisp-stroke">
-                    <img
-                      className="w-full h-full object-cover"
-                      alt="Mian Faseeh Ur Rehman"
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuASG0W42bY_gsxnnA3_k_vOaJMpMRkTnbhDtAgNMyxuQh16_1SD5oG3DFLMGGzfYquZBn77mMCbkLen4TsI-pHohdFb38m5tF-7OWAE2qAoDthPJcgjyj0eIM2PMtk2BXV6FlNUGfQLNNPMxqjg8A_bXAV6gbJzTxM2Z-SkBtj5gP47gG43tw_VKASueCNPcm97vUdgvjdpCM4rMbTrlN_TNQIR__WfpWZU5mFbqoDAcxiDXbsp3lPx"
-                    />
-                  </div>
-                  <span className="px-3 py-1 rounded-full bg-[#74BE9C] text-[#1B1A17] font-label-eyebrow text-label-eyebrow font-semibold mb-3 inline-block">
-                    CEO &amp; Project Manager
-                  </span>
-                  <h3 className="font-headline-md text-headline-md-mobile tracking-tight mb-2 font-bold">
-                    Mian Faseeh Ur Rehman
-                  </h3>
-                  <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-6">
-                    Directs studio technical strategy, client scoping, project timetables, and quality
-                    governance. Leads the Unity game practice and release lifecycle pipelines.
-                  </p>
-                </div>
-                <div className="pt-6 border-t border-on-surface/10">
-                  <span className="font-label-eyebrow text-label-eyebrow text-on-surface-variant font-medium block mb-1">
-                    Focus Areas
-                  </span>
-                  <p className="font-label-eyebrow text-label-eyebrow text-on-surface font-semibold">
-                    Delivery · Unity · C# Architecture · Release Ops
-                  </p>
-                </div>
-              </div>
+              {team.map((member, idx) => {
+                const badgeColor =
+                  idx === 0
+                    ? 'bg-[#74BE9C] text-[#1B1A17]'
+                    : idx === 1
+                    ? 'bg-[#FF5B5B] text-white'
+                    : idx === 2
+                    ? 'bg-secondary text-white'
+                    : 'bg-[#F6A6CF] text-[#1B1A17]'
 
-              {/* Founder 2: CTO Muhammad Tayyab */}
-              <div className="bg-surface-container rounded-2xl p-6 crisp-stroke flex flex-col justify-between border-2 border-secondary/20">
-                <div>
-                  <div className="aspect-square w-full rounded-xl overflow-hidden bg-surface-container-high mb-6 crisp-stroke">
-                    <img
-                      className="w-full h-full object-cover"
-                      alt="Muhammad Tayyab"
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuABKgk5aoLbkEjSO4kD0UHMS75Ss76wIMD7K923R0hYc269aXlE_Bqzb7EKyzDeSclq51KJF4dLIyapTX9NsLgB3r8kpK1wL4zZ9GcIRKdX4HpL2Rwcc0RMBBRjaDZ0lE2DEe_HVueLs-Py6rSnfJvvIx-Y0-AUvhSSxpoEwB1h1tjEnnKDHipkyFWvB1PgrIXzK7f1HRk30QBJl0TEJuvuP47F0uk7cV-ZkG9Uj66IpV-c5h872fN6"
-                    />
-                  </div>
-                  <span className="px-3 py-1 rounded-full bg-[#FF5B5B] text-white font-label-eyebrow text-label-eyebrow font-semibold mb-3 inline-block">
-                    CTO &amp; 3D Designer
-                  </span>
-                  <h3 className="font-headline-md text-headline-md-mobile tracking-tight mb-2 font-bold">
-                    Muhammad Tayyab
-                  </h3>
-                  <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-6">
-                    Leads technical architecture, Blender 3D modeling, rigging, enemy AI, and gameplay physics across Unity 6 and independent productions.
-                  </p>
-                </div>
-                <div className="pt-6 border-t border-on-surface/10">
-                  <span className="font-label-eyebrow text-label-eyebrow text-on-surface-variant font-medium block mb-1">
-                    Focus Areas
-                  </span>
-                  <p className="font-label-eyebrow text-label-eyebrow text-on-surface font-semibold">
-                    Unity 6 · Blender 3D · Enemy AI · Gameplay Systems · Rigging
-                  </p>
-                </div>
-              </div>
+                const borderStyle = idx === 1 ? 'border-2 border-secondary/20' : ''
 
-              {/* Founder 3: Shah Fahad */}
-              <div className="bg-surface-container rounded-2xl p-6 crisp-stroke flex flex-col justify-between">
-                <div>
-                  <div className="aspect-square w-full rounded-xl overflow-hidden bg-surface-container-high mb-6 crisp-stroke">
-                    <img
-                      className="w-full h-full object-cover"
-                      alt="Shah Fahad"
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBH5memFcwy57yMTRXoHEsrveGfwU6jj5m6Vf26XA_SwYnI6ptJr0p8q7xX3wjNg1lv_IjsrK3kMX9h5WrEp9c84nbkXiiF6uubJN35EDdDLPOqBseJ68YrclzUTHNGrDKPvEnB45FbRzOHTTzjbRuDqKeSC4ka6ifHTJQlgh-c3KlrHhqSCgcpqwYEx45PgoBps8GuYR2FcbOgWUAJCI8dhDHLZ8120okauYr02FBXFymm1j1hDGu"
-                    />
+                return (
+                  <div
+                    key={member.id || member.name}
+                    className={`bg-surface-container rounded-2xl p-6 crisp-stroke flex flex-col justify-between ${borderStyle}`}
+                  >
+                    <div>
+                      <div className="aspect-square w-full rounded-xl overflow-hidden bg-surface-container-high mb-6 crisp-stroke">
+                        <img
+                          className="w-full h-full object-cover"
+                          alt={member.name}
+                          src={normalizeImageUrl(member.imageUrl)}
+                          referrerPolicy="no-referrer"
+                          onError={(e) => {
+                            const fallback = getDriveFallbackUrl(member.imageUrl)
+                            if (fallback && e.currentTarget.src !== fallback) {
+                              e.currentTarget.src = fallback
+                            }
+                          }}
+                        />
+                      </div>
+                      <span className={`px-3 py-1 rounded-full ${badgeColor} font-label-eyebrow text-label-eyebrow font-semibold mb-3 inline-block`}>
+                        {member.role.split('/')[0].trim()}
+                      </span>
+                      <h3 className="font-headline-md text-headline-md-mobile tracking-tight mb-2 font-bold">
+                        {member.name}
+                      </h3>
+                      <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-6">
+                        {member.bio}
+                      </p>
+                    </div>
+                    <div className="pt-6 border-t border-on-surface/10">
+                      <span className="font-label-eyebrow text-label-eyebrow text-on-surface-variant font-medium block mb-1">
+                        Focus Areas
+                      </span>
+                      <p className="font-label-eyebrow text-label-eyebrow text-on-surface font-semibold">
+                        {member.focus || (member.chips ? member.chips.join(' · ') : 'Engineering Architecture')}
+                      </p>
+                    </div>
                   </div>
-                  <span className="px-3 py-1 rounded-full bg-secondary text-white font-label-eyebrow text-label-eyebrow font-semibold mb-3 inline-block">
-                    Lead Backend Engineer
-                  </span>
-                  <h3 className="font-headline-md text-headline-md-mobile tracking-tight mb-2 font-bold">
-                    Shah Fahad
-                  </h3>
-                  <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-6">
-                    Architects distributed services and real-time data pipelines. Supervises uptime,
-                    security, and scalability across our five live production SaaS platforms.
-                  </p>
-                </div>
-                <div className="pt-6 border-t border-on-surface/10">
-                  <span className="font-label-eyebrow text-label-eyebrow text-on-surface-variant font-medium block mb-1">
-                    Focus Areas
-                  </span>
-                  <p className="font-label-eyebrow text-label-eyebrow text-on-surface font-semibold">
-                    Node.js · Go · PostgreSQL · Redis · RabbitMQ · Docker
-                  </p>
-                </div>
-              </div>
-
-              {/* Founder 4: Muhammad Ali */}
-              <div className="bg-surface-container rounded-2xl p-6 crisp-stroke flex flex-col justify-between">
-                <div>
-                  <div className="aspect-square w-full rounded-xl overflow-hidden bg-surface-container-high mb-6 crisp-stroke">
-                    <img
-                      className="w-full h-full object-cover"
-                      alt="Muhammad Ali"
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuAS9vtxytMp8uhLYQvS6-IxDx2v7Dj_yiJWU4ziCpq6ZfoWfGPhZDr7J9FSvqWOYiummnybNIyo6kzu2rR_4s1Y1N2vxpWLNBp0wHq3l9FdANDgCWQlBApN2gnoXDVNtH2LqNQjqqa2OYV2SIRhcSbuW-Xrh7AasPkHysJScBBVhN_4kVy2mCT2-Q8LVfUuBklBYqVkULSMDn14IVHmu17f3d4Fjm53zNeRDyTo9FssZ5sUgY4PXfvL"
-                    />
-                  </div>
-                  <span className="px-3 py-1 rounded-full bg-[#F6A6CF] text-[#1B1A17] font-label-eyebrow text-label-eyebrow font-semibold mb-3 inline-block">
-                    Mobile &amp; Full-Stack
-                  </span>
-                  <h3 className="font-headline-md text-headline-md-mobile tracking-tight mb-2 font-bold">
-                    Muhammad Ali
-                  </h3>
-                  <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-6">
-                    Specializes in cross-platform mobile systems and edge computer vision. Developed the
-                    YOLOv8 factory counting pipeline and multi-platform architectures.
-                  </p>
-                </div>
-                <div className="pt-6 border-t border-on-surface/10">
-                  <span className="font-label-eyebrow text-label-eyebrow text-on-surface-variant font-medium block mb-1">
-                    Focus Areas
-                  </span>
-                  <p className="font-label-eyebrow text-label-eyebrow text-on-surface font-semibold">
-                    Flutter / Dart · React · Python · YOLOv8 · Mobile Edge AI
-                  </p>
-                </div>
-              </div>
+                )
+              })}
             </div>
           </div>
         </section>

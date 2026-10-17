@@ -62,7 +62,7 @@ export function extractGoogleDriveFileId(url: string): string | null {
  * Automatically converts Google Drive share/view links into direct image streaming URLs.
  * Uses high-speed lh3 CDN with fallback compatibility.
  */
-export function normalizeImageUrl(url: string): string {
+export function normalizeImageUrl(url?: string | null): string {
   if (!url || typeof url !== 'string') return ''
   const trimmed = url.trim()
 
@@ -78,7 +78,8 @@ export function normalizeImageUrl(url: string): string {
 /**
  * Fallback URL generator if the primary CDN format fails to load (e.g. strict rate limit).
  */
-export function getDriveFallbackUrl(url: string): string {
+export function getDriveFallbackUrl(url?: string | null): string {
+  if (!url || typeof url !== 'string') return ''
   const driveId = extractGoogleDriveFileId(url)
   if (driveId) {
     return `https://drive.google.com/uc?export=view&id=${driveId}`

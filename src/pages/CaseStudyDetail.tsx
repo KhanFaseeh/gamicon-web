@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import { supabase, parseGameRecord, getDriveFallbackUrl, type Game } from '../lib/supabaseClient'
+import { supabase, parseGameRecord, normalizeImageUrl, getDriveFallbackUrl, type Game } from '../lib/supabaseClient'
 
 interface CaseStudyData {
   id: string
@@ -745,18 +745,16 @@ export default function CaseStudyDetail() {
                 <img
                   className="w-full h-full object-cover opacity-60"
                   alt="Industrial Conveyor Inference"
-                  src={study.arch1ImgUrl}
+                  src={normalizeImageUrl(study.arch1ImgUrl)}
                   referrerPolicy="no-referrer"
                   onError={(e) => {
                     const target = e.currentTarget
                     if (study.arch1ImgUrl) {
                       const fallback = getDriveFallbackUrl(study.arch1ImgUrl)
-                      if (target.src !== fallback) {
+                      if (target.src !== fallback && fallback !== target.src) {
                         target.src = fallback
-                        return
                       }
                     }
-                    target.src = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80'
                   }}
                 />
                 {/* Real-time Bounding Box HUD Annotations */}

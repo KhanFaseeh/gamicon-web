@@ -1,9 +1,33 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
 export default function Footer() {
   const [email, setEmail] = useState('')
   const [subscribed, setSubscribed] = useState(false)
+
+  const [settings, setSettings] = useState(() => {
+    try {
+      const saved = localStorage.getItem('anamorphic_settings')
+      if (saved) return JSON.parse(saved)
+    } catch {
+      // ignore
+    }
+    return {
+      contactEmail: 'anamorphiicc@gmail.com',
+      githubUrl: 'https://github.com',
+      linkedinUrl: 'https://linkedin.com',
+      footerCopyright: '© Anamorphic Studio. Verified production stacks.',
+    }
+  })
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('anamorphic_settings')
+      if (saved) setSettings(JSON.parse(saved))
+    } catch {
+      // ignore
+    }
+  }, [])
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault()
@@ -126,7 +150,7 @@ export default function Footer() {
                 <div className="flex items-center space-x-3">
                   {/* GitHub */}
                   <a
-                    href="https://github.com"
+                    href={settings.githubUrl || 'https://github.com'}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="GitHub Repository"
@@ -139,7 +163,7 @@ export default function Footer() {
 
                   {/* LinkedIn */}
                   <a
-                    href="https://linkedin.com"
+                    href={settings.linkedinUrl || 'https://linkedin.com'}
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label="LinkedIn Profile"
@@ -152,7 +176,7 @@ export default function Footer() {
 
                   {/* Email */}
                   <a
-                    href="mailto:anamorphiicc@gmail.com"
+                    href={`mailto:${settings.contactEmail || 'anamorphiicc@gmail.com'}`}
                     aria-label="Direct Email"
                     className="w-10 h-10 rounded-full border border-surface/30 flex items-center justify-center text-surface hover:bg-surface hover:text-primary-container transition-colors duration-150"
                   >
@@ -182,7 +206,7 @@ export default function Footer() {
         {/* Bottom Bar: Verified Production Stacks & Legal */}
         <div className="pt-8 border-t border-surface/15 flex flex-col md:flex-row items-center justify-between gap-4 font-body-md text-body-md text-surface-variant">
           <p className="font-label-eyebrow text-label-eyebrow">
-            © Anamorphic Studio. Verified production stacks.
+            {settings.footerCopyright || '© Anamorphic Studio. Verified production stacks.'}
           </p>
           <p className="font-label-eyebrow text-label-eyebrow text-surface/40">
             Hand-crafted with zero slop · Built for durability

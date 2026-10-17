@@ -1,6 +1,19 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+
+interface ContactTeamMember {
+  name: string
+  role: string
+  focus?: string
+}
+
+const DEFAULT_CONTACT_TEAM: ContactTeamMember[] = [
+  { name: 'Mian Faseeh', role: 'Delivery & Systems' },
+  { name: 'Muhammad Tayyab', role: 'CTO / Unity & Blender 3D' },
+  { name: 'Shah Fahad', role: 'Cloud Backends & Microservices' },
+  { name: 'Muhammad Ali', role: 'Edge Vision & Cross-Platform Interfaces' },
+]
 
 export default function Contact() {
   const [selectedDiscipline, setSelectedDiscipline] = useState('🌐 Web Platform / SaaS')
@@ -9,6 +22,60 @@ export default function Contact() {
   const [message, setMessage] = useState('')
   const [submitted, setSubmitted] = useState(false)
 
+  const [team, setTeam] = useState<ContactTeamMember[]>(() => {
+    try {
+      const saved = localStorage.getItem('anamorphic_team')
+      if (saved) {
+        const parsed = JSON.parse(saved)
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed.map((m: any) => ({
+            name: m.name.split(' ')[0] + (m.name.split(' ')[1] ? ' ' + m.name.split(' ')[1] : ''),
+            role: m.role.split('/')[0].trim(),
+            focus: m.focus,
+          }))
+        }
+      }
+    } catch {
+      // ignore
+    }
+    return DEFAULT_CONTACT_TEAM
+  })
+
+  const [settings, setSettings] = useState(() => {
+    try {
+      const saved = localStorage.getItem('anamorphic_settings')
+      if (saved) return JSON.parse(saved)
+    } catch {
+      // ignore
+    }
+    return {
+      contactEmail: 'anamorphiicc@gmail.com',
+      locationLine: 'Lahore, Peshawar & Global Remote · UTC+5',
+    }
+  })
+
+  useEffect(() => {
+    try {
+      const savedTeam = localStorage.getItem('anamorphic_team')
+      if (savedTeam) {
+        const parsed = JSON.parse(savedTeam)
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setTeam(
+            parsed.map((m: any) => ({
+              name: m.name,
+              role: m.role.split('/')[0].trim(),
+              focus: m.focus,
+            }))
+          )
+        }
+      }
+      const savedSettings = localStorage.getItem('anamorphic_settings')
+      if (savedSettings) setSettings(JSON.parse(savedSettings))
+    } catch {
+      // ignore
+    }
+  }, [])
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     // Open default mail client with prefilled details
@@ -16,7 +83,7 @@ export default function Contact() {
     const body = encodeURIComponent(
       `Name / Team: ${name}\nEmail: ${email}\nDiscipline: ${selectedDiscipline}\n\nProject Overview & Timeline:\n${message}`
     )
-    window.location.href = `mailto:anamorphiicc@gmail.com?subject=${subject}&body=${body}`
+    window.location.href = `mailto:${settings.contactEmail || 'anamorphiicc@gmail.com'}?subject=${subject}&body=${body}`
     setSubmitted(true)
   }
 
@@ -97,7 +164,7 @@ export default function Contact() {
                   together.
                 </h2>
                 <p className="font-body-lg text-body-lg text-on-surface-variant mb-8 leading-relaxed">
-                  Every inquiry goes directly to Mian Faseeh, Muhammad Tayyab, Shah Fahad, and Muhammad Ali. We assess feasibility, draft initial tech stack thoughts, and reply with fixed milestones.
+                  Every inquiry goes directly to {team.map((m) => m.name).join(', ')}. We assess feasibility, draft initial tech stack thoughts, and reply with fixed milestones.
                 </p>
 
                 {/* Verification Commitment Badges */}
@@ -126,7 +193,7 @@ export default function Contact() {
                   </span>
                 </div>
                 <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-                  Faseeh (Delivery &amp; Systems), Tayyab (CTO / Unity &amp; Blender 3D), Fahad (Cloud Backends &amp; Microservices), Ali (Edge Vision &amp; Cross-Platform Interfaces). You collaborate directly with founders from line one.
+                  {team.map((m) => `${m.name} (${m.role})`).join(', ')}. You collaborate directly with founders from line one.
                 </p>
               </div>
             </div>
@@ -307,9 +374,9 @@ export default function Contact() {
                 <div className="md:col-span-6">
                   <a
                     className="font-headline-md md:font-headline-md text-headline-md hover:text-secondary transition-colors underline underline-offset-8 decoration-on-surface/20 font-bold"
-                    href="mailto:anamorphiicc@gmail.com"
+                    href={`mailto:${settings.contactEmail || 'anamorphiicc@gmail.com'}`}
                   >
-                    anamorphiicc@gmail.com
+                    {settings.contactEmail || 'anamorphiicc@gmail.com'}
                   </a>
                 </div>
                 <div className="md:col-span-3 md:text-right">
