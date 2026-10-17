@@ -230,31 +230,102 @@ export default function Admin() {
     return sessionStorage.getItem('gamicon_admin_auth') === 'authenticated'
   })
 
-  const [activeTab, setActiveTab] = useState<ActiveTab>('dashboard')
+  const [activeTab, setActiveTabState] = useState<ActiveTab>(() => {
+    const saved = localStorage.getItem('anamorphic_admin_tab') as ActiveTab | null
+    if (saved && ['dashboard', 'projects', 'inquiries', 'team', 'services', 'media', 'settings'].includes(saved)) {
+      return saved
+    }
+    return 'projects'
+  })
+
+  const setActiveTab = (tab: ActiveTab) => {
+    setActiveTabState(tab)
+    localStorage.setItem('anamorphic_admin_tab', tab)
+  }
+
   const [games, setGames] = useState<Game[]>([])
   const [loading, setLoading] = useState(false)
   const [notification, setNotification] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
 
-  // Inquiries State
-  const [inquiries, setInquiries] = useState<Inquiry[]>(INITIAL_INQUIRIES)
+  // Inquiries State (with localStorage persistence)
+  const [inquiries, setInquiriesState] = useState<Inquiry[]>(() => {
+    try {
+      const saved = localStorage.getItem('anamorphic_inquiries')
+      return saved ? JSON.parse(saved) : INITIAL_INQUIRIES
+    } catch {
+      return INITIAL_INQUIRIES
+    }
+  })
+  const setInquiries = (val: Inquiry[] | ((prev: Inquiry[]) => Inquiry[])) => {
+    setInquiriesState((prev) => {
+      const updated = typeof val === 'function' ? val(prev) : val
+      localStorage.setItem('anamorphic_inquiries', JSON.stringify(updated))
+      return updated
+    })
+  }
+
   const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null)
   const [inquiryFilter, setInquiryFilter] = useState<'all' | 'unread' | 'replied'>('all')
   const [replyText, setReplyText] = useState('')
 
-  // Team State
-  const [teamMembers, setTeamMembers] = useState<AdminTeamMember[]>(INITIAL_TEAM)
+  // Team State (with localStorage persistence)
+  const [teamMembers, setTeamMembersState] = useState<AdminTeamMember[]>(() => {
+    try {
+      const saved = localStorage.getItem('anamorphic_team')
+      return saved ? JSON.parse(saved) : INITIAL_TEAM
+    } catch {
+      return INITIAL_TEAM
+    }
+  })
+  const setTeamMembers = (val: AdminTeamMember[] | ((prev: AdminTeamMember[]) => AdminTeamMember[])) => {
+    setTeamMembersState((prev) => {
+      const updated = typeof val === 'function' ? val(prev) : val
+      localStorage.setItem('anamorphic_team', JSON.stringify(updated))
+      return updated
+    })
+  }
+
   const [editingMember, setEditingMember] = useState<AdminTeamMember | null>(null)
   const [isMemberSlideOpen, setIsMemberSlideOpen] = useState(false)
 
-  // Services State
-  const [services, setServices] = useState<ServiceBlock[]>(INITIAL_SERVICES)
+  // Services State (with localStorage persistence)
+  const [services, setServicesState] = useState<ServiceBlock[]>(() => {
+    try {
+      const saved = localStorage.getItem('anamorphic_services')
+      return saved ? JSON.parse(saved) : INITIAL_SERVICES
+    } catch {
+      return INITIAL_SERVICES
+    }
+  })
+  const setServices = (val: ServiceBlock[] | ((prev: ServiceBlock[]) => ServiceBlock[])) => {
+    setServicesState((prev) => {
+      const updated = typeof val === 'function' ? val(prev) : val
+      localStorage.setItem('anamorphic_services', JSON.stringify(updated))
+      return updated
+    })
+  }
 
-  // Media State
-  const [mediaItems, setMediaItems] = useState(INITIAL_MEDIA)
+  // Media State (with localStorage persistence)
+  type MediaItem = (typeof INITIAL_MEDIA)[number]
+  const [mediaItems, setMediaItemsState] = useState<MediaItem[]>(() => {
+    try {
+      const saved = localStorage.getItem('anamorphic_media')
+      return saved ? JSON.parse(saved) : INITIAL_MEDIA
+    } catch {
+      return INITIAL_MEDIA
+    }
+  })
+  const setMediaItems = (val: MediaItem[] | ((prev: MediaItem[]) => MediaItem[])) => {
+    setMediaItemsState((prev: MediaItem[]) => {
+      const updated = typeof val === 'function' ? val(prev) : val
+      localStorage.setItem('anamorphic_media', JSON.stringify(updated))
+      return updated
+    })
+  }
   const [mediaSearch, setMediaSearch] = useState('')
 
-  // Settings State
-  const [settings, setSettings] = useState({
+  // Settings State (with localStorage persistence)
+  const DEFAULT_SETTINGS = {
     siteTitle: 'anamorphic — Independent Engineering Studio',
     contactEmail: 'anamorphiicc@gmail.com',
     locationLine: 'Lahore, Peshawar & Global Remote · UTC+5',
@@ -272,7 +343,24 @@ export default function Admin() {
     githubUrl: 'https://github.com',
     linkedinUrl: 'https://linkedin.com',
     footerCopyright: '© Anamorphic Studio. Verified production stacks.',
+  }
+  type StudioSettings = typeof DEFAULT_SETTINGS
+
+  const [settings, setSettingsState] = useState<StudioSettings>(() => {
+    try {
+      const saved = localStorage.getItem('anamorphic_settings')
+      return saved ? JSON.parse(saved) : DEFAULT_SETTINGS
+    } catch {
+      return DEFAULT_SETTINGS
+    }
   })
+  const setSettings = (val: StudioSettings | ((prev: StudioSettings) => StudioSettings)) => {
+    setSettingsState((prev: StudioSettings) => {
+      const updated = typeof val === 'function' ? val(prev) : val
+      localStorage.setItem('anamorphic_settings', JSON.stringify(updated))
+      return updated
+    })
+  }
 
   // Projects State & Slide-Over
   const [projectFilter, setProjectFilter] = useState('All')
@@ -645,11 +733,13 @@ export default function Admin() {
                       <span>Total projects</span>
                       <span className="material-symbols-outlined text-[18px]">folder_open</span>
                     </div>
-                    <div className="text-4xl font-extrabold text-on-surface tracking-tight mb-2">10</div>
+                    <div className="text-4xl font-extrabold text-on-surface tracking-tight mb-2">
+                      {games.length}
+                    </div>
                   </div>
                   <div className="text-[12px] text-on-surface-variant border-t border-outline-variant/15 pt-2 flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#74BE9C]"></span>
-                    <span>8 live in production, 2 open-source</span>
+                    <span>{games.length} synced with database</span>
                   </div>
                 </div>
 
@@ -677,25 +767,29 @@ export default function Admin() {
                       <span>Principals &amp; Team</span>
                       <span className="material-symbols-outlined text-[18px]">group</span>
                     </div>
-                    <div className="text-4xl font-extrabold text-on-surface tracking-tight mb-2">4</div>
+                    <div className="text-4xl font-extrabold text-on-surface tracking-tight mb-2">
+                      {teamMembers.length}
+                    </div>
                   </div>
                   <div className="text-[12px] text-on-surface-variant border-t border-outline-variant/15 pt-2 flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-secondary"></span>
-                    <span>Faseeh, Tayyab (CTO), Fahad, Ali</span>
+                    <span>{teamMembers.map((m) => m.name.split(' ')[0]).join(', ')}</span>
                   </div>
                 </div>
 
                 <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/20 p-5 flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between mb-3 text-xs text-on-surface-variant font-medium">
-                      <span>Published case studies</span>
+                      <span>Live Case Studies</span>
                       <span className="material-symbols-outlined text-[18px]">auto_stories</span>
                     </div>
-                    <div className="text-4xl font-extrabold text-on-surface tracking-tight mb-2">3</div>
+                    <div className="text-4xl font-extrabold text-on-surface tracking-tight mb-2">
+                      {games.length}
+                    </div>
                   </div>
                   <div className="text-[12px] text-on-surface-variant border-t border-outline-variant/15 pt-2 flex items-center gap-1.5">
                     <span className="material-symbols-outlined text-[13px]">sync</span>
-                    <span>Echoes of Desolation &amp; PipeVision AI</span>
+                    <span>{games[0]?.title || 'Portfolio ready'}</span>
                   </div>
                 </div>
               </section>
@@ -758,47 +852,60 @@ export default function Admin() {
                       onClick={() => setActiveTab('projects')}
                       className="text-xs font-semibold text-secondary hover:underline flex items-center gap-1"
                     >
-                      <span>All projects</span>
+                      <span>All projects ({games.length})</span>
                       <span className="material-symbols-outlined text-[13px]">arrow_forward</span>
                     </button>
                   </div>
                   <div className="divide-y divide-outline-variant/15">
-                    <div className="py-3.5 flex items-center justify-between gap-3">
-                      <div className="min-w-0">
-                        <div className="font-bold text-sm text-on-surface">PipeVision AI</div>
-                        <div className="text-[11px] text-outline">Factory conveyor YOLOv8 tallying</div>
+                    {loading && (
+                      <div className="py-6 text-center text-xs text-outline font-mono">
+                        Loading projects...
                       </div>
-                      <span className="bg-[#74BE9C]/20 text-[#1B1A17] font-semibold text-[11px] px-2 py-0.5 rounded-full">
-                        Published
-                      </span>
-                    </div>
-                    <div className="py-3.5 flex items-center justify-between gap-3">
-                      <div className="min-w-0">
-                        <div className="font-bold text-sm text-on-surface">Echoes of Desolation</div>
-                        <div className="text-[11px] text-outline">Unity 6 &amp; Blender 3D horror</div>
+                    )}
+                    {!loading && games.length === 0 && (
+                      <div className="py-6 text-center text-xs text-outline">
+                        No projects yet. Click "New project" to create one.
                       </div>
-                      <span className="bg-[#FF5B5B]/20 text-[#1B1A17] font-semibold text-[11px] px-2 py-0.5 rounded-full">
-                        CTO Milestone
-                      </span>
-                    </div>
-                    <div className="py-3.5 flex items-center justify-between gap-3">
-                      <div className="min-w-0">
-                        <div className="font-bold text-sm text-on-surface">Workforce Suite</div>
-                        <div className="text-[11px] text-outline">5 live multi-role SaaS platforms</div>
-                      </div>
-                      <span className="bg-[#74BE9C]/20 text-[#1B1A17] font-semibold text-[11px] px-2 py-0.5 rounded-full">
-                        Published
-                      </span>
-                    </div>
-                    <div className="py-3.5 flex items-center justify-between gap-3">
-                      <div className="min-w-0">
-                        <div className="font-bold text-sm text-on-surface">Accounting &amp; POS Suite</div>
-                        <div className="text-[11px] text-outline">Live in 10+ retail locations</div>
-                      </div>
-                      <span className="bg-[#74BE9C]/20 text-[#1B1A17] font-semibold text-[11px] px-2 py-0.5 rounded-full">
-                        Published
-                      </span>
-                    </div>
+                    )}
+                    {!loading &&
+                      games.slice(0, 4).map((g) => (
+                        <div
+                          key={g.id}
+                          onClick={() => handleEditProject(g)}
+                          className="py-3.5 flex items-center justify-between gap-3 cursor-pointer hover:bg-surface-container-low/50 -mx-3 px-3 rounded-lg transition-colors group"
+                        >
+                          <div className="flex items-center gap-3 min-w-0">
+                            <img
+                              src={g.image_url || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=80&q=80'}
+                              referrerPolicy="no-referrer"
+                              alt=""
+                              className="w-8 h-8 rounded object-cover border border-outline-variant/20 shrink-0 bg-surface-container"
+                              onError={(e) => {
+                                const target = e.currentTarget
+                                if (g.image_url) {
+                                  const fallback = getDriveFallbackUrl(g.image_url)
+                                  if (target.src !== fallback) {
+                                    target.src = fallback
+                                    return
+                                  }
+                                }
+                                target.src = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=80&q=80'
+                              }}
+                            />
+                            <div className="min-w-0">
+                              <div className="font-bold text-sm text-on-surface group-hover:text-secondary truncate">
+                                {g.title}
+                              </div>
+                              <div className="text-[11px] text-outline truncate font-mono">
+                                {g.tags?.[0] || 'Project'} · /work/{g.slug}
+                              </div>
+                            </div>
+                          </div>
+                          <span className="bg-[#74BE9C]/20 text-[#1B1A17] font-semibold text-[11px] px-2 py-0.5 rounded-full shrink-0">
+                            Published
+                          </span>
+                        </div>
+                      ))}
                   </div>
                 </section>
               </div>
@@ -880,70 +987,97 @@ export default function Admin() {
                         </td>
                       </tr>
                     )}
-                    {!loading && games.map((g) => (
-                      <tr key={g.id} className="hover:bg-surface-container-low/50">
-                        <td className="py-3 px-4 flex items-center gap-3">
-                          <img
-                            src={g.image_url || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=120&q=80'}
-                            referrerPolicy="no-referrer"
-                            alt=""
-                            className="w-10 h-10 rounded object-cover border border-outline-variant/20 bg-surface-container"
-                            onError={(e) => {
-                              const target = e.currentTarget
-                              if (g.image_url) {
-                                const fallback = getDriveFallbackUrl(g.image_url)
-                                if (target.src !== fallback) {
-                                  target.src = fallback
-                                  return
-                                }
-                              }
-                              target.src = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=120&q=80'
-                            }}
-                          />
-                          <div>
-                            <div className="font-bold text-on-surface text-sm">{g.title}</div>
-                            <div className="text-[11px] text-outline font-mono">/work/{g.slug}</div>
-                          </div>
-                        </td>
-                        <td className="py-3 px-4">
-                          <span className="px-2 py-0.5 rounded-full bg-surface-container font-medium text-[11px]">
-                            {g.tags?.[0] || 'Web & SaaS'}
-                          </span>
-                        </td>
-                        <td className="py-3 px-4 font-mono text-[11px]">
-                          {g.release_date || 'Live in production'}
-                        </td>
-                        <td className="py-3 px-4">
-                          <span className="material-symbols-outlined text-amber-500 text-[18px]">star</span>
-                        </td>
-                        <td className="py-3 px-4">
-                          <span className="bg-[#74BE9C]/20 text-[#1B1A17] font-semibold text-[11px] px-2 py-0.5 rounded-full">
-                            Published
-                          </span>
-                        </td>
-                        <td className="py-3 px-4 text-right space-x-2">
-                          <button
-                            onClick={() => handleEditProject(g)}
-                            className="p-1 hover:text-secondary transition-colors"
-                          >
-                            <span className="material-symbols-outlined text-[16px]">edit</span>
-                          </button>
-                          <button
-                            onClick={() => handleDeleteProject(g.id)}
-                            className="p-1 hover:text-red-600 transition-colors"
-                          >
-                            <span className="material-symbols-outlined text-[16px]">delete</span>
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                    {games.length === 0 && (
-                      <tr>
-                        <td colSpan={6} className="py-8 text-center text-outline">
-                          No custom projects found. Click "New project" to create one.
-                        </td>
-                      </tr>
-                    )}
+                    {!loading &&
+                      games
+                        .filter((g) => {
+                          const matchesSearch =
+                            projectSearch.trim() === '' ||
+                            g.title.toLowerCase().includes(projectSearch.toLowerCase()) ||
+                            g.slug.toLowerCase().includes(projectSearch.toLowerCase()) ||
+                            (g.description && g.description.toLowerCase().includes(projectSearch.toLowerCase()))
+                          const matchesFilter =
+                            projectFilter === 'All' ||
+                            (g.tags && g.tags.some((t) => t.toLowerCase() === projectFilter.toLowerCase())) ||
+                            (projectFilter === 'Web & SaaS' && (!g.tags || g.tags.length === 0))
+                          return matchesSearch && matchesFilter
+                        })
+                        .map((g) => (
+                          <tr key={g.id} className="hover:bg-surface-container-low/50">
+                            <td className="py-3 px-4 flex items-center gap-3">
+                              <img
+                                src={g.image_url || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=120&q=80'}
+                                referrerPolicy="no-referrer"
+                                alt=""
+                                className="w-10 h-10 rounded object-cover border border-outline-variant/20 bg-surface-container"
+                                onError={(e) => {
+                                  const target = e.currentTarget
+                                  if (g.image_url) {
+                                    const fallback = getDriveFallbackUrl(g.image_url)
+                                    if (target.src !== fallback) {
+                                      target.src = fallback
+                                      return
+                                    }
+                                  }
+                                  target.src = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=120&q=80'
+                                }}
+                              />
+                              <div>
+                                <div className="font-bold text-on-surface text-sm">{g.title}</div>
+                                <div className="text-[11px] text-outline font-mono">/work/{g.slug}</div>
+                              </div>
+                            </td>
+                            <td className="py-3 px-4">
+                              <span className="px-2 py-0.5 rounded-full bg-surface-container font-medium text-[11px]">
+                                {g.tags?.[0] || 'Web & SaaS'}
+                              </span>
+                            </td>
+                            <td className="py-3 px-4 font-mono text-[11px]">
+                              {g.release_date || 'Live in production'}
+                            </td>
+                            <td className="py-3 px-4">
+                              <span className="material-symbols-outlined text-amber-500 text-[18px]">star</span>
+                            </td>
+                            <td className="py-3 px-4">
+                              <span className="bg-[#74BE9C]/20 text-[#1B1A17] font-semibold text-[11px] px-2 py-0.5 rounded-full">
+                                Published
+                              </span>
+                            </td>
+                            <td className="py-3 px-4 text-right space-x-2">
+                              <button
+                                onClick={() => handleEditProject(g)}
+                                className="p-1 hover:text-secondary transition-colors"
+                              >
+                                <span className="material-symbols-outlined text-[16px]">edit</span>
+                              </button>
+                              <button
+                                onClick={() => handleDeleteProject(g.id)}
+                                className="p-1 hover:text-red-600 transition-colors"
+                              >
+                                <span className="material-symbols-outlined text-[16px]">delete</span>
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                    {!loading &&
+                      games.length > 0 &&
+                      games.filter((g) => {
+                        const matchesSearch =
+                          projectSearch.trim() === '' ||
+                          g.title.toLowerCase().includes(projectSearch.toLowerCase()) ||
+                          g.slug.toLowerCase().includes(projectSearch.toLowerCase()) ||
+                          (g.description && g.description.toLowerCase().includes(projectSearch.toLowerCase()))
+                        const matchesFilter =
+                          projectFilter === 'All' ||
+                          (g.tags && g.tags.some((t) => t.toLowerCase() === projectFilter.toLowerCase())) ||
+                          (projectFilter === 'Web & SaaS' && (!g.tags || g.tags.length === 0))
+                        return matchesSearch && matchesFilter
+                      }).length === 0 && (
+                        <tr>
+                          <td colSpan={6} className="py-8 text-center text-outline">
+                            No projects match your filter "{projectFilter}" or search "{projectSearch}".
+                          </td>
+                        </tr>
+                      )}
                   </tbody>
                 </table>
               </div>
