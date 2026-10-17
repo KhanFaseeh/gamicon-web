@@ -4,6 +4,7 @@ import {
   supabase,
   parseGameRecord,
   serializeGameRecord,
+  normalizeImageUrl,
   type Game,
   type StudioInfo,
 } from '../lib/supabaseClient'
@@ -850,16 +851,11 @@ export default function Admin() {
                       value={formImageUrl}
                       onChange={(e) => {
                         const val = e.target.value
-                        // If user pastes a Google Drive link, immediately convert to direct streamable image URL
-                        if (val.includes('drive.google.com')) {
-                          const fileMatch = val.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || val.match(/[?&]id=([a-zA-Z0-9_-]+)/)
-                          if (fileMatch && fileMatch[1]) {
-                            setFormImageUrl(`https://lh3.googleusercontent.com/d/${fileMatch[1]}`)
-                            showNotification('Google Drive link converted to direct image URL!')
-                            return
-                          }
+                        const converted = normalizeImageUrl(val)
+                        if (converted !== val && converted.includes('lh3.googleusercontent.com')) {
+                          showNotification('Google Drive link converted to direct image URL!')
                         }
-                        setFormImageUrl(val)
+                        setFormImageUrl(converted)
                       }}
                       placeholder="https://drive.google.com/file/d/... or direct image URL"
                       className="w-full bg-[#0e0e0e] border border-[#444748]/40 text-white text-xs px-3 py-2 font-mono focus:border-white focus:outline-none"

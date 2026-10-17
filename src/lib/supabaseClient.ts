@@ -40,15 +40,20 @@ export function normalizeImageUrl(url: string): string {
   const trimmed = url.trim()
 
   if (trimmed.includes('drive.google.com')) {
-    // 1. /file/d/FILE_ID/...
+    // 1. /file/d/FILE_ID/view or /file/d/FILE_ID
     const fileMatch = trimmed.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)
     if (fileMatch && fileMatch[1]) {
       return `https://lh3.googleusercontent.com/d/${fileMatch[1]}`
     }
-    // 2. ?id=FILE_ID or &id=FILE_ID
+    // 2. ?id=FILE_ID or &id=FILE_ID (open?id=, uc?id=)
     const idMatch = trimmed.match(/[?&]id=([a-zA-Z0-9_-]+)/)
     if (idMatch && idMatch[1]) {
       return `https://lh3.googleusercontent.com/d/${idMatch[1]}`
+    }
+    // 3. /d/FILE_ID
+    const directDMatch = trimmed.match(/\/d\/([a-zA-Z0-9_-]+)/)
+    if (directDMatch && directDMatch[1]) {
+      return `https://lh3.googleusercontent.com/d/${directDMatch[1]}`
     }
   }
 

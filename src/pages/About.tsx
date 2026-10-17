@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import { MonogramIcon } from '../components/Logo'
 import { supabase, type StudioInfo } from '../lib/supabaseClient'
 
 const DEFAULT_STUDIO_INFO: StudioInfo = {
   id: 1,
   manifesto:
-    'ANAMORPHIC is an independent studio forging mechanics-driven, narrative-rich titles built without creative compromise. We reject automated formulas and safety-first design paradigms. We architect unforgiving worlds for players who demand mastery, physics, narrative literacy, and visceral design.',
+    'Anamorphic is an independent engineering studio for games, web platforms, and mobile apps — founded by engineers who run live production systems, not pitch decks or un-shipped prototypes.',
   contact_email: 'anamorphiicc@gmail.com',
   press_kit_url: 'https://anamorphic.studio/press-kit.zip',
 }
@@ -29,287 +29,372 @@ export default function About() {
           setStudioInfo(data as StudioInfo)
         }
       } catch (err) {
-        console.warn('Supabase studio_info fetch error or table empty, using default', err)
+        console.warn('Supabase studio_info fetch error, using default', err)
       }
     }
     loadStudioInfo()
   }, [])
 
   return (
-    <div className="bg-[#0e0e0e] text-[#e5e2e1] antialiased min-h-screen selection:bg-white selection:text-black">
+    <div className="bg-surface text-on-surface antialiased selection:bg-secondary selection:text-surface min-h-screen flex flex-col justify-between overflow-x-hidden">
       <Header />
 
-      <main className="w-full">
-        {/* =========================================================================
-               SECTION 1: HERO (Philosophical Manifesto)
-               ========================================================================= */}
-        <section className="min-h-screen flex flex-col justify-between px-6 md:px-16 pt-28 pb-12 relative bg-[#0e0e0e] border-b border-[#444748]/30">
-          {/* Studio Telemetry Coordinates Header */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between text-[#8e9192] border-b border-[#444748]/20 pb-4 gap-2 font-display text-[10px] tracking-widest">
-            <div className="text-[#c7c6c6]">
-              EST. 2023 // PESHAWAR LAB // PAKISTAN // 100% SELF-OWNED EQUITY
-            </div>
-            <div className="text-[#8e9192]">
-              AUTEUR SPECIFICATION // SPEC-092
-            </div>
-          </div>
-
-          {/* Core Philosophical Anchor */}
-          <div className="my-16 max-w-5xl mx-auto text-center flex flex-col items-center">
-            <div className="mb-6">
-              <MonogramIcon className="w-16 h-16 md:w-20 md:h-20" animated={true} />
-            </div>
-            <span className="font-display text-[10px] text-[#8e9192] tracking-widest uppercase mb-6 inline-block">
-              STUDIO MANIFESTO // VOL. 01
-            </span>
-            <h1 className="text-3xl sm:text-5xl md:text-7xl font-display text-white uppercase leading-tight md:leading-none tracking-tight">
-              FROM HOMO SAPIENS TO HOMO LUDENS — WE ARE THE ARCHITECTS OF VISCERAL INTERACTION
-            </h1>
-            <div className="w-16 h-[1px] bg-[#444748] my-10" />
-            <p className="text-base md:text-xl font-light text-[#c4c7c8] max-w-3xl leading-relaxed text-center">
-              {studioInfo.manifesto}
-            </p>
-          </div>
-
-          {/* Studio Tenets / Principles Triad */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-8 border-t border-[#444748]/20">
-            {/* Tenet 01 */}
-            <div className="space-y-3">
-              <div className="font-display text-[10px] text-white tracking-widest flex items-center gap-2 uppercase">
-                01 // PHYSICAL INTEGRITY
-              </div>
-              <p className="text-xs md:text-sm text-[#8e9192] leading-relaxed">
-                Real-time kinetic physics, deterministic penetration, and responsive frame timing. No superficial hitscan compromises.
-              </p>
-            </div>
-            {/* Tenet 02 */}
-            <div className="space-y-3">
-              <div className="font-display text-[10px] text-white tracking-widest flex items-center gap-2 uppercase">
-                02 // DIEGETIC IMMERSION
-              </div>
-              <p className="text-xs md:text-sm text-[#8e9192] leading-relaxed">
-                Zero visual clutter. In-world tactical HUD telemetry, spatial acoustic clues, and environmental deduction replace minimaps.
-              </p>
-            </div>
-            {/* Tenet 03 */}
-            <div className="space-y-3">
-              <div className="font-display text-[10px] text-white tracking-widest flex items-center gap-2 uppercase">
-                03 // OPEN PLAYTEST LOOPS
-              </div>
-              <p className="text-xs md:text-sm text-[#8e9192] leading-relaxed">
-                Direct player telemetry and uncompromised playtest iteration through closed developer branches and tactile feedback rings.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* =========================================================================
-               SECTION 2: MASCOT / STUDIO IDENTITY VISUAL BREAK (Letterbox 21:9)
-               ========================================================================= */}
-        <section className="w-full bg-[#0e0e0e] border-b border-[#444748]/30 overflow-hidden">
-          {/* Letterbox Top Bar */}
-          <div className="w-full bg-[#000000] py-3 px-6 md:px-16 flex justify-between items-center text-[#8e9192] border-b border-[#444748]/20 font-display text-[10px] tracking-widest">
-            <span>ASPECT RATIO 21:9 // ANAMORPHIC SENSOR SIMULATION</span>
-            <span>FPS 24.000 // MONO-CHROME LOG</span>
-          </div>
-
-          {/* Cinematic Artwork Frame */}
-          <div className="relative w-full aspect-[21/9] min-h-[480px] bg-[#0e0e0e] overflow-hidden group">
-            <img
-              alt="PROJECT 01 // NEON PROTOCOL"
-              className="w-full h-full object-cover grayscale contrast-125 transition-all duration-700 group-hover:grayscale-0 group-hover:scale-105"
-              src="https://lh3.googleusercontent.com/aida/AEtjO1W8l1YFBtH3X_E6WY4GiitT_RiPH7iW_0qgptlmrSoiJlCDizxfzPe_pKkQ74OO4aeaCBUxJ1tcaohW4f8bv2EuPO7vC2vJArRHJlcFt_9NBqdWTQSKw8LMOmJbOagJYNhEOzrPgAP3Q5OXc4lOtxJ48ySUKuXWGRauto2aDR8ERVxBO7mZ6AWbbF2-sqh81Yt7aql18eMW6NSwwxD42RDuIQSjKPGKqAvoPs5ZtxyJP54Rx8f2VL9FJ2c"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0e0e0e] via-transparent to-transparent opacity-80 pointer-events-none" />
-
-            {/* Overlay Caption */}
-            <div className="absolute bottom-6 left-6 md:left-16 md:bottom-8 z-10 space-y-2">
-              <div className="font-display text-[10px] text-white bg-[#0e0e0e]/80 px-2 py-1 backdrop-blur-sm border border-[#444748]/30 inline-block uppercase tracking-widest">
-                FLAGSHIP CONCEPT // ECHOES OF DESOLATION
-              </div>
-              <div className="font-display text-2xl md:text-3xl text-white tracking-widest uppercase">
-                THE EMBODIED SPIRIT OF ANAMORPHIC
-              </div>
-              <p className="text-xs md:text-sm text-[#c4c7c8] max-w-lg font-light leading-relaxed">
-                Atmospheric psychological survival horror modeled in Blender, engineered in Unity Engine, and voiced with ElevenLabs audio.
-              </p>
-            </div>
-          </div>
-
-          {/* Letterbox Bottom Bar */}
-          <div className="w-full bg-[#000000] py-3 px-6 md:px-16 flex justify-between items-center text-[#8e9192] border-t border-[#444748]/20 font-display text-[10px] tracking-widest">
-            <span>PESHAWAR PRODUCTION UNIT // SECTOR 04</span>
-            <span>TIME CODE: 01:44:28:12</span>
-          </div>
-        </section>
-
-        {/* =========================================================================
-               SECTION 3: FOUNDER MESSAGE & LABORATORY
-               ========================================================================= */}
-        <section className="w-full px-6 md:px-16 py-24 bg-[#0e0e0e] border-b border-[#444748]/30">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Statement Left Column */}
-            <div className="lg:col-span-6 space-y-6">
-              <div className="font-display text-[10px] tracking-widest text-[#8e9192] uppercase">
-                EXECUTIVE DISPATCH // FOUNDER DIRECTIVE
-              </div>
-              <h2 className="font-display text-3xl md:text-4xl text-white uppercase tracking-tight">
-                A MESSAGE FROM CEO MIAN FASEEH UR REHMAN & PARTNER MUHAMMAD TAYYAB
-              </h2>
-              <div className="space-y-4 text-sm md:text-base text-[#c4c7c8] leading-relaxed font-light">
-                <p>
-                  "Games are not passive entertainment; they are interactive architecture. When we founded ANAMORPHIC, our goal was singular: create a sanctuary where high-fidelity Blender 3D modeling, Unity Engine technical precision, and immersive ElevenLabs audio storytelling exist as one."
-                </p>
-                <p>
-                  "We do not design games to be consumed in haste; we build worlds to be inhabited, analyzed, and mastered. Every model sculpted in Blender, every frame simulated in Unity, and every voice engineered with ElevenLabs is crafted with uncompromising creative intent."
-                </p>
-              </div>
-
-              {/* Founder Signoff */}
-              <div className="pt-6 border-t border-[#444748]/20 flex flex-wrap items-center justify-between gap-4">
-                <div className="space-y-1">
-                  <div className="font-display text-xs text-white tracking-widest uppercase">
-                    MIAN FASEEH UR REHMAN
-                  </div>
-                  <div className="font-display text-[10px] text-[#8e9192] tracking-widest uppercase">
-                    CHIEF EXECUTIVE OFFICER & FOUNDER
-                  </div>
-                </div>
-                <div className="space-y-1">
-                  <div className="font-display text-xs text-white tracking-widest uppercase">
-                    MUHAMMAD TAYYAB
-                  </div>
-                  <div className="font-display text-[10px] text-[#8e9192] tracking-widest uppercase">
-                    STUDIO PARTNER & CO-FOUNDER
-                  </div>
-                </div>
-                <div className="font-display text-[10px] text-[#c7c6c6] tracking-widest border border-[#444748] px-3 py-1 uppercase">
-                  LEADERSHIP
-                </div>
-              </div>
-            </div>
-
-            {/* Laboratory Photo Right Column */}
-            <div className="lg:col-span-6">
-              <div className="border border-[#444748]/30 p-2 bg-[#1c1b1b]">
-                <div className="relative overflow-hidden aspect-[4/3]">
-                  <img
-                    alt="Peshawar Soundstage & Engineering Lab"
-                    className="w-full h-full object-cover filter contrast-110"
-                    src="https://lh3.googleusercontent.com/aida/AEtjO1X8gVDzQKeN1xnNu8yH5hqMwFVSf2tgib-RrN4qRR4hYfMl1W1K84GlSKWbF0bCtfapCBy75RgVw9rATVOsigq89QNtmXDugvbaXFOC9wAq6I0iCDdcZcFx4jVjZhwbsp3B7bvutYI3lt0ZGkoF19qWlev-tk3rDCALHDrL8Et0daLsjCKEjSy9vr0fudlrSAaMt_g1GO8wLvg6Ua1DGh0Ss2NmAle4pFz2_R2WwvLr2qcyJh0haDvSHZ0"
-                  />
-                  <div className="absolute inset-0 bg-[#0e0e0e]/20 pointer-events-none" />
-                </div>
-                {/* Metadata Strip below image */}
-                <div className="mt-3 pt-3 border-t border-[#444748]/20 flex flex-wrap justify-between items-center font-display text-[10px] text-[#8e9192]">
-                  <span>FACILITY: PESHAWAR LAB 01</span>
-                  <span>CREW: 5 CORE ENGINEERS & ARTISTS</span>
-                  <span>RIG: DUAL-SIMULATION SOUNDSTAGE</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* =========================================================================
-               SECTION 4: STUDIO TIMELINE (Dramatic High-Contrast White Canvas)
-               ========================================================================= */}
-        <section className="w-full bg-[#FFFFFF] text-[#050505] px-6 md:px-16 py-24 transition-colors duration-300">
-          <div className="max-w-4xl mx-auto">
-            {/* Timeline Header */}
-            <div className="text-center mb-16 space-y-3">
-              <span className="font-display text-[10px] text-[#777777] tracking-widest uppercase inline-block">
-                CHRONOLOGICAL ARCHIVE // 2023 — BEYOND
+      {/* Content Canvas Container */}
+      <main className="pt-28 md:pt-36 flex-grow">
+        {/* ========================================================================= */}
+        {/* 2. HERO SECTION                                                           */}
+        {/* ========================================================================= */}
+        <section className="w-full px-margin md:px-margin-desktop pt-space-lg pb-space-xl md:pb-space-xxl border-b border-on-surface/15">
+          <div className="max-w-7xl mx-auto">
+            {/* Eyebrow Badge */}
+            <div className="flex items-center gap-2 mb-space-md">
+              <span className="inline-block w-2.5 h-2.5 rounded-full bg-secondary"></span>
+              <span className="font-label-eyebrow text-label-eyebrow text-on-surface-variant tracking-wider uppercase font-semibold">
+                About
               </span>
-              <h2 className="font-display text-3xl md:text-5xl uppercase text-[#050505] tracking-tight">
-                THE CHRONOLOGY OF AUTEUR DEV
-              </h2>
-              <p className="text-sm md:text-base text-[#555555] max-w-lg mx-auto leading-relaxed">
-                From an independent sanctuary in Peshawar to uncompromising global recognition.
-              </p>
             </div>
 
-            {/* Center Spine Vertical Timeline */}
-            <div className="relative">
-              {/* Hairline center vertical line */}
-              <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-[1px] bg-[#D4D4D4] transform md:-translate-x-1/2" />
+            {/* Giant Mixed Headline */}
+            <div className="max-w-6xl mb-space-lg">
+              <h1 className="tracking-tight leading-none">
+                <span className="block font-display-serif-xxl-mobile md:font-display-serif-xxl text-display-serif-xxl-mobile md:text-display-serif-xxl italic font-normal text-on-surface mb-2">
+                  A small studio
+                </span>
+                <span className="block font-display-xxl-mobile md:font-display-xxl text-display-xxl-mobile md:text-display-xxl font-extrabold text-on-surface">
+                  with shipped proof.
+                </span>
+              </h1>
+            </div>
 
-              <div className="space-y-16">
-                {/* Item 1: 2023 */}
-                <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between">
-                  <div className="md:w-5/12 pl-12 md:pl-0 md:text-right space-y-2">
-                    <span className="font-display text-[10px] text-[#888888] tracking-widest block uppercase">
-                      FOUNDING ERA
-                    </span>
-                    <h3 className="font-display text-2xl text-[#050505] uppercase">
-                      GENESIS // PESHAWAR
-                    </h3>
-                    <p className="text-xs md:text-sm text-[#444444] leading-relaxed">
-                      Founded as an auteur studio collective uniting Blender 3D modeling, Unity Engine precision, and ElevenLabs audio architecture. 100% self-owned equity secured to guarantee permanent creative autonomy.
-                    </p>
-                  </div>
-                  <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-3 h-3 bg-[#050505] border-2 border-[#FFFFFF] rounded-none z-10 mt-1 md:mt-0" />
-                  <div className="md:w-5/12 pl-12 md:pl-8 font-display text-sm text-[#050505] tracking-widest font-bold">
-                    2023
-                  </div>
+            {/* Editorial Intro Block with Asymmetric 12-Column Grid */}
+            <div className="grid grid-cols-12 gap-gutter-desktop items-baseline pt-space-md border-t border-on-surface/15">
+              <div className="col-span-12 md:col-span-7">
+                <p className="font-body-lg text-body-lg text-on-surface font-normal leading-relaxed">
+                  {studioInfo.manifesto ||
+                    'Anamorphic is an independent engineering studio for games, web platforms, and mobile apps — founded by engineers who run live production systems, not pitch decks or un-shipped prototypes.'}
+                </p>
+              </div>
+              <div className="col-span-12 md:col-span-5 flex flex-col justify-between mt-6 md:mt-0">
+                <p className="font-body-md text-body-md text-on-surface-variant font-medium">
+                  Direct collaboration with principal builders. Lahore &amp; Global Remote. Zero bloated account layers.
+                </p>
+                <div className="mt-4 flex flex-wrap items-center gap-3">
+                  <span className="px-2.5 py-0.5 rounded-full bg-[#74BE9C] text-on-surface font-label-eyebrow text-label-eyebrow font-semibold">
+                    Live Production Status
+                  </span>
+                  <span className="font-label-eyebrow text-label-eyebrow text-on-surface-variant">
+                    UTC +5:00 / Edge 24/7
+                  </span>
                 </div>
+                <div className="mt-6">
+                  <Link to="/contact" className="fused-pod group inline-flex items-center">
+                    <span className="bg-primary-container text-surface px-6 py-3 rounded-l-full font-label-eyebrow text-label-eyebrow font-medium group-hover:bg-secondary group-hover:text-on-secondary transition-colors duration-150">
+                      Work with us
+                    </span>
+                    <span className="fused-arrow bg-primary-container text-surface w-11 h-11 rounded-r-full flex items-center justify-center -ml-px border-l border-surface/20 group-hover:bg-secondary group-hover:text-on-secondary transition-all duration-150">
+                      <span className="material-symbols-outlined text-lg">north_east</span>
+                    </span>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-                {/* Item 2: 2024 */}
-                <div className="relative flex flex-col md:flex-row-reverse items-start md:items-center justify-between">
-                  <div className="md:w-5/12 pl-12 md:pl-8 space-y-2">
-                    <span className="font-display text-[10px] text-[#888888] tracking-widest block uppercase">
-                      TECH FOUNDATION
-                    </span>
-                    <h3 className="font-display text-2xl text-[#050505] uppercase">
-                      CORE ENGINE PIPELINE
-                    </h3>
-                    <p className="text-xs md:text-sm text-[#444444] leading-relaxed">
-                      Integration of advanced Unity Engine physics pipelines, procedural high-poly Blender assets, and ElevenLabs dynamic voice synthesis for high-tension spatial realism.
-                    </p>
-                  </div>
-                  <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-3 h-3 bg-[#050505] border-2 border-[#FFFFFF] rounded-none z-10 mt-1 md:mt-0" />
-                  <div className="md:w-5/12 pl-12 md:pl-0 md:text-right font-display text-sm text-[#050505] tracking-widest font-bold">
-                    2024
-                  </div>
-                </div>
+        {/* ========================================================================= */}
+        {/* 3. VALUES SECTION (Principles Forged in Production)                       */}
+        {/* ========================================================================= */}
+        <section className="w-full px-margin md:px-margin-desktop py-space-xl md:py-space-xxl border-b border-on-surface/15">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-12 gap-gutter-desktop mb-space-xl">
+              <div className="col-span-12 md:col-span-4">
+                <span className="font-label-eyebrow text-label-eyebrow text-on-surface-variant uppercase tracking-wider block mb-2 font-semibold">
+                  How We Operate
+                </span>
+                <h2 className="font-headline-md text-headline-md font-bold text-on-surface tracking-tight">
+                  Engineering principles forged in production.
+                </h2>
+              </div>
+              <div className="col-span-12 md:col-span-8 flex items-end">
+                <p className="font-body-md text-body-md text-on-surface-variant max-w-xl">
+                  We reject the typical agency conveyor belt. No account liaisons, no outsourced offshore shell teams, and no academic dogma. We guarantee direct terminal access to the people writing core logic.
+                </p>
+              </div>
+            </div>
 
-                {/* Item 4: 2025 */}
-                <div className="relative flex flex-col md:flex-row-reverse items-start md:items-center justify-between">
-                  <div className="md:w-5/12 pl-12 md:pl-8 space-y-2">
-                    <span className="font-display text-[10px] text-[#888888] tracking-widest block uppercase">
-                      FLAGSHIP PRODUCTION
-                    </span>
-                    <h3 className="font-display text-2xl text-[#050505] uppercase">
-                      ECHOES OF DESOLATION
-                    </h3>
-                    <p className="text-xs md:text-sm text-[#444444] leading-relaxed">
-                      Investigation into Elysium Asylum; psychological single-player survival horror with brutal combat encounters and unsparing narrative literacy.
-                    </p>
-                  </div>
-                  <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-3 h-3 bg-[#050505] border-2 border-[#FFFFFF] rounded-none z-10 mt-1 md:mt-0" />
-                  <div className="md:w-5/12 pl-12 md:pl-0 md:text-right font-display text-sm text-[#050505] tracking-widest font-bold">
-                    2025
-                  </div>
+            {/* Structured Rows with Hairline Dividers */}
+            <div className="divide-y divide-on-surface/15 border-t border-b border-on-surface/15">
+              {/* Row 01 */}
+              <div className="grid grid-cols-12 gap-gutter-desktop py-space-lg group hover:bg-surface-container-low transition-colors duration-150">
+                <div className="col-span-12 md:col-span-2 flex items-start">
+                  <span className="font-metric-huge text-headline-md font-bold text-secondary">01</span>
                 </div>
+                <div className="col-span-12 md:col-span-4 flex items-start">
+                  <h3 className="font-headline-md text-headline-md text-on-surface font-bold tracking-tight">
+                    Ship real software
+                  </h3>
+                </div>
+                <div className="col-span-12 md:col-span-6 flex items-start">
+                  <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                    Live in retail shops, factories, and app stores beats slide decks every time. We build software that handles real commerce, physical manufacturing lines, and daily operational payroll.
+                  </p>
+                </div>
+              </div>
 
-                {/* Item 5: 2026 & Beyond */}
-                <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between">
-                  <div className="md:w-5/12 pl-12 md:pl-0 md:text-right space-y-2">
-                    <span className="font-display text-[10px] text-[#888888] tracking-widest block uppercase">
-                      GAUNTLET EXTRACTION
-                    </span>
-                    <h3 className="font-display text-2xl text-[#050505] uppercase">
-                      ASHES OF ESCAPE
-                    </h3>
-                    <p className="text-xs md:text-sm text-[#444444] leading-relaxed">
-                      High-stakes survival action gauntlet spanning three brutal environments, testing wave endurance, spatial discipline, and tactical extraction.
-                    </p>
-                  </div>
-                  <div className="absolute left-4 md:left-1/2 transform -translate-x-1/2 w-3 h-3 bg-[#050505] border-2 border-[#FFFFFF] rounded-none z-10 mt-1 md:mt-0" />
-                  <div className="md:w-5/12 pl-12 md:pl-8 font-display text-sm text-[#050505] tracking-widest font-bold">
-                    2026
-                  </div>
+              {/* Row 02 */}
+              <div className="grid grid-cols-12 gap-gutter-desktop py-space-lg group hover:bg-surface-container-low transition-colors duration-150">
+                <div className="col-span-12 md:col-span-2 flex items-start">
+                  <span className="font-metric-huge text-headline-md font-bold text-secondary">02</span>
                 </div>
+                <div className="col-span-12 md:col-span-4 flex items-start">
+                  <h3 className="font-headline-md text-headline-md text-on-surface font-bold tracking-tight">
+                    Own the backend
+                  </h3>
+                </div>
+                <div className="col-span-12 md:col-span-6 flex items-start">
+                  <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                    We run what we build: background worker queues, telemetry, Redis caching layers, Dockerized microservices, and database integrity under high load. We do not throw code over a wall.
+                  </p>
+                </div>
+              </div>
+
+              {/* Row 03 */}
+              <div className="grid grid-cols-12 gap-gutter-desktop py-space-lg group hover:bg-surface-container-low transition-colors duration-150">
+                <div className="col-span-12 md:col-span-2 flex items-start">
+                  <span className="font-metric-huge text-headline-md font-bold text-secondary">03</span>
+                </div>
+                <div className="col-span-12 md:col-span-4 flex items-start">
+                  <h3 className="font-headline-md text-headline-md text-on-surface font-bold tracking-tight">
+                    Small team, full stack
+                  </h3>
+                </div>
+                <div className="col-span-12 md:col-span-6 flex items-start">
+                  <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                    The person you speak with is the person writing your schemas, configuring your pipelines, and shipping your release. No middle management or diluted agency handoffs.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 4. STATS BAND (Full-Bleed Electric Indigo #3D1BFD)                         */}
+        {/* ========================================================================= */}
+        <section className="w-full bg-[#3D1BFD] text-surface py-space-xl md:py-space-xxl px-margin md:px-margin-desktop">
+          <div className="max-w-7xl mx-auto">
+            <div className="mb-space-lg">
+              <span className="font-label-eyebrow text-label-eyebrow text-surface/75 uppercase tracking-wider block mb-2 font-semibold">
+                Verified Production Telemetry
+              </span>
+              <h2 className="font-headline-lg text-headline-lg font-bold text-surface tracking-tight">
+                Output measured in live execution.
+              </h2>
+            </div>
+
+            {/* 4 Stat Columns */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter-desktop pt-space-lg border-t border-surface/20">
+              {/* Metric 01 */}
+              <div className="border-b lg:border-b-0 lg:border-r border-surface/20 pb-8 lg:pb-0 lg:pr-6 flex flex-col justify-between">
+                <div>
+                  <div className="font-metric-huge text-metric-huge font-extrabold text-surface tracking-tight mb-2">
+                    10+
+                  </div>
+                  <div className="h-1 w-12 bg-[#F6A6CF] mb-4"></div>
+                </div>
+                <p className="font-body-md text-body-md text-surface/90 font-medium leading-snug">
+                  Commercial shops live with our POS &amp; ERP suite.
+                </p>
+              </div>
+
+              {/* Metric 02 */}
+              <div className="border-b lg:border-b-0 lg:border-r border-surface/20 pb-8 lg:pb-0 lg:pr-6 flex flex-col justify-between">
+                <div>
+                  <div className="font-metric-huge text-metric-huge font-extrabold text-surface tracking-tight mb-2">
+                    5
+                  </div>
+                  <div className="h-1 w-12 bg-[#74BE9C] mb-4"></div>
+                </div>
+                <p className="font-body-md text-body-md text-surface/90 font-medium leading-snug">
+                  Production SaaS platforms running 24/7 with zero unmanaged downtime.
+                </p>
+              </div>
+
+              {/* Metric 03 */}
+              <div className="border-b lg:border-b-0 lg:border-r border-surface/20 pb-8 lg:pb-0 lg:pr-6 flex flex-col justify-between">
+                <div>
+                  <div className="font-metric-huge text-metric-huge font-extrabold text-surface tracking-tight mb-2">
+                    3
+                  </div>
+                  <div className="h-1 w-12 bg-surface mb-4"></div>
+                </div>
+                <p className="font-body-md text-body-md text-surface/90 font-medium leading-snug">
+                  Core disciplines: Game engines, distributed web systems, and high-performance native apps.
+                </p>
+              </div>
+
+              {/* Metric 04 */}
+              <div className="flex flex-col justify-between">
+                <div>
+                  <div className="font-metric-huge text-metric-huge font-extrabold text-surface tracking-tight mb-2">
+                    2
+                  </div>
+                  <div className="h-1 w-12 bg-[#F6A6CF] mb-4"></div>
+                </div>
+                <p className="font-body-md text-body-md text-surface/90 font-medium leading-snug">
+                  Engineers deep in AI, computer vision, and real-time edge telemetry.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 5. PRODUCTION TIMELINE (Vertical Provenance)                              */}
+        {/* ========================================================================= */}
+        <section className="w-full px-margin md:px-margin-desktop py-space-xl md:py-space-xxl border-b border-on-surface/15">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid grid-cols-12 gap-gutter-desktop mb-space-xl">
+              <div className="col-span-12 md:col-span-5">
+                <span className="font-label-eyebrow text-label-eyebrow text-on-surface-variant uppercase tracking-wider block mb-2 font-semibold">
+                  Studio Provenance
+                </span>
+                <h2 className="font-headline-md text-headline-md font-bold text-on-surface tracking-tight">
+                  From initial deployments to multi-platform engineering.
+                </h2>
+              </div>
+              <div className="col-span-12 md:col-span-7 flex items-end">
+                <p className="font-body-md text-body-md text-on-surface-variant">
+                  A chronological breakdown of how our technical stack matured from bespoke infrastructure scripts into hardened, cross-industry production suites.
+                </p>
+              </div>
+            </div>
+
+            {/* Vertical Timeline Component */}
+            <div className="relative pl-6 md:pl-12 border-l border-on-surface/20 space-y-space-xl max-w-4xl">
+              {/* Milestone 01 */}
+              <div className="relative group">
+                <div className="absolute -left-[31px] md:-left-[55px] top-1.5 w-3.5 h-3.5 rounded-full bg-secondary ring-4 ring-surface"></div>
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="font-label-eyebrow text-label-eyebrow font-semibold px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface">
+                    Epoch 01
+                  </span>
+                  <span className="font-label-eyebrow text-label-eyebrow text-on-surface-variant">
+                    Architecture Baseline
+                  </span>
+                </div>
+                <h3 className="font-headline-md text-headline-md font-bold text-on-surface mb-2">
+                  Studio Founded
+                </h3>
+                <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                  Three principal engineers unite around a singular rule: take full technical ownership and eliminate non-technical management bloat. Direct access to source repositories from day zero.
+                </p>
+              </div>
+
+              {/* Milestone 02 */}
+              <div className="relative group">
+                <div className="absolute -left-[31px] md:-left-[55px] top-1.5 w-3.5 h-3.5 rounded-full bg-primary ring-4 ring-surface"></div>
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="font-label-eyebrow text-label-eyebrow font-semibold px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface">
+                    Epoch 02
+                  </span>
+                  <span className="font-label-eyebrow text-label-eyebrow text-on-surface-variant">
+                    High-Concurrency Cloud
+                  </span>
+                </div>
+                <h3 className="font-headline-md text-headline-md font-bold text-on-surface mb-2">
+                  First SaaS Platforms Live
+                </h3>
+                <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                  Deployment of 5 multi-role operational SaaS platforms (Workforce Suite) handling attendance, scheduling, and double-entry payroll across high-concurrency environments.
+                </p>
+              </div>
+
+              {/* Milestone 03 */}
+              <div className="relative group">
+                <div className="absolute -left-[31px] md:-left-[55px] top-1.5 w-3.5 h-3.5 rounded-full bg-primary ring-4 ring-surface"></div>
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="font-label-eyebrow text-label-eyebrow font-semibold px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface">
+                    Epoch 03
+                  </span>
+                  <span className="font-label-eyebrow text-label-eyebrow text-on-surface-variant">
+                    Hardware &amp; Physical Integration
+                  </span>
+                </div>
+                <h3 className="font-headline-md text-headline-md font-bold text-on-surface mb-2">
+                  POS Suite in 10+ Commercial Shops
+                </h3>
+                <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                  Delivery of enterprise POS and retail accounting systems operating live on shop counters with thermal ESC/POS hardware integration, offline cash-drawer synchronizations, and sub-second barcode scans.
+                </p>
+              </div>
+
+              {/* Milestone 04 */}
+              <div className="relative group">
+                <div className="absolute -left-[31px] md:-left-[55px] top-1.5 w-3.5 h-3.5 rounded-full bg-primary ring-4 ring-surface"></div>
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="font-label-eyebrow text-label-eyebrow font-semibold px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface">
+                    Epoch 04
+                  </span>
+                  <span className="font-label-eyebrow text-label-eyebrow text-on-surface-variant">
+                    Industrial ML
+                  </span>
+                </div>
+                <h3 className="font-headline-md text-headline-md font-bold text-on-surface mb-2">
+                  Edge Computer Vision &amp; AI Automation
+                </h3>
+                <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                  Architecture and factory deployment of PipeVision AI, coupling YOLOv8 conveyor tracking directly to enterprise ERP ledgers for A-One PVC. Real-time fault tolerance without cloud latency overheads.
+                </p>
+              </div>
+
+              {/* Milestone 05 */}
+              <div className="relative group">
+                <div className="absolute -left-[31px] md:-left-[55px] top-1.5 w-3.5 h-3.5 rounded-full bg-secondary ring-4 ring-surface"></div>
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="font-label-eyebrow text-label-eyebrow font-semibold px-2 py-0.5 rounded-full bg-secondary text-surface">
+                    Present State
+                  </span>
+                  <span className="font-label-eyebrow text-label-eyebrow text-on-surface-variant">
+                    Global Delivery
+                  </span>
+                </div>
+                <h3 className="font-headline-md text-headline-md font-bold text-on-surface mb-2">
+                  Anamorphic Today
+                </h3>
+                <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+                  Delivering unified game engines, distributed cloud platforms, and native Flutter apps with guaranteed sub-40ms edge performance and 24h architectural roadmaps.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 6. CTA BAND (Next Engagement)                                            */}
+        {/* ========================================================================= */}
+        <section className="w-full px-margin md:px-margin-desktop py-space-xl md:py-space-xxl bg-surface-container-low border-b border-on-surface/15" id="contact">
+          <div className="max-w-7xl mx-auto">
+            <div className="max-w-4xl">
+              <span className="font-label-eyebrow text-label-eyebrow text-on-surface-variant uppercase tracking-wider block mb-2 font-semibold">
+                Next Engagement
+              </span>
+              <h2 className="font-headline-lg text-headline-lg font-bold text-on-surface tracking-tight mb-4">
+                Work with the people who ship.
+              </h2>
+              <p className="font-body-lg text-body-lg text-on-surface-variant mb-space-lg leading-relaxed max-w-2xl">
+                Have technical specifications or a hard launch deadline? We review architecture specs and provide fixed delivery roadmaps within 24 hours.
+              </p>
+              {/* Fused Pill Action CTA: Meet the team ↗ */}
+              <div className="inline-flex">
+                <Link to="/#team" className="fused-pod group inline-flex items-center">
+                  <span className="bg-primary-container text-surface px-7 py-4 rounded-l-full font-body-md text-body-md font-semibold tracking-wide group-hover:bg-secondary group-hover:text-on-secondary transition-colors duration-150">
+                    Meet the team
+                  </span>
+                  <span className="bg-primary-container text-surface w-14 h-14 rounded-r-full flex items-center justify-center -ml-px border-l border-surface/20 group-hover:bg-secondary group-hover:text-on-secondary transition-all duration-150">
+                    <span className="material-symbols-outlined text-2xl">north_east</span>
+                  </span>
+                </Link>
               </div>
             </div>
           </div>

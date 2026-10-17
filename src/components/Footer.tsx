@@ -1,176 +1,192 @@
-import React from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import Logo from './Logo'
 
 export default function Footer() {
-  const handleScrollToTop = (e: React.MouseEvent) => {
+  const [email, setEmail] = useState('')
+  const [subscribed, setSubscribed] = useState(false)
+
+  const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault()
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    if (!email) return
+    setSubscribed(true)
   }
 
   return (
-    <footer id="studio-footer" className="w-full bg-[#050505] border-t border-[#1F1F1F] relative overflow-hidden select-none">
-      {/* Outer Container with Generous Negative Space (py-20 px-6 md:px-20) */}
-      <div className="w-full max-w-7xl mx-auto px-6 md:px-20 py-20">
-        {/* Top Row: Asymmetric 2-Column Split */}
-        <div className="flex flex-col md:flex-row justify-between items-start gap-16 md:gap-12">
-          {/* Left Side: <Logo variant="navbar"/> + clean mailto link */}
-          <div className="flex flex-col items-start space-y-6 max-w-md">
-            <Link to="/" className="inline-block transition-opacity duration-200 hover:opacity-85" aria-label="Anamorphic Home">
-              <Logo variant="navbar" animated={false} />
+    <footer className="docked full-width bottom w-full px-margin md:px-margin-desktop py-space-xl md:py-space-xxl flex flex-col justify-between bg-primary-container text-surface border-t border-surface/15">
+      <div className="max-w-[1440px] mx-auto w-full">
+        {/* Top Row: Editorial Nav + Newsletter Form */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-20">
+          {/* Left Column: Massive Headline & Navigation Links */}
+          <div className="lg:col-span-7 flex flex-col">
+            <Link
+              to="/"
+              className="font-metric-huge text-headline-lg lowercase font-extrabold text-surface mb-8 hover:text-secondary-fixed-dim transition-colors inline-block"
+            >
+              anamorphic
             </Link>
-
-            {/* Clean Understated Email Link */}
-            <div className="pt-1">
-              <a
-                href="mailto:anamorphiicc@gmail.com"
-                className="group/email inline-flex items-center gap-2.5 text-sm font-sans text-[#888888] hover:text-white transition-colors duration-200 tracking-wide font-normal relative"
+            <p className="font-headline-md text-headline-md text-surface/80 max-w-lg mb-10">
+              Keep Exploring...
+            </p>
+            <nav className="flex flex-col space-y-4">
+              <Link
+                className="font-display-xxl text-headline-md md:text-headline-lg font-bold text-surface hover:text-secondary-fixed-dim transition-colors duration-150"
+                to="/services"
               >
-                <svg className="w-3.5 h-3.5 fill-current text-[#666666] group-hover:text-white transition-colors duration-150" viewBox="0 0 24 24">
-                  <path d="M1.5 4.5h21a1.5 1.5 0 0 1 1.5 1.5v12a1.5 1.5 0 0 1-1.5 1.5h-21A1.5 1.5 0 0 1 0 18V6a1.5 1.5 0 0 1 1.5-1.5zm0 1.5v.75l10.5 6.562L22.5 6.75V6H1.5zm21 2.518-9.972 6.233a1 1 0 0 1-1.056 0L1.5 8.768V18h21V8.518z"/>
-                </svg>
-                <span>anamorphiicc@gmail.com</span>
-                <span className="absolute left-6 bottom-[-2px] w-0 h-[1px] bg-white transition-all duration-200 ease-out group-hover/email:w-[calc(100%-1.5rem)]" />
-              </a>
-            </div>
+                Services
+              </Link>
+              <Link
+                className="font-display-xxl text-headline-md md:text-headline-lg font-bold text-surface hover:text-secondary-fixed-dim transition-colors duration-150"
+                to="/work"
+              >
+                Work
+              </Link>
+              <Link
+                className="font-display-xxl text-headline-md md:text-headline-lg font-bold text-surface hover:text-secondary-fixed-dim transition-colors duration-150"
+                to="/about"
+              >
+                About
+              </Link>
+              <Link
+                className="font-display-xxl text-headline-md md:text-headline-lg font-bold text-surface hover:text-secondary-fixed-dim transition-colors duration-150"
+                to="/team"
+              >
+                Team
+              </Link>
+              <Link
+                className="font-display-xxl text-headline-md md:text-headline-lg font-bold text-surface hover:text-secondary-fixed-dim transition-colors duration-150"
+                to="/contact"
+              >
+                Contact
+              </Link>
+            </nav>
           </div>
 
-          {/* Right Side: Two minimal uppercase link columns */}
-          <div className="flex items-start gap-16 md:gap-20 sm:gap-24">
-            {/* Column 1: Index */}
-            <div className="flex flex-col space-y-4">
-              <span className="font-display text-[10px] uppercase tracking-[0.24em] text-[#555555] font-semibold mb-1">
-                Index
-              </span>
-              <ul className="flex flex-col space-y-3.5">
-                <li>
-                  <Link
-                    to="/"
-                    className="font-display text-xs uppercase tracking-[0.2em] text-[#888888] hover:text-white transition-colors duration-150 block"
-                  >
-                    Works
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/about"
-                    className="font-display text-xs uppercase tracking-[0.2em] text-[#888888] hover:text-white transition-colors duration-150 block"
-                  >
-                    Vision
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/press"
-                    className="font-display text-xs uppercase tracking-[0.2em] text-[#888888] hover:text-white transition-colors duration-150 block"
-                  >
-                    Press
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/admin"
-                    className="font-display text-xs uppercase tracking-[0.2em] text-[#888888] hover:text-white transition-colors duration-150 block"
-                  >
-                    Admin
-                  </Link>
-                </li>
-              </ul>
-            </div>
+          {/* Right Column: Verification, Studio Time, Newsletter, and Socials */}
+          <div className="lg:col-span-5 flex flex-col justify-between space-y-8">
+            <div className="space-y-8">
+              <div>
+                <span className="font-label-eyebrow text-label-eyebrow text-surface-variant uppercase tracking-wider block mb-2 font-semibold">
+                  Studio Status
+                </span>
+                <div className="flex items-center space-x-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#74BE9C] animate-pulse"></span>
+                  <span className="font-body-md text-body-md text-surface font-medium">
+                    Accepting Q3 Production Engagements
+                  </span>
+                </div>
+              </div>
 
-            {/* Column 2: Social & Contact */}
-            <div className="flex flex-col space-y-4">
-              <span className="font-display text-[10px] uppercase tracking-[0.24em] text-[#555555] font-semibold mb-1">
-                Social
-              </span>
-              <ul className="flex flex-col space-y-3.5">
-                <li>
-                  <a
-                    href="https://youtube.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2.5 font-display text-xs uppercase tracking-[0.2em] text-[#888888] hover:text-white transition-colors duration-150"
-                  >
-                    <svg className="w-3.5 h-3.5 fill-current text-[#666666] group-hover:text-white transition-colors duration-150" viewBox="0 0 24 24">
-                      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                    </svg>
-                    <span>YouTube</span>
-                    <span className="text-[10px] text-[#666666] group-hover:text-white transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-                      ↗
-                    </span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://x.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2.5 font-display text-xs uppercase tracking-[0.2em] text-[#888888] hover:text-white transition-colors duration-150"
-                  >
-                    <svg className="w-3.5 h-3.5 fill-current text-[#666666] group-hover:text-white transition-colors duration-150" viewBox="0 0 24 24">
-                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                    </svg>
-                    <span>X</span>
-                    <span className="text-[10px] text-[#666666] group-hover:text-white transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-                      ↗
-                    </span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://discord.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2.5 font-display text-xs uppercase tracking-[0.2em] text-[#888888] hover:text-white transition-colors duration-150"
-                  >
-                    <svg className="w-3.5 h-3.5 fill-current text-[#666666] group-hover:text-white transition-colors duration-150" viewBox="0 0 24 24">
-                      <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.929 1.793 8.18 1.793 12.061 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.894.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.028zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
-                    </svg>
-                    <span>Discord</span>
-                    <span className="text-[10px] text-[#666666] group-hover:text-white transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-                      ↗
-                    </span>
-                  </a>
-                </li>
-                <li>
+              <div>
+                <span className="font-label-eyebrow text-label-eyebrow text-surface-variant uppercase tracking-wider block mb-2 font-semibold">
+                  Dispatch Coordinates
+                </span>
+                <p className="font-body-md text-body-md text-surface/80">
+                  Lahore &amp; Global Remote
+                  <br />
+                  UTC +5:00 · Sub-40ms Edge Pipelines
+                </p>
+              </div>
+
+              {/* Newsletter Input Pod */}
+              <div className="pt-2">
+                <span className="font-label-eyebrow text-label-eyebrow text-surface-variant uppercase tracking-wider block mb-3 font-semibold">
+                  Studio Technical Letters
+                </span>
+                {subscribed ? (
+                  <div className="p-4 rounded-xl bg-surface/10 border border-surface/20 text-[#74BE9C] font-label-eyebrow text-label-eyebrow font-bold flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[18px]">check_circle</span>
+                    Subscribed to Engineering Dispatches.
+                  </div>
+                ) : (
+                  <form className="flex items-center" onSubmit={handleSubscribe}>
+                    <input
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="w-full bg-surface text-on-surface px-5 py-3 rounded-l-full font-body-md text-body-md border-0 focus:ring-2 focus:ring-secondary focus:outline-none placeholder:text-on-surface-variant/60"
+                      placeholder="Enter engineer contact email"
+                      type="email"
+                    />
+                    <button
+                      aria-label="Subscribe"
+                      className="fused-pod bg-surface text-on-surface w-12 h-12 rounded-r-full flex items-center justify-center -ml-px border-l border-on-surface/10 hover:bg-secondary hover:text-white transition-colors duration-150 shrink-0"
+                      type="submit"
+                    >
+                      <span className="material-symbols-outlined fused-arrow">north_east</span>
+                    </button>
+                  </form>
+                )}
+              </div>
+
+              {/* Social Icons (GitHub, LinkedIn, Email) */}
+              <div>
+                <span className="font-label-eyebrow text-label-eyebrow text-surface-variant uppercase tracking-wider block mb-3 font-semibold">
+                  Social &amp; Repositories
+                </span>
+                <div className="flex items-center space-x-3">
+                  {/* GitHub */}
                   <a
                     href="https://github.com"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-2.5 font-display text-xs uppercase tracking-[0.2em] text-[#888888] hover:text-white transition-colors duration-150"
+                    aria-label="GitHub Repository"
+                    className="w-10 h-10 rounded-full border border-surface/30 flex items-center justify-center text-surface hover:bg-surface hover:text-primary-container transition-colors duration-150"
                   >
-                    <svg className="w-3.5 h-3.5 fill-current text-[#666666] group-hover:text-white transition-colors duration-150" viewBox="0 0 24 24">
-                      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+                    <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
                     </svg>
-                    <span>GitHub</span>
-                    <span className="text-[10px] text-[#666666] group-hover:text-white transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-                      ↗
-                    </span>
                   </a>
-                </li>
-              </ul>
+
+                  {/* LinkedIn */}
+                  <a
+                    href="https://linkedin.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="LinkedIn Profile"
+                    className="w-10 h-10 rounded-full border border-surface/30 flex items-center justify-center text-surface hover:bg-surface hover:text-primary-container transition-colors duration-150"
+                  >
+                    <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                      <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                    </svg>
+                  </a>
+
+                  {/* Email */}
+                  <a
+                    href="mailto:anamorphiicc@gmail.com"
+                    aria-label="Direct Email"
+                    className="w-10 h-10 rounded-full border border-surface/30 flex items-center justify-center text-surface hover:bg-surface hover:text-primary-container transition-colors duration-150"
+                  >
+                    <span className="material-symbols-outlined text-[18px]">mail</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            {/* Secondary Links & Admin Link */}
+            <div className="pt-8 flex flex-wrap gap-4 text-surface-variant font-label-eyebrow text-label-eyebrow items-center border-t border-surface/10">
+              <Link to="/contact" className="hover:text-surface transition-colors">
+                Privacy Policy
+              </Link>
+              <span>·</span>
+              <Link to="/contact" className="hover:text-surface transition-colors">
+                Terms of Service
+              </Link>
+              <span>·</span>
+              <Link to="/admin" className="hover:text-surface text-[#c3c0ff] transition-colors">
+                Studio CMS Admin
+              </Link>
             </div>
           </div>
         </div>
 
-        {/* Bottom Row: Separated by a 1px solid #1F1F1F line */}
-        <div className="mt-16 pt-8 border-t border-[#1F1F1F] flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-[11px] tracking-widest text-[#666666] uppercase">
-          {/* Left: Copyright */}
-          <p className="font-mono">
-            &copy; 2026 ANAMORPHIC STUDIO. ALL RIGHTS RESERVED.
+        {/* Bottom Bar: Verified Production Stacks & Legal */}
+        <div className="pt-8 border-t border-surface/15 flex flex-col md:flex-row items-center justify-between gap-4 font-body-md text-body-md text-surface-variant">
+          <p className="font-label-eyebrow text-label-eyebrow">
+            © Anamorphic Studio. Verified production stacks.
           </p>
-
-          {/* Right: Interactive Back to Top Button */}
-          <button
-            onClick={handleScrollToTop}
-            className="group inline-flex items-center gap-2 font-display text-[11px] uppercase tracking-[0.2em] text-[#888888] hover:text-white transition-colors duration-150 py-1"
-            aria-label="Scroll back to top"
-          >
-            <span>BACK TO TOP</span>
-            <span className="transition-transform duration-200 group-hover:-translate-y-1 text-xs">
-              ↑
-            </span>
-          </button>
+          <p className="font-label-eyebrow text-label-eyebrow text-surface/40">
+            Hand-crafted with zero slop · Built for durability
+          </p>
         </div>
       </div>
     </footer>

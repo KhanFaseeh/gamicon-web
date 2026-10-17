@@ -11,19 +11,51 @@
 
 html {
   scroll-behavior: smooth;
-  background-color: #0e0e0e;
+  background-color: #fcf9f1;
 }
 
 body {
-  background-color: #0e0e0e;
-  color: #e5e2e1;
+  background-color: #fcf9f1;
+  color: #1c1c17;
   margin: 0;
   overflow-x: hidden;
+  font-family: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 ::selection {
-  background-color: #ffffff;
-  color: #0e0e0e;
+  background-color: #2b00d1;
+  color: #ffffff;
+}
+
+.fused-pod:hover .fused-arrow {
+  transform: translate(2px, -2px);
+}
+
+.crisp-stroke {
+  border: 1px solid rgba(27, 26, 23, 0.15);
+}
+
+.crisp-stroke-dark {
+  border: 1px solid rgba(247, 244, 236, 0.15);
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 32s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
 }
 
 /* Brutalist HUD Radar & Monogram Signal Keyframes */

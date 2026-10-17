@@ -1,8 +1,11 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
-import GameDetail from './pages/GameDetail'
+import Services from './pages/Services'
+import Work from './pages/Work'
+import CaseStudyDetail from './pages/CaseStudyDetail'
 import About from './pages/About'
-import Press from './pages/Press'
+import Team from './pages/Team'
+import Contact from './pages/Contact'
 import Admin from './pages/Admin'
 import NotFound from './pages/NotFound'
 
@@ -14,9 +17,14 @@ export default function App() {
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/game/:slug" element={<GameDetail />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/work" element={<Work />} />
+        <Route path="/work/:slug" element={<CaseStudyDetail />} />
+        <Route path="/game/:slug" element={<CaseStudyDetail />} />
         <Route path="/about" element={<About />} />
-        <Route path="/press" element={<Press />} />
+        <Route path="/team" element={<Team />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/press" element={<Contact />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
