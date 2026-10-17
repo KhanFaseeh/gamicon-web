@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import { supabase, parseGameRecord, type Game } from '../lib/supabaseClient'
+import { supabase, parseGameRecord, getDriveFallbackUrl, type Game } from '../lib/supabaseClient'
 
 interface CaseStudyData {
   id: string
@@ -507,7 +507,9 @@ export default function CaseStudyDetail() {
     titleSans: dbGame?.title ? dbGame.title.split(' ').slice(1).join(' ') : baseStudy.titleSans,
     stackBadges: dbGame?.tags && dbGame.tags.length > 0 ? dbGame.tags : baseStudy.stackBadges,
     overviewBody1: dbGame?.description || baseStudy.overviewBody1,
-    arch1ImgUrl: dbGame?.youtube_id
+    arch1ImgUrl: dbGame?.image_url
+      ? dbGame.image_url
+      : dbGame?.youtube_id
       ? dbGame.youtube_id.startsWith('http')
         ? dbGame.youtube_id
         : `https://img.youtube.com/vi/${dbGame.youtube_id}/maxresdefault.jpg`
@@ -744,6 +746,18 @@ export default function CaseStudyDetail() {
                   className="w-full h-full object-cover opacity-60"
                   alt="Industrial Conveyor Inference"
                   src={study.arch1ImgUrl}
+                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    const target = e.currentTarget
+                    if (study.arch1ImgUrl) {
+                      const fallback = getDriveFallbackUrl(study.arch1ImgUrl)
+                      if (target.src !== fallback) {
+                        target.src = fallback
+                        return
+                      }
+                    }
+                    target.src = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80'
+                  }}
                 />
                 {/* Real-time Bounding Box HUD Annotations */}
                 <div className="absolute inset-0 p-4 md:p-8 flex flex-col justify-between pointer-events-none">

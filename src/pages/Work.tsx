@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import { getDriveFallbackUrl } from '../lib/supabaseClient'
 
 interface Project {
   id: string
@@ -350,6 +351,18 @@ export default function Work() {
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       alt={p.title}
                       src={p.imageUrl}
+                      referrerPolicy="no-referrer"
+                      onError={(e) => {
+                        const target = e.currentTarget
+                        if (p.imageUrl) {
+                          const fallback = getDriveFallbackUrl(p.imageUrl)
+                          if (target.src !== fallback) {
+                            target.src = fallback
+                            return
+                          }
+                        }
+                        target.src = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80'
+                      }}
                     />
                     <div className="absolute top-4 left-4">
                       <span className={`inline-flex items-center px-3 py-1 rounded-full text-label-eyebrow font-label-eyebrow font-semibold ${p.statusBadgeClass}`}>

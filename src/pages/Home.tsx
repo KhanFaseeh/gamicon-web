@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import { supabase, parseGameRecord, type Game } from '../lib/supabaseClient'
+import { supabase, parseGameRecord, getDriveFallbackUrl, type Game } from '../lib/supabaseClient'
 
 // Default fallback projects with spec imagery if database is empty
 const DEFAULT_PROJECTS = [
@@ -351,6 +351,18 @@ export default function Home() {
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       alt={proj.title}
                       src={proj.imageUrl}
+                      referrerPolicy="no-referrer"
+                      onError={(e) => {
+                        const target = e.currentTarget
+                        if (proj.imageUrl) {
+                          const fallback = getDriveFallbackUrl(proj.imageUrl)
+                          if (target.src !== fallback) {
+                            target.src = fallback
+                            return
+                          }
+                        }
+                        target.src = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80'
+                      }}
                     />
                     <div className="absolute top-4 left-4">
                       <span

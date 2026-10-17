@@ -29,35 +29,61 @@ const LEGACY_DELIMITER = '\n<!--GAMICON_IMAGE:'
 const IMAGE_DELIMITER_END = '-->'
 
 /**
+ * Extracts Google Drive file ID from any drive share / preview / uc / open link.
+ */
+export function extractGoogleDriveFileId(url: string): string | null {
+  if (!url || typeof url !== 'string') return null
+  const trimmed = url.trim()
+
+  if (trimmed.includes('drive.google.com') || trimmed.includes('docs.google.com')) {
+    // 1. /file/d/FILE_ID
+    const fileMatch = trimmed.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)
+    if (fileMatch && fileMatch[1]) return fileMatch[1]
+
+    // 2. ?id=FILE_ID or &id=FILE_ID
+    const idMatch = trimmed.match(/[?&]id=([a-zA-Z0-9_-]+)/)
+    if (idMatch && idMatch[1]) return idMatch[1]
+
+    // 3. /d/FILE_ID
+    const directDMatch = trimmed.match(/\/d\/([a-zA-Z0-9_-]+)/)
+    if (directDMatch && directDMatch[1]) return directDMatch[1]
+  }
+
+  // Also support already-extracted lh3 links
+  if (trimmed.includes('lh3.googleusercontent.com/d/')) {
+    const lh3Match = trimmed.match(/lh3\.googleusercontent\.com\/d\/([a-zA-Z0-9_-]+)/)
+    if (lh3Match && lh3Match[1]) return lh3Match[1]
+  }
+
+  return null
+}
+
+/**
  * Automatically converts Google Drive share/view links into direct image streaming URLs.
- * Works with:
- * - https://drive.google.com/file/d/FILE_ID/view?usp=sharing
- * - https://drive.google.com/open?id=FILE_ID
- * - https://drive.google.com/uc?id=FILE_ID
+ * Uses high-speed lh3 CDN with fallback compatibility.
  */
 export function normalizeImageUrl(url: string): string {
   if (!url || typeof url !== 'string') return ''
   const trimmed = url.trim()
 
-  if (trimmed.includes('drive.google.com')) {
-    // 1. /file/d/FILE_ID/view or /file/d/FILE_ID
-    const fileMatch = trimmed.match(/\/file\/d\/([a-zA-Z0-9_-]+)/)
-    if (fileMatch && fileMatch[1]) {
-      return `https://lh3.googleusercontent.com/d/${fileMatch[1]}`
-    }
-    // 2. ?id=FILE_ID or &id=FILE_ID (open?id=, uc?id=)
-    const idMatch = trimmed.match(/[?&]id=([a-zA-Z0-9_-]+)/)
-    if (idMatch && idMatch[1]) {
-      return `https://lh3.googleusercontent.com/d/${idMatch[1]}`
-    }
-    // 3. /d/FILE_ID
-    const directDMatch = trimmed.match(/\/d\/([a-zA-Z0-9_-]+)/)
-    if (directDMatch && directDMatch[1]) {
-      return `https://lh3.googleusercontent.com/d/${directDMatch[1]}`
-    }
+  const driveId = extractGoogleDriveFileId(trimmed)
+  if (driveId) {
+    // High-speed Google CDN format for inline images
+    return `https://lh3.googleusercontent.com/d/${driveId}`
   }
 
   return trimmed
+}
+
+/**
+ * Fallback URL generator if the primary CDN format fails to load (e.g. strict rate limit).
+ */
+export function getDriveFallbackUrl(url: string): string {
+  const driveId = extractGoogleDriveFileId(url)
+  if (driveId) {
+    return `https://drive.google.com/uc?export=view&id=${driveId}`
+  }
+  return url
 }
 
 /**

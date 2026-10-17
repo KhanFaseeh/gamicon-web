@@ -5,6 +5,7 @@ import {
   parseGameRecord,
   serializeGameRecord,
   normalizeImageUrl,
+  getDriveFallbackUrl,
   type Game,
 } from '../lib/supabaseClient'
 import AdminLogin from './AdminLogin'
@@ -883,9 +884,21 @@ export default function Admin() {
                       <tr key={g.id} className="hover:bg-surface-container-low/50">
                         <td className="py-3 px-4 flex items-center gap-3">
                           <img
-                            src={g.image_url || 'https://via.placeholder.com/60'}
+                            src={g.image_url || 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=120&q=80'}
+                            referrerPolicy="no-referrer"
                             alt=""
                             className="w-10 h-10 rounded object-cover border border-outline-variant/20 bg-surface-container"
+                            onError={(e) => {
+                              const target = e.currentTarget
+                              if (g.image_url) {
+                                const fallback = getDriveFallbackUrl(g.image_url)
+                                if (target.src !== fallback) {
+                                  target.src = fallback
+                                  return
+                                }
+                              }
+                              target.src = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=120&q=80'
+                            }}
                           />
                           <div>
                             <div className="font-bold text-on-surface text-sm">{g.title}</div>
@@ -1545,12 +1558,39 @@ export default function Admin() {
                   <input
                     value={formImageUrl}
                     onChange={(e) => setFormImageUrl(e.target.value)}
-                    placeholder="https://drive.google.com/file/d/... or https://..."
+                    placeholder="https://drive.google.com/file/d/... or direct image URL"
                     className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-xs font-mono"
                   />
+                  <div className="mt-1.5 flex items-start gap-1.5 text-[11px] text-on-surface-variant font-mono">
+                    <span className="material-symbols-outlined text-[14px] text-amber-600 shrink-0 mt-0.5">info</span>
+                    <span>
+                      For Google Drive images: Ensure file permissions are set to <strong>"Anyone with the link can view"</strong> in Drive.
+                    </span>
+                  </div>
                   {formImageUrl && (
-                    <div className="mt-2 aspect-video w-32 rounded border border-outline-variant/30 overflow-hidden bg-surface-container">
-                      <img src={normalizeImageUrl(formImageUrl)} alt="" className="w-full h-full object-cover" />
+                    <div className="mt-2.5 flex items-center gap-4">
+                      <div className="aspect-video w-36 rounded border border-outline-variant/30 overflow-hidden bg-surface-container shrink-0 relative">
+                        <img
+                          src={normalizeImageUrl(formImageUrl)}
+                          referrerPolicy="no-referrer"
+                          alt="Preview"
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            // Fallback to secondary Drive view stream if lh3 was blocked
+                            const target = e.currentTarget
+                            const fallback = getDriveFallbackUrl(formImageUrl)
+                            if (target.src !== fallback) {
+                              target.src = fallback
+                            }
+                          }}
+                        />
+                      </div>
+                      <div className="text-[11px] text-outline font-mono truncate max-w-xs">
+                        Direct Stream URL:
+                        <div className="text-[10px] text-primary break-all">
+                          {normalizeImageUrl(formImageUrl)}
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
