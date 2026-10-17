@@ -482,22 +482,22 @@ export default function Home() {
               </p>
             </div>
 
-            {/* 3 Founder Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter-desktop">
+            {/* 4 Founder & Principal Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter-desktop">
               {/* Founder 1 */}
-              <div className="bg-surface-container rounded-2xl p-8 crisp-stroke flex flex-col justify-between">
+              <div className="bg-surface-container rounded-2xl p-6 crisp-stroke flex flex-col justify-between">
                 <div>
                   <div className="aspect-square w-full rounded-xl overflow-hidden bg-surface-container-high mb-6 crisp-stroke">
                     <img
                       className="w-full h-full object-cover"
                       alt="Mian Faseeh Ur Rehman"
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuABKgk5aoLbkEjSO4kD0UHMS75Ss76wIMD7K923R0hYc269aXlE_Bqzb7EKyzDeSclq51KJF4dLIyapTX9NsLgB3r8kpK1wL4zZ9GcIRKdX4HpL2Rwcc0RMBBRjaDZ0lE2DEe_HVueLs-Py6rSnfJvvIx-Y0-AUvhSSxpoEwB1h1tjEnnKDHipkyFWvB1PgrIXzK7f1HRk30QBJl0TEJuvuP47F0uk7cV-ZkG9Uj66IpV-c5h872fN6"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuASG0W42bY_gsxnnA3_k_vOaJMpMRkTnbhDtAgNMyxuQh16_1SD5oG3DFLMGGzfYquZBn77mMCbkLen4TsI-pHohdFb38m5tF-7OWAE2qAoDthPJcgjyj0eIM2PMtk2BXV6FlNUGfQLNNPMxqjg8A_bXAV6gbJzTxM2Z-SkBtj5gP47gG43tw_VKASueCNPcm97vUdgvjdpCM4rMbTrlN_TNQIR__WfpWZU5mFbqoDAcxiDXbsp3lPx"
                     />
                   </div>
                   <span className="px-3 py-1 rounded-full bg-[#74BE9C] text-[#1B1A17] font-label-eyebrow text-label-eyebrow font-semibold mb-3 inline-block">
                     CEO &amp; Project Manager
                   </span>
-                  <h3 className="font-headline-md text-headline-md-mobile md:text-headline-md tracking-tight mb-2">
+                  <h3 className="font-headline-md text-headline-md-mobile tracking-tight mb-2 font-bold">
                     Mian Faseeh Ur Rehman
                   </h3>
                   <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-6">
@@ -510,13 +510,43 @@ export default function Home() {
                     Focus Areas
                   </span>
                   <p className="font-label-eyebrow text-label-eyebrow text-on-surface font-semibold">
-                    Project Delivery · Unity Engine · C# Game Architecture · Release Ops
+                    Delivery · Unity · C# Architecture · Release Ops
                   </p>
                 </div>
               </div>
 
-              {/* Founder 2 */}
-              <div className="bg-surface-container rounded-2xl p-8 crisp-stroke flex flex-col justify-between">
+              {/* Founder 2: CTO Muhammad Tayyab */}
+              <div className="bg-surface-container rounded-2xl p-6 crisp-stroke flex flex-col justify-between border-2 border-secondary/20">
+                <div>
+                  <div className="aspect-square w-full rounded-xl overflow-hidden bg-surface-container-high mb-6 crisp-stroke">
+                    <img
+                      className="w-full h-full object-cover"
+                      alt="Muhammad Tayyab"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuABKgk5aoLbkEjSO4kD0UHMS75Ss76wIMD7K923R0hYc269aXlE_Bqzb7EKyzDeSclq51KJF4dLIyapTX9NsLgB3r8kpK1wL4zZ9GcIRKdX4HpL2Rwcc0RMBBRjaDZ0lE2DEe_HVueLs-Py6rSnfJvvIx-Y0-AUvhSSxpoEwB1h1tjEnnKDHipkyFWvB1PgrIXzK7f1HRk30QBJl0TEJuvuP47F0uk7cV-ZkG9Uj66IpV-c5h872fN6"
+                    />
+                  </div>
+                  <span className="px-3 py-1 rounded-full bg-[#FF5B5B] text-white font-label-eyebrow text-label-eyebrow font-semibold mb-3 inline-block">
+                    CTO &amp; 3D Designer
+                  </span>
+                  <h3 className="font-headline-md text-headline-md-mobile tracking-tight mb-2 font-bold">
+                    Muhammad Tayyab
+                  </h3>
+                  <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-6">
+                    Leads technical architecture, Blender 3D modeling, rigging, enemy AI, and gameplay physics across Unity 6 and independent productions.
+                  </p>
+                </div>
+                <div className="pt-6 border-t border-on-surface/10">
+                  <span className="font-label-eyebrow text-label-eyebrow text-on-surface-variant font-medium block mb-1">
+                    Focus Areas
+                  </span>
+                  <p className="font-label-eyebrow text-label-eyebrow text-on-surface font-semibold">
+                    Unity 6 · Blender 3D · Enemy AI · Gameplay Systems · Rigging
+                  </p>
+                </div>
+              </div>
+
+              {/* Founder 3: Shah Fahad */}
+              <div className="bg-surface-container rounded-2xl p-6 crisp-stroke flex flex-col justify-between">
                 <div>
                   <div className="aspect-square w-full rounded-xl overflow-hidden bg-surface-container-high mb-6 crisp-stroke">
                     <img
@@ -528,12 +558,12 @@ export default function Home() {
                   <span className="px-3 py-1 rounded-full bg-secondary text-white font-label-eyebrow text-label-eyebrow font-semibold mb-3 inline-block">
                     Lead Backend Engineer
                   </span>
-                  <h3 className="font-headline-md text-headline-md-mobile md:text-headline-md tracking-tight mb-2">
+                  <h3 className="font-headline-md text-headline-md-mobile tracking-tight mb-2 font-bold">
                     Shah Fahad
                   </h3>
                   <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-6">
-                    Architects distributed services and real-time data pipelines. Supervises the uptime,
-                    security, and scalability of our five live production SaaS platforms.
+                    Architects distributed services and real-time data pipelines. Supervises uptime,
+                    security, and scalability across our five live production SaaS platforms.
                   </p>
                 </div>
                 <div className="pt-6 border-t border-on-surface/10">
@@ -541,13 +571,13 @@ export default function Home() {
                     Focus Areas
                   </span>
                   <p className="font-label-eyebrow text-label-eyebrow text-on-surface font-semibold">
-                    Node.js · Go · PostgreSQL · Redis · RabbitMQ · Docker / Prometheus
+                    Node.js · Go · PostgreSQL · Redis · RabbitMQ · Docker
                   </p>
                 </div>
               </div>
 
-              {/* Founder 3 */}
-              <div className="bg-surface-container rounded-2xl p-8 crisp-stroke flex flex-col justify-between">
+              {/* Founder 4: Muhammad Ali */}
+              <div className="bg-surface-container rounded-2xl p-6 crisp-stroke flex flex-col justify-between">
                 <div>
                   <div className="aspect-square w-full rounded-xl overflow-hidden bg-surface-container-high mb-6 crisp-stroke">
                     <img
@@ -559,12 +589,12 @@ export default function Home() {
                   <span className="px-3 py-1 rounded-full bg-[#F6A6CF] text-[#1B1A17] font-label-eyebrow text-label-eyebrow font-semibold mb-3 inline-block">
                     Mobile &amp; Full-Stack
                   </span>
-                  <h3 className="font-headline-md text-headline-md-mobile md:text-headline-md tracking-tight mb-2">
+                  <h3 className="font-headline-md text-headline-md-mobile tracking-tight mb-2 font-bold">
                     Muhammad Ali
                   </h3>
                   <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed mb-6">
                     Specializes in cross-platform mobile systems and edge computer vision. Developed the
-                    YOLOv8 factory counting pipeline and multi-platform mobile architectures.
+                    YOLOv8 factory counting pipeline and multi-platform architectures.
                   </p>
                 </div>
                 <div className="pt-6 border-t border-on-surface/10">
@@ -572,7 +602,7 @@ export default function Home() {
                     Focus Areas
                   </span>
                   <p className="font-label-eyebrow text-label-eyebrow text-on-surface font-semibold">
-                    Flutter / Dart · React · Python · YOLOv8 / OpenCV · Mobile Edge AI
+                    Flutter / Dart · React · Python · YOLOv8 · Mobile Edge AI
                   </p>
                 </div>
               </div>

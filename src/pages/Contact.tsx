@@ -97,7 +97,7 @@ export default function Contact() {
                   together.
                 </h2>
                 <p className="font-body-lg text-body-lg text-on-surface-variant mb-8 leading-relaxed">
-                  Every inquiry goes directly to Mian Faseeh, Shah Fahad, and Muhammad Ali. We assess feasibility, draft initial tech stack thoughts, and reply with fixed milestones.
+                  Every inquiry goes directly to Mian Faseeh, Muhammad Tayyab, Shah Fahad, and Muhammad Ali. We assess feasibility, draft initial tech stack thoughts, and reply with fixed milestones.
                 </p>
 
                 {/* Verification Commitment Badges */}
@@ -126,7 +126,7 @@ export default function Contact() {
                   </span>
                 </div>
                 <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-                  Faseeh (Systems &amp; Simulation), Fahad (Fullstack &amp; Cloud Architecture), Ali (Graphics &amp; WebGL Pipelines). You collaborate directly with tech leadership from kickoff to delivery.
+                  Faseeh (Delivery &amp; Systems), Tayyab (CTO / Unity &amp; Blender 3D), Fahad (Cloud Backends &amp; Microservices), Ali (Edge Vision &amp; Cross-Platform Interfaces). You collaborate directly with founders from line one.
                 </p>
               </div>
             </div>

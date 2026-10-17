@@ -6,168 +6,303 @@ import {
   serializeGameRecord,
   normalizeImageUrl,
   type Game,
-  type StudioInfo,
 } from '../lib/supabaseClient'
 import AdminLogin from './AdminLogin'
-import { MonogramIcon } from '../components/Logo'
 
-const DEFAULT_STUDIO: StudioInfo = {
-  id: 1,
-  manifesto:
-    'ANAMORPHIC is an independent studio forging mechanics-driven, narrative-rich titles built without creative compromise. We reject automated formulas and safety-first design paradigms. We architect unforgiving worlds for players who demand mastery, physics, narrative literacy, and visceral design.',
-  contact_email: 'anamorphiicc@gmail.com',
+interface Inquiry {
+  id: string
+  name: string
+  company: string
+  email: string
+  projectType: string
+  budget?: string
+  message: string
+  timeAgo: string
+  status: 'unread' | 'read' | 'replied'
 }
 
-function extractYouTubeId(urlOrId: string): string {
-  const trimmed = urlOrId.trim()
-  if (!trimmed) return ''
-  // 11-char ID check
-  if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) {
-    return trimmed
-  }
-  // youtu.be/<id>
-  const shortMatch = trimmed.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/)
-  if (shortMatch) return shortMatch[1]
-  // youtube.com/watch?v=<id> or embed/<id>
-  const longMatch = trimmed.match(/[?&]v=([a-zA-Z0-9_-]{11})/)
-  if (longMatch) return longMatch[1]
-  const embedMatch = trimmed.match(/\/embed\/([a-zA-Z0-9_-]{11})/)
-  if (embedMatch) return embedMatch[1]
-  return trimmed
+const INITIAL_INQUIRIES: Inquiry[] = [
+  {
+    id: 'inq-1',
+    name: 'Tariq Mehmood',
+    company: 'Apex Logistics',
+    email: 'tariq@apexlogistics.pk',
+    projectType: 'Web Platform / SaaS',
+    budget: '$25k - $50k',
+    message:
+      'Looking to build an automated container tracking & warehouse dispatch dashboard with real-time driver telemetry over WebSockets. Needs to integrate with existing legacy ERP databases.',
+    timeAgo: '24m ago',
+    status: 'unread',
+  },
+  {
+    id: 'inq-2',
+    name: 'Elena Rostova',
+    company: 'Krona Sim',
+    email: 'elena@kronasim.io',
+    projectType: 'Game Development',
+    budget: '$40k - $80k',
+    message:
+      'Need HLSL shader optimization, custom vehicle physics collision pipeline, and deterministic network rollback code for our high-fidelity Unity simulator title on Steam.',
+    timeAgo: '2h ago',
+    status: 'unread',
+  },
+  {
+    id: 'inq-3',
+    name: 'Dr. Zafar Qasim',
+    company: 'BioScan Labs',
+    email: 'zqasim@bioscanlabs.com',
+    projectType: 'AI / CV / Edge',
+    budget: '$30k+',
+    message:
+      'Inquiring about deploying an on-premise YOLOv8 microservice on Jetson Orin modules for automated pathology slide tallying and live optical microscope inspections.',
+    timeAgo: '5h ago',
+    status: 'unread',
+  },
+  {
+    id: 'inq-4',
+    name: 'Kieran Scott',
+    company: 'VentureForge',
+    email: 'kieran@ventureforge.vc',
+    projectType: 'Mobile App',
+    budget: '$20k',
+    message:
+      'Follow-up regarding the cross-platform Flutter inspection app milestone review and escrow release. The offline-first SQLite sync is performing under 12ms latency.',
+    timeAgo: 'Yesterday',
+    status: 'read',
+  },
+]
+
+interface AdminTeamMember {
+  id: string
+  name: string
+  role: string
+  focus: string
+  bio: string
+  chips: string[]
+  imageUrl: string
+  linkedInUrl: string
+  order: number
 }
 
-/**
- * Resizes and compresses an image in browser using an offscreen canvas
- * Produces a lightweight, crystal-clear WebP / JPEG data URL ideal for persistence.
- */
-function compressImageFile(file: File, maxWidth = 1280, quality = 0.82): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onerror = reject
-    reader.onload = (e) => {
-      const img = new Image()
-      img.onerror = reject
-      img.onload = () => {
-        let width = img.width
-        let height = img.height
+const INITIAL_TEAM: AdminTeamMember[] = [
+  {
+    id: 'member-1',
+    name: 'Mian Faseeh Ur Rehman',
+    role: 'CEO & Project Manager / Head of Games',
+    focus: 'Delivery · Unity · C# Architecture · Release Ops',
+    bio: 'Runs delivery end to end — technical scoping, architecture roadmaps, sprint execution, and shipping. Leads the Unity game practice and release lifecycle pipelines.',
+    chips: ['Unity 3D', 'C#', 'HLSL Shaders', 'Sprint Scoping', 'Production CI/CD', 'Photon'],
+    imageUrl:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuASG0W42bY_gsxnnA3_k_vOaJMpMRkTnbhDtAgNMyxuQh16_1SD5oG3DFLMGGzfYquZBn77mMCbkLen4TsI-pHohdFb38m5tF-7OWAE2qAoDthPJcgjyj0eIM2PMtk2BXV6FlNUGfQLNNPMxqjg8A_bXAV6gbJzTxM2Z-SkBtj5gP47gG43tw_VKASueCNPcm97vUdgvjdpCM4rMbTrlN_TNQIR__WfpWZU5mFbqoDAcxiDXbsp3lPx',
+    linkedInUrl: 'https://linkedin.com',
+    order: 1,
+  },
+  {
+    id: 'member-2',
+    name: 'Muhammad Tayyab',
+    role: 'Chief Technology Officer (CTO) & Head of 3D',
+    focus: 'Unity 6 · Blender 3D · Enemy AI · Gameplay Systems · Rigging',
+    bio: 'Leads technical architecture, Blender 3D modeling, rigging, enemy AI, and gameplay physics across Unity 6 and independent productions.',
+    chips: ['Unity 6', 'Blender', 'NavMesh AI', 'Cinemachine', 'Mixamo', 'URP'],
+    imageUrl:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuABKgk5aoLbkEjSO4kD0UHMS75Ss76wIMD7K923R0hYc269aXlE_Bqzb7EKyzDeSclq51KJF4dLIyapTX9NsLgB3r8kpK1wL4zZ9GcIRKdX4HpL2Rwcc0RMBBRjaDZ0lE2DEe_HVueLs-Py6rSnfJvvIx-Y0-AUvhSSxpoEwB1h1tjEnnKDHipkyFWvB1PgrIXzK7f1HRk30QBJl0TEJuvuP47F0uk7cV-ZkG9Uj66IpV-c5h872fN6',
+    linkedInUrl: 'https://linkedin.com/in/m-tayyabmalik',
+    order: 2,
+  },
+  {
+    id: 'member-3',
+    name: 'Shah Fahad',
+    role: 'Lead Backend Engineer / Systems Architect',
+    focus: 'Node.js · Go · PostgreSQL · Redis · RabbitMQ · Docker',
+    bio: 'Architects distributed services and real-time data pipelines. Supervises uptime, security, and scalability across our five live production SaaS platforms.',
+    chips: ['Node.js', 'Go', 'PostgreSQL', 'Redis', 'RabbitMQ', 'Docker'],
+    imageUrl:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuBx9TIs49Kb0IvpeF6uqLG73w7-n3R5Uqw3nzs6BxQInrfhx6T_BtKGXxz78hVI5ZWZ4YDLnJ4p2wC9oqX0FBuwhvgt52v32biMQBi0-mdFC1nh0_gVaQoAn2ViocNtTIIJK8r49S5sfZkV8CCwrp3owd-S15dwbxR_yLIQMcYUmqSYynQ4dBI1gT7cWmWeGZafRMqDb9McK_Cnjt1NTNwjIcLHWtbVhDZd4odK9bwp8tithHTfNEG4',
+    linkedInUrl: 'https://linkedin.com',
+    order: 3,
+  },
+  {
+    id: 'member-4',
+    name: 'Muhammad Ali',
+    role: 'Mobile & Full-Stack Engineer / Vision Systems',
+    focus: 'Flutter / Dart · React · Python · YOLOv8 · Mobile Edge AI',
+    bio: 'Specializes in cross-platform mobile systems and edge computer vision. Developed the YOLOv8 factory counting pipeline and multi-platform architectures.',
+    chips: ['Flutter', 'React', 'Python', 'YOLOv8', 'FastAPI', 'WebSockets'],
+    imageUrl:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuB5xYc-mLL9-A1w9lvObOPRrOspFo1dTyE4AcB3z8VOddNPohXGrlDbrMP64JzQbrKAI6ScMntkHcYr2AQguwjnHsZJ31SdPCuToXZKm-3utNnUPfvSaX7T6emLW9dYVkY2ZeK6x30QCO61A9yuKhR6l4-JjWo5FTWv8Bbefk__eTX9GfhVN5sPyF1jU1OBd1JZlMgD62ajZnd1Z0f64xl2ydNZsRg50AEb5TpOIlz_WlwRa64pD98C',
+    linkedInUrl: 'https://linkedin.com',
+    order: 4,
+  },
+]
 
-        if (width > maxWidth) {
-          height = Math.round((height * maxWidth) / width)
-          width = maxWidth
-        }
-
-        const canvas = document.createElement('canvas')
-        canvas.width = width
-        canvas.height = height
-        const ctx = canvas.getContext('2d')
-        if (!ctx) {
-          resolve(e.target?.result as string)
-          return
-        }
-
-        ctx.drawImage(img, 0, 0, width, height)
-        // Prefer webp, fallback to jpeg
-        try {
-          const webpData = canvas.toDataURL('image/webp', quality)
-          if (webpData.startsWith('data:image/webp')) {
-            resolve(webpData)
-            return
-          }
-        } catch {
-          // ignore
-        }
-        resolve(canvas.toDataURL('image/jpeg', quality))
-      }
-      img.src = e.target?.result as string
-    }
-    reader.readAsDataURL(file)
-  })
+interface ServiceBlock {
+  id: string
+  title: string
+  description: string
+  bullets: string[]
+  chips: string[]
+  accentColor: string
 }
+
+const INITIAL_SERVICES: ServiceBlock[] = [
+  {
+    id: 'srv-1',
+    title: 'Game Development',
+    description:
+      'Unity 2D and 3D titles engineered for mobile and PC. We handle technical gameplay programming, physics optimizations, custom UI pipelines, and continuous deployment through Steam and mobile app stores.',
+    bullets: [
+      'Deterministic character & vehicle controllers',
+      'Custom HLSL shaders & post-processing pipelines',
+      'Mixamo & Blender procedural rigging',
+      'Photon real-time multiplayer networking',
+    ],
+    chips: ['Unity 6', 'C#', 'HLSL', 'Photon', 'Steamworks'],
+    accentColor: '#FF5B5B',
+  },
+  {
+    id: 'srv-2',
+    title: 'Web Platforms & SaaS',
+    description:
+      'Production SaaS platforms and resilient enterprise portals. Modern React and Next.js frontends powered by distributed Node.js and Go microservices, strict PostgreSQL schemas, Redis caching, and RabbitMQ message queues.',
+    bullets: [
+      'Multi-tenant schemas with RBAC security',
+      'Sub-50ms Redis caching & session management',
+      'RabbitMQ background event workers',
+      'Transactional double-entry billing ledgers',
+    ],
+    chips: ['Next.js', 'Go', 'Node.js', 'PostgreSQL', 'Redis', 'RabbitMQ', 'Docker'],
+    accentColor: '#74BE9C',
+  },
+  {
+    id: 'srv-3',
+    title: 'Mobile Apps & Interfaces',
+    description:
+      'Fluid, high-performance applications built with Flutter and native integrations. Offline-first data caching with SQLite/Isar, background Bluetooth device synchronization, and edge YOLOv8 computer vision pipelines.',
+    bullets: [
+      'Single-codebase Flutter engine across iOS & Android',
+      'Offline-first synchronization with conflict resolution',
+      'On-premise YOLOv8 edge machine vision inference',
+      'Sub-second WebSocket telemetry streams',
+    ],
+    chips: ['Flutter', 'Dart', 'Firebase', 'SQLite', 'YOLOv8', 'FastAPI'],
+    accentColor: '#2b00d1',
+  },
+]
+
+const INITIAL_MEDIA = [
+  {
+    name: 'pipevision-hero-feed.jpg',
+    dims: '1920 × 1080',
+    url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDPs8ZBHxma3oXU95SQz2FXpuwGqeprh73xaliwfPN1_05cab3p4x9k1bnBuBD1kIrdkGu_G1KkuOzQTz6zjeKAFHxB3q88z19uB6t2XgmS_52v59o1yIVDEwU2giJg90YJ2R6a-4dgAjXVNDDmThubRcjHY6vZob2oKfuuO-aYXa_WOl-kQUC_nHhf5e_sTvW7u-14Qq2tdB7miQJXD4YXxfj64RFVzVTajpSvh3kQC_C5nJouppmZ',
+  },
+  {
+    name: 'workforce-suite-preview.jpg',
+    dims: '1600 × 1000',
+    url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuA6JuSnJ5ncwLHE79qaY6a6KfvkVu2zCiaQ0GfKVF3qMLOiiQbJw_lu9IYmk8Hk4hvIb0xi9RbBx6V5Iz7OEqN2YK16ANGlHvpETLB5BXcBtdwfgZHWezbpAVwMKmV5Wk1KPKfJjcnZ3cbZw6IklSlF-vyZzkNe_OzaQLePpXN0JDKIjAnSGY3P9QXzd-FgJdY6tgpC47ixiLz_lRmX_-MKg_hRgCW64iSJT82MJ4Ir7vpDjHcuHmuE',
+  },
+  {
+    name: 'faseeh-portrait.jpg',
+    dims: '800 × 1000',
+    url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuASG0W42bY_gsxnnA3_k_vOaJMpMRkTnbhDtAgNMyxuQh16_1SD5oG3DFLMGGzfYquZBn77mMCbkLen4TsI-pHohdFb38m5tF-7OWAE2qAoDthPJcgjyj0eIM2PMtk2BXV6FlNUGfQLNNPMxqjg8A_bXAV6gbJzTxM2Z-SkBtj5gP47gG43tw_VKASueCNPcm97vUdgvjdpCM4rMbTrlN_TNQIR__WfpWZU5mFbqoDAcxiDXbsp3lPx',
+  },
+  {
+    name: 'tayyab-portrait.jpg',
+    dims: '800 × 1000',
+    url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuABKgk5aoLbkEjSO4kD0UHMS75Ss76wIMD7K923R0hYc269aXlE_Bqzb7EKyzDeSclq51KJF4dLIyapTX9NsLgB3r8kpK1wL4zZ9GcIRKdX4HpL2Rwcc0RMBBRjaDZ0lE2DEe_HVueLs-Py6rSnfJvvIx-Y0-AUvhSSxpoEwB1h1tjEnnKDHipkyFWvB1PgrIXzK7f1HRk30QBJl0TEJuvuP47F0uk7cV-ZkG9Uj66IpV-c5h872fN6',
+  },
+  {
+    name: 'shah-fahad-portrait.jpg',
+    dims: '800 × 1000',
+    url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBx9TIs49Kb0IvpeF6uqLG73w7-n3R5Uqw3nzs6BxQInrfhx6T_BtKGXxz78hVI5ZWZ4YDLnJ4p2wC9oqX0FBuwhvgt52v32biMQBi0-mdFC1nh0_gVaQoAn2ViocNtTIIJK8r49S5sfZkV8CCwrp3owd-S15dwbxR_yLIQMcYUmqSYynQ4dBI1gT7cWmWeGZafRMqDb9McK_Cnjt1NTNwjIcLHWtbVhDZd4odK9bwp8tithHTfNEG4',
+  },
+  {
+    name: 'muhammad-ali-portrait.jpg',
+    dims: '800 × 1000',
+    url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB5xYc-mLL9-A1w9lvObOPRrOspFo1dTyE4AcB3z8VOddNPohXGrlDbrMP64JzQbrKAI6ScMntkHcYr2AQguwjnHsZJ31SdPCuToXZKm-3utNnUPfvSaX7T6emLW9dYVkY2ZeK6x30QCO61A9yuKhR6l4-JjWo5FTWv8Bbefk__eTX9GfhVN5sPyF1jU1OBd1JZlMgD62ajZnd1Z0f64xl2ydNZsRg50AEb5TpOIlz_WlwRa64pD98C',
+  },
+]
+
+type ActiveTab = 'dashboard' | 'projects' | 'inquiries' | 'team' | 'services' | 'media' | 'settings'
 
 export default function Admin() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
     return sessionStorage.getItem('gamicon_admin_auth') === 'authenticated'
   })
-  const [games, setGames] = useState<Game[]>([])
-  const [loading, setLoading] = useState(true)
-  const [notification, setNotification] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
-  const [searchQuery, setSearchQuery] = useState('')
 
-  // Edit / Add Modal or Section
-  const [isFormOpen, setIsFormOpen] = useState(false)
-  const [editingGameId, setEditingGameId] = useState<string | null>(null)
+  const [activeTab, setActiveTab] = useState<ActiveTab>('dashboard')
+  const [games, setGames] = useState<Game[]>([])
+  const [loading, setLoading] = useState(false)
+  const [notification, setNotification] = useState<{ message: string; type: 'success' | 'error' } | null>(null)
+
+  // Inquiries State
+  const [inquiries, setInquiries] = useState<Inquiry[]>(INITIAL_INQUIRIES)
+  const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null)
+  const [inquiryFilter, setInquiryFilter] = useState<'all' | 'unread' | 'replied'>('all')
+  const [replyText, setReplyText] = useState('')
+
+  // Team State
+  const [teamMembers, setTeamMembers] = useState<AdminTeamMember[]>(INITIAL_TEAM)
+  const [editingMember, setEditingMember] = useState<AdminTeamMember | null>(null)
+  const [isMemberSlideOpen, setIsMemberSlideOpen] = useState(false)
+
+  // Services State
+  const [services, setServices] = useState<ServiceBlock[]>(INITIAL_SERVICES)
+
+  // Media State
+  const [mediaItems, setMediaItems] = useState(INITIAL_MEDIA)
+  const [mediaSearch, setMediaSearch] = useState('')
+
+  // Settings State
+  const [settings, setSettings] = useState({
+    siteTitle: 'anamorphic — Independent Engineering Studio',
+    contactEmail: 'anamorphiicc@gmail.com',
+    locationLine: 'Lahore, Peshawar & Global Remote · UTC+5',
+    heroHeadline: 'Shipped software, not slideware.',
+    heroSubline:
+      'Direct access to principal engineers. Every engagement is scoped down to pure execution without account managers or diluted agency layers.',
+    stat1Val: '10+',
+    stat1Label: 'Commercial Shops Live',
+    stat2Val: '5',
+    stat2Label: 'Production SaaS Platforms',
+    stat3Val: '4',
+    stat3Label: 'Founding Principals',
+    stat4Val: '60 FPS',
+    stat4Label: 'Game Engine Benchmark',
+    githubUrl: 'https://github.com',
+    linkedinUrl: 'https://linkedin.com',
+    footerCopyright: '© Anamorphic Studio. Verified production stacks.',
+  })
+
+  // Projects State & Slide-Over
+  const [projectFilter, setProjectFilter] = useState('All')
+  const [projectSearch, setProjectSearch] = useState('')
+  const [isProjectSlideOpen, setIsProjectSlideOpen] = useState(false)
+  const [editingProjectId, setEditingProjectId] = useState<string | null>(null)
   const [formTitle, setFormTitle] = useState('')
   const [formSlug, setFormSlug] = useState('')
-  const [formReleaseDate, setFormReleaseDate] = useState('')
-  const [formYoutubeId, setFormYoutubeId] = useState('')
-  const [formImageUrl, setFormImageUrl] = useState('')
+  const [formCategory, setFormCategory] = useState('Web & SaaS')
+  const [formDeliveryTag, setFormDeliveryTag] = useState('')
   const [formDescription, setFormDescription] = useState('')
   const [formTags, setFormTags] = useState('')
+  const [formImageUrl, setFormImageUrl] = useState('')
+  const [formFeatured, setFormFeatured] = useState(true)
+  const [formPublished, setFormPublished] = useState(true)
 
-  // Studio Info Editing Tab / Modal
-  const [isStudioModalOpen, setIsStudioModalOpen] = useState(false)
-  const [studioManifesto, setStudioManifesto] = useState('')
-  const [studioEmail, setStudioEmail] = useState('')
-
-  const [isUploadingImage, setIsUploadingImage] = useState(false)
-
-  // Quick Image Preview selection
-  const [previewGameSlug, setPreviewGameSlug] = useState('')
-
-  async function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    if (!file) return
-
-    if (!file.type.startsWith('image/')) {
-      showNotification('Please select a valid image file (PNG, JPG, WEBP).', 'error')
-      return
-    }
-
-    setIsUploadingImage(true)
-    try {
-      const compressedDataUrl = await compressImageFile(file, 1280, 0.85)
-      setFormImageUrl(compressedDataUrl)
-      showNotification('Picture processed & optimized successfully!')
-    } catch (err: any) {
-      console.error('Image compression error:', err)
-      showNotification('Failed to read and process image file.', 'error')
-    } finally {
-      setIsUploadingImage(false)
-    }
+  function showNotification(message: string, type: 'success' | 'error' = 'success') {
+    setNotification({ message, type })
+    setTimeout(() => setNotification(null), 4000)
   }
 
-  async function loadData() {
+  // Load Supabase games
+  async function loadGames() {
     setLoading(true)
     try {
-      const { data: gamesData, error: gamesError } = await supabase
-        .from('games')
-        .select('*')
-        .order('created_at', { ascending: false })
-
-      if (!gamesError && gamesData) {
-        const casted = gamesData.map(parseGameRecord)
-        setGames(casted)
-        if (casted.length > 0 && !previewGameSlug) {
-          setPreviewGameSlug(casted[0].slug)
-        }
+      const { data, error } = await supabase.from('games').select('*').order('created_at', { ascending: false })
+      if (!error && data) {
+        setGames(data.map(parseGameRecord))
       }
-
-      const { data: studioData } = await supabase
-        .from('studio_info')
-        .select('*')
-        .eq('id', 1)
-        .single()
-
-      if (studioData) {
-        const info = studioData as StudioInfo
-        setStudioManifesto(info.manifesto)
-        setStudioEmail(info.contact_email)
-      } else {
-        setStudioManifesto(DEFAULT_STUDIO.manifesto)
-        setStudioEmail(DEFAULT_STUDIO.contact_email)
-      }
-    } catch (err) {
-      console.error('Supabase load error', err)
+    } catch (e) {
+      console.warn('Could not load games from Supabase', e)
     } finally {
       setLoading(false)
     }
@@ -175,841 +310,1520 @@ export default function Admin() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      loadData()
+      loadGames()
     }
   }, [isAuthenticated])
 
-  function showNotification(message: string, type: 'success' | 'error' = 'success') {
-    setNotification({ message, type })
-    setTimeout(() => setNotification(null), 5000)
+  // Open Project Slide Over
+  const handleOpenNewProject = () => {
+    setEditingProjectId(null)
+    setFormTitle('')
+    setFormSlug('')
+    setFormCategory('Web & SaaS')
+    setFormDeliveryTag('Live in production')
+    setFormDescription('')
+    setFormTags('React, TypeScript, Node.js')
+    setFormImageUrl('')
+    setFormFeatured(false)
+    setFormPublished(true)
+    setIsProjectSlideOpen(true)
   }
 
-  async function handleClearAllGames() {
-    const confirmed = window.confirm(
-      'WARNING: Are you sure you want to permanently delete ALL games from the database? This cannot be undone.'
-    )
-    if (!confirmed) return
+  const handleEditProject = (p: Game) => {
+    setEditingProjectId(p.id)
+    setFormTitle(p.title)
+    setFormSlug(p.slug)
+    setFormCategory(p.tags?.[0] || 'Web & SaaS')
+    setFormDeliveryTag(p.release_date || 'Live in production')
+    setFormDescription(p.description || '')
+    setFormTags((p.tags || []).join(', '))
+    setFormImageUrl(p.image_url || '')
+    setFormFeatured(true)
+    setFormPublished(true)
+    setIsProjectSlideOpen(true)
+  }
 
-    try {
-      setLoading(true)
-      // Delete all records from games table
-      const { error } = await supabase
-        .from('games')
-        .delete()
-        .neq('id', '00000000-0000-0000-0000-000000000000')
-
-      if (error) throw error
-
-      setGames([])
-      setPreviewGameSlug('')
-      showNotification('SUCCESS: All game transmissions cleared from database.')
-      await loadData()
-    } catch (err: any) {
-      console.error(err)
-      showNotification(`CLEAR FAILED: ${err.message || 'Database error'}`, 'error')
-    } finally {
-      setLoading(false)
+  // Auto-slug from title
+  const handleTitleChange = (val: string) => {
+    setFormTitle(val)
+    if (!editingProjectId) {
+      setFormSlug(
+        val
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-|-$/g, '')
+      )
     }
   }
 
-  const [isSaving, setIsSaving] = useState(false)
-
-  async function handleSaveGame(e: React.FormEvent) {
+  // Save Project to Supabase
+  const handleSaveProject = async (e: React.FormEvent) => {
     e.preventDefault()
-
     if (!formTitle.trim()) {
-      showNotification('Please enter a Product Title.', 'error')
+      showNotification('Project title is required.', 'error')
       return
     }
 
-    setIsSaving(true)
-    const tagsArray = formTags
-      .split(',')
-      .map((t) => t.trim())
-      .filter(Boolean)
-
-    const generatedSlug =
-      formSlug.trim() ||
-      formTitle
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-|-$/g, '')
-
-    const generatedDate = formReleaseDate || new Date().toISOString().split('T')[0]
-    const parsedYoutubeId = extractYouTubeId(formYoutubeId)
-
-    // Construct primary payload using serializer which embeds image_url into metadata tag
+    const tagsArray = formTags.split(',').map((t) => t.trim()).filter(Boolean)
+    const normalizedImg = normalizeImageUrl(formImageUrl)
     const payload = serializeGameRecord({
+      id: editingProjectId || undefined,
       title: formTitle.trim(),
-      slug: generatedSlug,
-      release_date: generatedDate,
+      slug: formSlug.trim() || 'project',
+      release_date: new Date().toISOString().split('T')[0],
       description: formDescription.trim(),
       tags: tagsArray,
-      image_url: formImageUrl.trim(),
-      youtube_id: parsedYoutubeId,
+      image_url: normalizedImg,
     })
 
     try {
-      if (editingGameId) {
-        // Try standard update
-        let { error } = await supabase
-          .from('games')
-          .update(payload)
-          .eq('id', editingGameId)
-
-        // If remote schema complains about unknown image_url column, retry without the image_url field
-        // (The image is still safely stored and preserved inside payload.description!)
-        if (error && error.message?.includes('image_url')) {
-          console.warn('Remote table does not have image_url column, saving with description metadata...')
-          const fallbackPayload = { ...payload }
-          delete fallbackPayload.image_url
-          const retryRes = await supabase
-            .from('games')
-            .update(fallbackPayload)
-            .eq('id', editingGameId)
-          error = retryRes.error
-        }
-
-        if (error) throw error
-        showNotification(`Product "${payload.title}" updated successfully!`)
+      if (editingProjectId) {
+        await supabase.from('games').update(payload).eq('id', editingProjectId)
+        showNotification('Project updated successfully.')
       } else {
-        // Try standard insert
-        let { error } = await supabase.from('games').insert([payload])
-
-        // If remote schema does not have image_url column, retry without it
-        // (The image is still safely stored and preserved inside payload.description!)
-        if (error && error.message?.includes('image_url')) {
-          console.warn('Remote table does not have image_url column, inserting with description metadata...')
-          const fallbackPayload = { ...payload }
-          delete fallbackPayload.image_url
-          const retryRes = await supabase.from('games').insert([fallbackPayload])
-          error = retryRes.error
-        }
-
-        if (error) throw error
-        showNotification(`Product "${payload.title}" created successfully!`)
+        await supabase.from('games').insert([payload])
+        showNotification('Project published successfully.')
       }
-
-      setIsFormOpen(false)
-      resetForm()
-      await loadData()
+      setIsProjectSlideOpen(false)
+      loadGames()
     } catch (err: any) {
-      console.error('Failed to save to Supabase:', err)
-      const errorMsg = err?.message || 'Database error occurred'
-      showNotification(`ERROR: ${errorMsg}`, 'error')
-
-      // Also persist locally in current state session so the product is not lost
-      const tempId = editingGameId || `local-${Date.now()}`
-      const localProduct: Game = {
-        id: tempId,
-        title: payload.title,
-        slug: payload.slug,
-        release_date: payload.release_date,
-        description: payload.description,
-        tags: payload.tags,
-        image_url: formImageUrl.trim(),
-        youtube_id: parsedYoutubeId,
-      }
-
-      setGames((prev) => {
-        const existingIdx = prev.findIndex((g) => g.id === tempId || g.slug === localProduct.slug)
-        if (existingIdx >= 0) {
-          const next = [...prev]
-          next[existingIdx] = localProduct
-          return next
-        }
-        return [localProduct, ...prev]
-      })
-
-      setIsFormOpen(false)
-      resetForm()
-      showNotification(`Product "${payload.title}" added to local catalog (Database: ${errorMsg})`, 'error')
-    } finally {
-      setIsSaving(false)
+      showNotification(`Save failed: ${err.message}`, 'error')
     }
   }
 
-  function handleEditClick(game: Game) {
-    setEditingGameId(game.id)
-    setFormTitle(game.title)
-    setFormSlug(game.slug)
-    setFormReleaseDate(game.release_date)
-    setFormYoutubeId(game.youtube_id || '')
-    setFormImageUrl(game.image_url || '')
-    setFormDescription(game.description)
-    setFormTags(game.tags ? game.tags.join(', ') : '')
-    setIsFormOpen(true)
-  }
-
-  async function handleDeleteGame(id: string, title: string) {
-    if (!confirm(`Confirm deletion of product: "${title}"?`)) return
+  const handleDeleteProject = async (id: string) => {
+    if (!window.confirm('Delete this project permanently?')) return
     try {
-      const { error } = await supabase.from('games').delete().eq('id', id)
-      if (error) throw error
-      showNotification(`Product "${title}" removed from catalog.`)
-      await loadData()
+      await supabase.from('games').delete().eq('id', id)
+      showNotification('Project deleted.')
+      setIsProjectSlideOpen(false)
+      loadGames()
     } catch (err: any) {
-      showNotification(`DELETE FAILED: ${err.message}`, 'error')
+      showNotification(`Delete failed: ${err.message}`, 'error')
     }
   }
 
-  function resetForm() {
-    setEditingGameId(null)
-    setFormTitle('')
-    setFormSlug('')
-    setFormReleaseDate('')
-    setFormYoutubeId('')
-    setFormImageUrl('')
-    setFormDescription('')
-    setFormTags('')
-  }
-
-  async function handleSaveStudioInfo(e: React.FormEvent) {
-    e.preventDefault()
-    try {
-      const payload: StudioInfo = {
-        id: 1,
-        manifesto: studioManifesto,
-        contact_email: studioEmail,
-      }
-      const { error } = await supabase.from('studio_info').upsert(payload, { onConflict: 'id' })
-      if (error) throw error
-      showNotification('Studio Info saved successfully.')
-      setIsStudioModalOpen(false)
-    } catch (err: any) {
-      showNotification(`SAVE FAILED: ${err.message}`, 'error')
-    }
-  }
-
-  const handleSignOut = () => {
+  // Handle Logout
+  const handleLogout = () => {
     sessionStorage.removeItem('gamicon_admin_auth')
     setIsAuthenticated(false)
   }
-
-  const filteredGames = games.filter((g) => {
-    const matchesSearch =
-      g.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      g.slug.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      g.description.toLowerCase().includes(searchQuery.toLowerCase())
-    return matchesSearch
-  })
-
-  const selectedPreviewGame =
-    games.find((g) => g.slug === previewGameSlug) || games[0] || null
 
   if (!isAuthenticated) {
     return <AdminLogin onLoginSuccess={() => setIsAuthenticated(true)} />
   }
 
+  const unreadInquiriesCount = inquiries.filter((i) => i.status === 'unread').length
+
   return (
-    <div className="bg-[#0e0e0e] text-[#e5e2e1] min-h-screen font-sans select-none overflow-x-hidden antialiased flex selection:bg-white selection:text-black">
-      {/* LEFT SIDEBAR COMPONENT */}
-      <aside className="fixed left-0 top-0 h-screen w-64 bg-[#0e0e0e] border-r border-[#444748]/40 flex flex-col justify-between p-4 z-40">
+    <div className="bg-surface text-on-surface antialiased min-h-screen selection:bg-secondary-container selection:text-on-primary">
+      {/* ========================================================================= */}
+      {/* 1. LEFT SIDEBAR COMPONENT                                                 */}
+      {/* ========================================================================= */}
+      <aside className="bg-primary-container text-on-primary docked h-screen w-64 flex flex-col justify-between shrink-0 border-r border-outline-variant/15 fixed left-0 top-0 z-40 p-4">
         <div>
-          <div className="flex items-center justify-between pb-4 border-b border-[#444748]/40 mb-4">
-            <Link to="/" className="flex items-center gap-2.5 group">
-              <MonogramIcon className="w-7 h-7" animated={true} />
-              <div>
-                <span className="font-display tracking-[0.2em] text-white uppercase font-bold text-sm leading-none block group-hover:text-neutral-300 transition-colors">
-                  ANAMORPHIC
-                </span>
-                <span className="font-mono text-[8px] uppercase tracking-widest text-[#8e9192] block mt-1">
-                  CMS // PRODUCT MANAGER
-                </span>
-              </div>
+          {/* Header Wordmark & Badge */}
+          <div className="flex items-center justify-between px-3 py-2 mb-6">
+            <Link to="/" className="text-headline-md font-bold tracking-tight text-white lowercase leading-none">
+              anamorphic
             </Link>
-            <span className="inline-flex items-center px-1.5 py-0.5 border border-[#444748]/40 font-mono text-[9px] text-[#8e9192]">
-              ADMIN
+            <span className="text-label-eyebrow text-on-primary-container bg-surface-container-highest/10 px-2 py-0.5 rounded text-[11px] font-mono">
+              Studio Admin
             </span>
           </div>
 
+          {/* Navigation Links */}
           <nav className="space-y-1">
             <button
-              onClick={() => {}}
-              className="w-full flex items-center gap-2 px-3 py-2.5 font-display text-xs uppercase tracking-widest text-white bg-[#2a2a2a] border-l-2 border-white font-bold transition-colors"
+              onClick={() => setActiveTab('dashboard')}
+              className={`w-full flex items-center gap-3 px-3 py-2 rounded text-left transition-all duration-150 ${
+                activeTab === 'dashboard'
+                  ? 'bg-surface-container-highest/15 text-white font-bold border-l-2 border-secondary'
+                  : 'text-outline-variant hover:text-white hover:bg-surface-container-highest/10'
+              }`}
             >
-              <span className="material-symbols-outlined text-white">inventory_2</span>
-              <span>Products Catalog</span>
+              <span className="material-symbols-outlined text-[18px]">dashboard</span>
+              <span className="text-sm font-medium">Dashboard</span>
             </button>
+
             <button
-              onClick={() => setIsStudioModalOpen(true)}
-              className="w-full flex items-center gap-2 px-3 py-2.5 font-display text-xs uppercase tracking-widest text-[#c7c6c6] hover:text-white hover:bg-[#1c1b1b] transition-colors"
+              onClick={() => setActiveTab('projects')}
+              className={`w-full flex items-center gap-3 px-3 py-2 rounded text-left transition-all duration-150 ${
+                activeTab === 'projects'
+                  ? 'bg-surface-container-highest/15 text-white font-bold border-l-2 border-secondary'
+                  : 'text-outline-variant hover:text-white hover:bg-surface-container-highest/10'
+              }`}
             >
-              <span className="material-symbols-outlined text-[#8e9192]">tune</span>
-              <span>Studio Info</span>
+              <span className="material-symbols-outlined text-[18px]">folder_open</span>
+              <span className="text-sm font-medium">Projects</span>
             </button>
-            <Link
-              to="/"
-              className="w-full flex items-center gap-2 px-3 py-2.5 font-display text-xs uppercase tracking-widest text-[#c7c6c6] hover:text-white hover:bg-[#1c1b1b] transition-colors"
+
+            <button
+              onClick={() => setActiveTab('inquiries')}
+              className={`w-full flex items-center justify-between px-3 py-2 rounded text-left transition-all duration-150 ${
+                activeTab === 'inquiries'
+                  ? 'bg-surface-container-highest/15 text-white font-bold border-l-2 border-secondary'
+                  : 'text-outline-variant hover:text-white hover:bg-surface-container-highest/10'
+              }`}
             >
-              <span className="material-symbols-outlined text-[#8e9192]">visibility</span>
-              <span>Live Site</span>
-            </Link>
+              <div className="flex items-center gap-3">
+                <span className="material-symbols-outlined text-[18px]">mail</span>
+                <span className="text-sm font-medium">Inquiries</span>
+              </div>
+              {unreadInquiriesCount > 0 && (
+                <span className="bg-[#4123ff] text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                  {unreadInquiriesCount}
+                </span>
+              )}
+            </button>
+
+            <button
+              onClick={() => setActiveTab('team')}
+              className={`w-full flex items-center gap-3 px-3 py-2 rounded text-left transition-all duration-150 ${
+                activeTab === 'team'
+                  ? 'bg-surface-container-highest/15 text-white font-bold border-l-2 border-secondary'
+                  : 'text-outline-variant hover:text-white hover:bg-surface-container-highest/10'
+              }`}
+            >
+              <span className="material-symbols-outlined text-[18px]">group</span>
+              <span className="text-sm font-medium">Team</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('services')}
+              className={`w-full flex items-center gap-3 px-3 py-2 rounded text-left transition-all duration-150 ${
+                activeTab === 'services'
+                  ? 'bg-surface-container-highest/15 text-white font-bold border-l-2 border-secondary'
+                  : 'text-outline-variant hover:text-white hover:bg-surface-container-highest/10'
+              }`}
+            >
+              <span className="material-symbols-outlined text-[18px]">layers</span>
+              <span className="text-sm font-medium">Services</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('media')}
+              className={`w-full flex items-center gap-3 px-3 py-2 rounded text-left transition-all duration-150 ${
+                activeTab === 'media'
+                  ? 'bg-surface-container-highest/15 text-white font-bold border-l-2 border-secondary'
+                  : 'text-outline-variant hover:text-white hover:bg-surface-container-highest/10'
+              }`}
+            >
+              <span className="material-symbols-outlined text-[18px]">perm_media</span>
+              <span className="text-sm font-medium">Media</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('settings')}
+              className={`w-full flex items-center gap-3 px-3 py-2 rounded text-left transition-all duration-150 ${
+                activeTab === 'settings'
+                  ? 'bg-surface-container-highest/15 text-white font-bold border-l-2 border-secondary'
+                  : 'text-outline-variant hover:text-white hover:bg-surface-container-highest/10'
+              }`}
+            >
+              <span className="material-symbols-outlined text-[18px]">settings</span>
+              <span className="text-sm font-medium">Settings</span>
+            </button>
           </nav>
-
-          <div className="mt-8 pt-4 border-t border-[#444748]/40 space-y-2">
-            <button
-              onClick={handleClearAllGames}
-              disabled={loading}
-              className="w-full py-2.5 px-3 border border-red-500/80 hover:bg-red-500 hover:text-white text-red-400 font-display text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 transition-colors duration-150 bg-red-950/20 font-bold"
-            >
-              <span className="material-symbols-outlined text-sm">delete_forever</span>
-              <span>Clear All Games</span>
-            </button>
-
-            <button
-              onClick={() => setIsStudioModalOpen(true)}
-              className="w-full py-2.5 px-3 border border-[#444748]/60 hover:border-white text-white font-display text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 transition-colors duration-150 bg-transparent"
-            >
-              <span className="material-symbols-outlined text-sm">edit_document</span>
-              <span>Edit Manifesto</span>
-            </button>
-          </div>
         </div>
 
-        <div className="border-t border-[#444748]/40 pt-4 space-y-4">
-          <div className="grid grid-cols-2 gap-2 text-[#8e9192] font-display text-[10px] uppercase tracking-widest">
-            <Link to="/" className="flex items-center gap-1.5 p-1 hover:text-white transition-colors">
-              <span className="material-symbols-outlined text-sm">home</span>
-              <span>Site</span>
-            </Link>
-            <button
-              onClick={handleSignOut}
-              className="flex items-center gap-1.5 p-1 hover:text-white transition-colors justify-end"
-            >
-              <span className="material-symbols-outlined text-sm">logout</span>
-              <span>Sign Out</span>
-            </button>
-          </div>
-
-          <div className="p-2.5 bg-[#1c1b1b] border border-[#444748]/40 flex items-center justify-between">
+        {/* Bottom Profile & Logout */}
+        <div className="border-t border-outline-variant/15 pt-4">
+          <div className="flex items-center justify-between px-2 mb-3">
             <div className="flex items-center gap-2.5">
-              <div className="relative w-8 h-8 bg-[#2a2a2a] border border-[#444748] flex items-center justify-center font-mono text-xs text-white font-bold">
-                KS
-                <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 bg-emerald-500 border border-black" />
+              <div className="w-8 h-8 rounded-full bg-surface-container-highest/20 text-white flex items-center justify-center font-bold text-xs">
+                AN
               </div>
-              <div className="overflow-hidden">
-                <p className="font-display text-[10px] text-white tracking-widest uppercase truncate leading-tight">
-                  K. SATO
-                </p>
-                <p className="font-sans text-[11px] text-[#8e9192] truncate leading-tight mt-0.5">
-                  Studio Lead
-                </p>
+              <div>
+                <div className="text-xs font-semibold text-white leading-tight">Anamorphic Studio</div>
+                <div className="text-[10px] text-on-primary-container leading-tight">Principal Custody</div>
               </div>
             </div>
-            <span className="material-symbols-outlined text-sm text-[#8e9192]">lock</span>
           </div>
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-2.5 px-3 py-2 rounded text-outline-variant hover:text-white hover:bg-surface-container-highest/10 transition-colors text-xs"
+          >
+            <span className="material-symbols-outlined text-[16px]">logout</span>
+            <span>Log out</span>
+          </button>
         </div>
       </aside>
 
-      {/* MAIN WORKSPACE CANVAS */}
-      <div className="ml-64 flex-1 flex flex-col min-h-screen bg-[#131313]">
+      {/* ========================================================================= */}
+      {/* 2. TOPBAR COMPONENT                                                       */}
+      {/* ========================================================================= */}
+      <header className="fixed top-0 left-64 right-0 h-14 bg-surface/95 backdrop-blur-md border-b border-outline-variant/15 px-8 flex justify-between items-center z-30">
+        <div className="flex items-center gap-3">
+          <h1 className="font-bold text-on-surface text-lg leading-none tracking-tight capitalize">
+            {activeTab}
+          </h1>
+          <span className="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+        </div>
+
+        {/* Notification Pill */}
         {notification && (
           <div
-            className={`px-6 py-3 font-display text-xs uppercase tracking-widest flex items-center justify-between border-b ${
-              notification.type === 'error'
-                ? 'bg-red-950/80 text-red-300 border-red-700'
-                : 'bg-emerald-950/80 text-emerald-300 border-emerald-700'
+            className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1.5 ${
+              notification.type === 'error' ? 'bg-red-100 text-red-800' : 'bg-emerald-100 text-emerald-900'
             }`}
           >
-            <span>{notification.message}</span>
-            <button onClick={() => setNotification(null)} className="p-1">
-              ✕
-            </button>
+            <span className="material-symbols-outlined text-sm">
+              {notification.type === 'error' ? 'error' : 'check_circle'}
+            </span>
+            {notification.message}
           </div>
         )}
 
-        <header className="h-16 w-full border-b border-[#444748]/40 bg-[#131313] px-8 flex items-center justify-between sticky top-0 z-30">
-          <div className="flex items-center gap-8 flex-1 max-w-2xl">
-            <div className="flex items-center gap-3">
-              <span className="font-display text-white tracking-widest uppercase font-bold text-base">
-                PRODUCT SHOWCASE CMS
-              </span>
-              <span className="px-2 py-0.5 border border-[#444748]/40 bg-[#1c1b1b] font-mono text-xs text-[#c4c7c8]">
-                {games.length} PRODUCTS
-              </span>
-            </div>
+        {/* Trailing Actions */}
+        <div className="flex items-center gap-2.5">
+          <Link
+            to="/"
+            className="border border-outline-variant/40 text-on-surface hover:bg-surface-container text-xs font-semibold px-4 py-1.5 rounded-full transition-all flex items-center gap-1.5"
+          >
+            <span>View site</span>
+            <span className="material-symbols-outlined text-[14px]">open_in_new</span>
+          </Link>
+          <button
+            onClick={handleOpenNewProject}
+            className="bg-primary-container text-white hover:bg-black text-xs font-semibold px-4 py-1.5 rounded-full transition-all flex items-center gap-1.5 shadow-[2px_2px_0px_#1B1A17]"
+          >
+            <span className="material-symbols-outlined text-[14px]">add</span>
+            <span>New project</span>
+          </button>
+        </div>
+      </header>
 
-            <div className="relative flex-1 max-w-md hidden md:block">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#8e9192]">
-                <span className="material-symbols-outlined text-base">search</span>
-              </div>
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search products by title, slug or desc..."
-                className="w-full bg-[#0e0e0e] border border-[#444748]/40 text-white pl-9 pr-4 py-1.5 text-xs font-mono focus:border-white focus:ring-0 placeholder:text-[#8e9192]/70"
-              />
-            </div>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => {
-                resetForm()
-                setIsFormOpen(true)
-              }}
-              className="flex items-center gap-2 px-4 py-1.5 bg-white text-black font-display text-xs tracking-widest uppercase font-bold hover:bg-neutral-200 transition-colors"
-            >
-              <span className="material-symbols-outlined text-sm">add</span>
-              <span>+ ADD NEW PRODUCT</span>
-            </button>
-          </div>
-        </header>
-
-        <main className="flex-1 p-8 grid grid-cols-1 xl:grid-cols-12 gap-8 items-start">
-          {/* PRIMARY COLUMN: Data Table */}
-          <section className="xl:col-span-8 space-y-6">
-            <div className="border border-[#444748]/40 bg-[#0e0e0e]">
-              <div className="px-4 py-3 border-b border-[#444748]/40 flex items-center justify-between bg-[#1c1b1b]">
-                <div className="flex items-center gap-2">
-                  <h2 className="font-display text-xs uppercase tracking-widest text-white font-bold">
-                    PRODUCT CATALOG & VISUALS
+      {/* ========================================================================= */}
+      {/* 3. MAIN WORKSPACE ACCORDING TO ACTIVE TAB                                 */}
+      {/* ========================================================================= */}
+      <main className="ml-64 pt-20 px-8 pb-16 bg-surface min-h-screen">
+        <div className="max-w-[1440px] mx-auto">
+          {/* TAB 1: DASHBOARD */}
+          {activeTab === 'dashboard' && (
+            <div>
+              <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6 pb-4 border-b border-outline-variant/15">
+                <div>
+                  <div className="text-label-eyebrow uppercase tracking-widest text-[11px] font-bold text-outline mb-1">
+                    Dashboard
+                  </div>
+                  <h2 className="text-2xl font-extrabold text-on-surface tracking-tight">
+                    Overview &amp; Studio Operations
                   </h2>
                 </div>
-                <div className="flex items-center gap-2 text-[#8e9192] font-mono text-xs">
-                  <span>{filteredGames.length} ITEMS</span>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={handleOpenNewProject}
+                    className="bg-primary-container text-white hover:bg-black text-xs font-medium px-3.5 py-1.5 rounded-full flex items-center gap-1.5 transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-[14px]">add</span>
+                    <span>New project</span>
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('team')}
+                    className="bg-surface-container border border-outline-variant/30 text-on-surface hover:bg-surface-container-high text-xs font-medium px-3.5 py-1.5 rounded-full flex items-center gap-1.5 transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-[14px]">person_add</span>
+                    <span>Team</span>
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('inquiries')}
+                    className="bg-surface-container border border-outline-variant/30 text-on-surface hover:bg-surface-container-high text-xs font-medium px-3.5 py-1.5 rounded-full flex items-center gap-1.5 transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-[14px]">inbox</span>
+                    <span>View inbox</span>
+                  </button>
                 </div>
               </div>
 
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                  <thead>
-                    <tr className="border-b border-[#444748]/40 bg-[#201f1f] text-[#8e9192] font-display text-[10px] uppercase tracking-widest">
-                      <th className="p-3 w-28">Preview</th>
-                      <th className="p-3">Title & Slug</th>
-                      <th className="p-3">Release Date</th>
-                      <th className="p-3">Tags</th>
-                      <th className="p-3 text-right">Actions</th>
+              {/* Bento Stat Cards */}
+              <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/20 p-5 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between mb-3 text-xs text-on-surface-variant font-medium">
+                      <span>Total projects</span>
+                      <span className="material-symbols-outlined text-[18px]">folder_open</span>
+                    </div>
+                    <div className="text-4xl font-extrabold text-on-surface tracking-tight mb-2">10</div>
+                  </div>
+                  <div className="text-[12px] text-on-surface-variant border-t border-outline-variant/15 pt-2 flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#74BE9C]"></span>
+                    <span>8 live in production, 2 open-source</span>
+                  </div>
+                </div>
+
+                <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/20 p-5 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between mb-3 text-xs text-on-surface-variant font-medium">
+                      <span>Unread inquiries</span>
+                      <span className="bg-secondary/10 text-secondary font-semibold text-[10px] px-2 py-0.5 rounded-full">
+                        {unreadInquiriesCount} new
+                      </span>
+                    </div>
+                    <div className="text-4xl font-extrabold text-on-surface tracking-tight mb-2">
+                      {unreadInquiriesCount}
+                    </div>
+                  </div>
+                  <div className="text-[12px] text-on-surface-variant border-t border-outline-variant/15 pt-2 flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-[13px]">schedule</span>
+                    <span>Average response SLA: &lt; 4 Hours</span>
+                  </div>
+                </div>
+
+                <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/20 p-5 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between mb-3 text-xs text-on-surface-variant font-medium">
+                      <span>Principals &amp; Team</span>
+                      <span className="material-symbols-outlined text-[18px]">group</span>
+                    </div>
+                    <div className="text-4xl font-extrabold text-on-surface tracking-tight mb-2">4</div>
+                  </div>
+                  <div className="text-[12px] text-on-surface-variant border-t border-outline-variant/15 pt-2 flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                    <span>Faseeh, Tayyab (CTO), Fahad, Ali</span>
+                  </div>
+                </div>
+
+                <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/20 p-5 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between mb-3 text-xs text-on-surface-variant font-medium">
+                      <span>Published case studies</span>
+                      <span className="material-symbols-outlined text-[18px]">auto_stories</span>
+                    </div>
+                    <div className="text-4xl font-extrabold text-on-surface tracking-tight mb-2">3</div>
+                  </div>
+                  <div className="text-[12px] text-on-surface-variant border-t border-outline-variant/15 pt-2 flex items-center gap-1.5">
+                    <span className="material-symbols-outlined text-[13px]">sync</span>
+                    <span>Echoes of Desolation &amp; PipeVision AI</span>
+                  </div>
+                </div>
+              </section>
+
+              {/* Two Column Workbench */}
+              <div className="grid grid-cols-12 gap-6">
+                <section className="col-span-12 lg:col-span-7 bg-surface-container-lowest rounded-xl border border-outline-variant/20 p-5">
+                  <div className="flex items-center justify-between pb-4 border-b border-outline-variant/15">
+                    <div className="flex items-center gap-2 font-bold text-base">
+                      <span>Recent inquiries</span>
+                      <span className="bg-secondary text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                        {unreadInquiriesCount} active
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => setActiveTab('inquiries')}
+                      className="text-xs font-semibold text-secondary hover:underline flex items-center gap-1"
+                    >
+                      <span>View all</span>
+                      <span className="material-symbols-outlined text-[13px]">arrow_forward</span>
+                    </button>
+                  </div>
+                  <div className="divide-y divide-outline-variant/15">
+                    {inquiries.slice(0, 4).map((inq) => (
+                      <div
+                        key={inq.id}
+                        onClick={() => {
+                          setSelectedInquiry(inq)
+                          setActiveTab('inquiries')
+                        }}
+                        className="py-4 hover:bg-surface-container/50 -mx-5 px-5 transition-colors cursor-pointer group"
+                      >
+                        <div className="flex items-start justify-between gap-3 mb-1">
+                          <div className="flex items-center gap-2">
+                            {inq.status === 'unread' && (
+                              <span className="w-2 h-2 rounded-full bg-secondary shrink-0"></span>
+                            )}
+                            <span className="font-bold text-sm text-on-surface group-hover:text-secondary">
+                              {inq.name}
+                            </span>
+                            <span className="text-xs text-on-surface-variant">({inq.company})</span>
+                          </div>
+                          <div className="flex items-center gap-2 shrink-0">
+                            <span className="text-[11px] px-2 py-0.5 rounded-full bg-surface-container font-medium">
+                              {inq.projectType}
+                            </span>
+                            <span className="text-[11px] text-outline">{inq.timeAgo}</span>
+                          </div>
+                        </div>
+                        <p className="text-xs text-on-surface-variant line-clamp-2 pl-4">{inq.message}</p>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+
+                <section className="col-span-12 lg:col-span-5 bg-surface-container-lowest rounded-xl border border-outline-variant/20 p-5">
+                  <div className="flex items-center justify-between pb-4 border-b border-outline-variant/15">
+                    <h3 className="font-bold text-base text-on-surface">Recently updated projects</h3>
+                    <button
+                      onClick={() => setActiveTab('projects')}
+                      className="text-xs font-semibold text-secondary hover:underline flex items-center gap-1"
+                    >
+                      <span>All projects</span>
+                      <span className="material-symbols-outlined text-[13px]">arrow_forward</span>
+                    </button>
+                  </div>
+                  <div className="divide-y divide-outline-variant/15">
+                    <div className="py-3.5 flex items-center justify-between gap-3">
+                      <div className="min-w-0">
+                        <div className="font-bold text-sm text-on-surface">PipeVision AI</div>
+                        <div className="text-[11px] text-outline">Factory conveyor YOLOv8 tallying</div>
+                      </div>
+                      <span className="bg-[#74BE9C]/20 text-[#1B1A17] font-semibold text-[11px] px-2 py-0.5 rounded-full">
+                        Published
+                      </span>
+                    </div>
+                    <div className="py-3.5 flex items-center justify-between gap-3">
+                      <div className="min-w-0">
+                        <div className="font-bold text-sm text-on-surface">Echoes of Desolation</div>
+                        <div className="text-[11px] text-outline">Unity 6 &amp; Blender 3D horror</div>
+                      </div>
+                      <span className="bg-[#FF5B5B]/20 text-[#1B1A17] font-semibold text-[11px] px-2 py-0.5 rounded-full">
+                        CTO Milestone
+                      </span>
+                    </div>
+                    <div className="py-3.5 flex items-center justify-between gap-3">
+                      <div className="min-w-0">
+                        <div className="font-bold text-sm text-on-surface">Workforce Suite</div>
+                        <div className="text-[11px] text-outline">5 live multi-role SaaS platforms</div>
+                      </div>
+                      <span className="bg-[#74BE9C]/20 text-[#1B1A17] font-semibold text-[11px] px-2 py-0.5 rounded-full">
+                        Published
+                      </span>
+                    </div>
+                    <div className="py-3.5 flex items-center justify-between gap-3">
+                      <div className="min-w-0">
+                        <div className="font-bold text-sm text-on-surface">Accounting &amp; POS Suite</div>
+                        <div className="text-[11px] text-outline">Live in 10+ retail locations</div>
+                      </div>
+                      <span className="bg-[#74BE9C]/20 text-[#1B1A17] font-semibold text-[11px] px-2 py-0.5 rounded-full">
+                        Published
+                      </span>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 2: PROJECTS */}
+          {activeTab === 'projects' && (
+            <div>
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold tracking-tight">Projects</h2>
+                  <p className="text-xs text-on-surface-variant">Manage your portfolio and case studies.</p>
+                </div>
+                <button
+                  onClick={handleOpenNewProject}
+                  className="bg-primary-container text-white px-5 py-2 rounded-full font-semibold text-xs flex items-center gap-1.5 shadow-[2px_2px_0px_#1B1A17]"
+                >
+                  <span className="material-symbols-outlined text-[16px]">add</span>
+                  <span>New project</span>
+                </button>
+              </div>
+
+              {/* Filter chips & Search */}
+              <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+                <div className="flex flex-wrap gap-2">
+                  {['All', 'Web & SaaS', 'Mobile Apps', 'AI & Automation', 'Open Source'].map((chip) => (
+                    <button
+                      key={chip}
+                      onClick={() => setProjectFilter(chip)}
+                      className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-colors ${
+                        projectFilter === chip
+                          ? 'bg-primary-container text-white'
+                          : 'bg-surface-container border border-outline-variant/30 text-on-surface-variant hover:text-on-surface'
+                      }`}
+                    >
+                      {chip}
+                    </button>
+                  ))}
+                </div>
+                <div className="relative w-64">
+                  <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[16px] text-outline">
+                    search
+                  </span>
+                  <input
+                    value={projectSearch}
+                    onChange={(e) => setProjectSearch(e.target.value)}
+                    placeholder="Search projects..."
+                    className="w-full pl-9 pr-3 py-1.5 text-xs bg-surface-container-lowest border border-outline-variant/30 rounded-full"
+                  />
+                </div>
+              </div>
+
+              {/* Data Table */}
+              <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/20 overflow-hidden">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-surface-container-high/50 border-b border-outline-variant/15 text-on-surface-variant">
+                    <tr>
+                      <th className="py-3 px-4">Project</th>
+                      <th className="py-3 px-4">Category</th>
+                      <th className="py-3 px-4">Delivery Tag</th>
+                      <th className="py-3 px-4">Featured</th>
+                      <th className="py-3 px-4">Status</th>
+                      <th className="py-3 px-4 text-right">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#444748]/30 font-mono text-xs">
-                    {filteredGames.length === 0 ? (
+                  <tbody className="divide-y divide-outline-variant/15">
+                    {loading && (
                       <tr>
-                        <td colSpan={5} className="p-8 text-center text-neutral-400">
-                          No products found. Click <strong>"Seed Initial Products"</strong> or <strong>"+ Add New Product"</strong>.
+                        <td colSpan={6} className="py-8 text-center text-on-surface-variant font-mono">
+                          Loading projects from Supabase...
                         </td>
                       </tr>
-                    ) : (
-                      filteredGames.map((g) => (
-                        <tr
-                          key={g.id}
-                          className="hover:bg-[#201f1f] transition-colors duration-150 group cursor-pointer"
-                          onClick={() => setPreviewGameSlug(g.slug)}
-                        >
-                          <td className="p-3 align-middle">
-                            <div className="w-20 aspect-video border border-[#444748]/40 bg-[#1c1b1b] overflow-hidden">
-                              {g.image_url ? (
-                                <img
-                                  src={g.image_url}
-                                  alt={g.title}
-                                  className="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all"
-                                />
-                              ) : (
-                                <div className="w-full h-full flex items-center justify-center text-[9px] text-[#8e9192]">
-                                  NO IMG
-                                </div>
-                              )}
-                            </div>
-                          </td>
-
-                          <td className="p-3 align-middle">
-                            <div className="font-display text-sm text-white font-medium uppercase">
-                              {g.title}
-                            </div>
-                            <div className="text-[11px] text-[#8e9192]">/game/{g.slug}</div>
-                          </td>
-
-                          <td className="p-3 align-middle text-[#c4c7c8] text-xs">
-                            {g.release_date || 'TBD'}
-                          </td>
-
-                          <td className="p-3 align-middle">
-                            <div className="flex flex-wrap gap-1 max-w-xs">
-                              {g.tags &&
-                                g.tags.map((t, idx) => (
-                                  <span
-                                    key={idx}
-                                    className="px-1.5 py-0.5 bg-[#1c1b1b] border border-[#444748]/30 text-[9px] text-[#8e9192] uppercase"
-                                  >
-                                    {t}
-                                  </span>
-                                ))}
-                            </div>
-                          </td>
-
-                          <td className="p-3 align-middle text-right" onClick={(e) => e.stopPropagation()}>
-                            <div className="inline-flex items-center gap-1">
-                              <Link
-                                to={`/game/${g.slug}`}
-                                target="_blank"
-                                className="px-2 py-1 border border-[#444748]/40 hover:border-white text-[#8e9192] hover:text-white transition-colors text-[10px] uppercase font-display"
-                              >
-                                View
-                              </Link>
-                              <button
-                                onClick={() => handleEditClick(g)}
-                                className="px-2 py-1 border border-[#444748]/40 hover:border-white text-[#8e9192] hover:text-white transition-colors text-[10px] uppercase font-display"
-                              >
-                                Edit
-                              </button>
-                              <button
-                                onClick={() => handleDeleteGame(g.id, g.title)}
-                                className="p-1 text-[#8e9192] hover:text-red-400 transition-colors"
-                                title="Delete"
-                              >
-                                <span className="material-symbols-outlined text-sm">delete</span>
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))
+                    )}
+                    {!loading && games.length === 0 && (
+                      <tr>
+                        <td colSpan={6} className="py-8 text-center text-on-surface-variant font-mono">
+                          No projects found. Click "New project" to create one.
+                        </td>
+                      </tr>
+                    )}
+                    {!loading && games.map((g) => (
+                      <tr key={g.id} className="hover:bg-surface-container-low/50">
+                        <td className="py-3 px-4 flex items-center gap-3">
+                          <img
+                            src={g.image_url || 'https://via.placeholder.com/60'}
+                            alt=""
+                            className="w-10 h-10 rounded object-cover border border-outline-variant/20 bg-surface-container"
+                          />
+                          <div>
+                            <div className="font-bold text-on-surface text-sm">{g.title}</div>
+                            <div className="text-[11px] text-outline font-mono">/work/{g.slug}</div>
+                          </div>
+                        </td>
+                        <td className="py-3 px-4">
+                          <span className="px-2 py-0.5 rounded-full bg-surface-container font-medium text-[11px]">
+                            {g.tags?.[0] || 'Web & SaaS'}
+                          </span>
+                        </td>
+                        <td className="py-3 px-4 font-mono text-[11px]">
+                          {g.release_date || 'Live in production'}
+                        </td>
+                        <td className="py-3 px-4">
+                          <span className="material-symbols-outlined text-amber-500 text-[18px]">star</span>
+                        </td>
+                        <td className="py-3 px-4">
+                          <span className="bg-[#74BE9C]/20 text-[#1B1A17] font-semibold text-[11px] px-2 py-0.5 rounded-full">
+                            Published
+                          </span>
+                        </td>
+                        <td className="py-3 px-4 text-right space-x-2">
+                          <button
+                            onClick={() => handleEditProject(g)}
+                            className="p-1 hover:text-secondary transition-colors"
+                          >
+                            <span className="material-symbols-outlined text-[16px]">edit</span>
+                          </button>
+                          <button
+                            onClick={() => handleDeleteProject(g.id)}
+                            className="p-1 hover:text-red-600 transition-colors"
+                          >
+                            <span className="material-symbols-outlined text-[16px]">delete</span>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                    {games.length === 0 && (
+                      <tr>
+                        <td colSpan={6} className="py-8 text-center text-outline">
+                          No custom projects found. Click "New project" to create one.
+                        </td>
+                      </tr>
                     )}
                   </tbody>
                 </table>
               </div>
             </div>
-          </section>
+          )}
 
-          {/* SECONDARY COLUMN: Fast Image Preview & Details */}
-          <section className="xl:col-span-4 border border-[#444748]/40 bg-[#0e0e0e] p-6 space-y-4">
-            <div className="pb-3 border-b border-[#444748]/40 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-white text-base">image</span>
-                <h3 className="font-display text-xs uppercase tracking-widest text-white font-bold">
-                  IMAGE & SHOWCASE PREVIEW
-                </h3>
+          {/* TAB 3: INQUIRIES */}
+          {activeTab === 'inquiries' && (
+            <div>
+              <div className="flex items-center justify-between gap-4 mb-6">
+                <div className="flex items-center gap-3">
+                  <h2 className="text-2xl font-bold tracking-tight">Inbox</h2>
+                  {unreadInquiriesCount > 0 && (
+                    <span className="bg-secondary text-white text-xs font-bold px-2 py-0.5 rounded-full">
+                      {unreadInquiriesCount} unread
+                    </span>
+                  )}
+                </div>
+                <div className="flex gap-2">
+                  {(['all', 'unread', 'replied'] as const).map((filter) => (
+                    <button
+                      key={filter}
+                      onClick={() => setInquiryFilter(filter)}
+                      className={`px-3 py-1 rounded-full text-xs font-semibold capitalize ${
+                        inquiryFilter === filter
+                          ? 'bg-primary-container text-white'
+                          : 'bg-surface-container border border-outline-variant/30 text-on-surface-variant'
+                      }`}
+                    >
+                      {filter}
+                    </button>
+                  ))}
+                </div>
               </div>
-              <span className="font-display text-[10px] uppercase tracking-widest text-[#8e9192]">
-                SELECTED
-              </span>
-            </div>
 
-            {selectedPreviewGame && (
-              <div className="space-y-4">
+              {/* Inquiries Table */}
+              <div className="bg-surface-container-lowest rounded-xl border border-outline-variant/20 overflow-hidden">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-surface-container-high/50 border-b border-outline-variant/15 text-on-surface-variant">
+                    <tr>
+                      <th className="py-3 px-4">Contact</th>
+                      <th className="py-3 px-4">Discipline</th>
+                      <th className="py-3 px-4">Excerpt</th>
+                      <th className="py-3 px-4">Received</th>
+                      <th className="py-3 px-4">Status</th>
+                      <th className="py-3 px-4 text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-outline-variant/15">
+                    {inquiries.map((inq) => (
+                      <tr
+                        key={inq.id}
+                        className="hover:bg-surface-container-low/50 cursor-pointer"
+                        onClick={() => setSelectedInquiry(inq)}
+                      >
+                        <td className="py-3.5 px-4">
+                          <div className="flex items-center gap-2">
+                            {inq.status === 'unread' && (
+                              <span className="w-2 h-2 rounded-full bg-secondary shrink-0"></span>
+                            )}
+                            <div>
+                              <div className="font-bold text-sm text-on-surface">{inq.name}</div>
+                              <div className="text-outline text-[11px]">{inq.email}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="py-3.5 px-4">
+                          <span className="px-2 py-0.5 rounded-full bg-surface-container font-medium text-[11px]">
+                            {inq.projectType}
+                          </span>
+                        </td>
+                        <td className="py-3.5 px-4 max-w-xs truncate text-on-surface-variant">
+                          {inq.message}
+                        </td>
+                        <td className="py-3.5 px-4 font-mono text-[11px] text-outline">{inq.timeAgo}</td>
+                        <td className="py-3.5 px-4">
+                          <span
+                            className={`px-2 py-0.5 rounded-full text-[11px] font-semibold ${
+                              inq.status === 'unread'
+                                ? 'bg-secondary/10 text-secondary'
+                                : inq.status === 'replied'
+                                ? 'bg-[#74BE9C]/20 text-[#1B1A17]'
+                                : 'bg-surface-container text-on-surface-variant'
+                            }`}
+                          >
+                            {inq.status}
+                          </span>
+                        </td>
+                        <td className="py-3.5 px-4 text-right space-x-2">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setSelectedInquiry(inq)
+                            }}
+                            className="p-1 hover:text-secondary transition-colors"
+                          >
+                            <span className="material-symbols-outlined text-[16px]">visibility</span>
+                          </button>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              setInquiries(inquiries.filter((i) => i.id !== inq.id))
+                              showNotification('Inquiry deleted.')
+                            }}
+                            className="p-1 hover:text-red-600 transition-colors"
+                          >
+                            <span className="material-symbols-outlined text-[16px]">delete</span>
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* TAB 4: TEAM */}
+          {activeTab === 'team' && (
+            <div>
+              <div className="flex items-center justify-between gap-4 mb-6">
                 <div>
-                  <h4 className="font-display text-lg text-white uppercase font-bold">
-                    {selectedPreviewGame.title}
-                  </h4>
-                  <p className="font-mono text-xs text-[#8e9192]">/game/{selectedPreviewGame.slug}</p>
+                  <h2 className="text-2xl font-bold tracking-tight">Team Leadership</h2>
+                  <p className="text-xs text-on-surface-variant">Manage founding profiles, bios, and LinkedIn URLs.</p>
+                </div>
+                <button
+                  onClick={() => {
+                    setEditingMember({
+                      id: `member-${Date.now()}`,
+                      name: '',
+                      role: '',
+                      focus: '',
+                      bio: '',
+                      chips: [],
+                      imageUrl: '',
+                      linkedInUrl: '',
+                      order: teamMembers.length + 1,
+                    })
+                    setIsMemberSlideOpen(true)
+                  }}
+                  className="bg-primary-container text-white px-5 py-2 rounded-full font-semibold text-xs flex items-center gap-1.5 shadow-[2px_2px_0px_#1B1A17]"
+                >
+                  <span className="material-symbols-outlined text-[16px]">add</span>
+                  <span>New member</span>
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {teamMembers.map((m) => (
+                  <div
+                    key={m.id}
+                    className="p-5 rounded-xl border border-outline-variant/20 bg-surface-container-lowest flex items-center justify-between gap-4"
+                  >
+                    <div className="flex items-center gap-4">
+                      <span className="material-symbols-outlined text-outline cursor-grab">drag_indicator</span>
+                      <img
+                        src={m.imageUrl || 'https://via.placeholder.com/80'}
+                        alt=""
+                        className="w-12 h-12 rounded-full object-cover border border-outline-variant/20"
+                      />
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h4 className="font-bold text-sm text-on-surface">{m.name}</h4>
+                          <span className="text-[11px] font-mono text-outline">#{m.order}</span>
+                        </div>
+                        <div className="text-xs text-on-surface-variant">{m.role}</div>
+                        <div className="text-[11px] text-outline mt-0.5">{m.focus}</div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => {
+                          setEditingMember(m)
+                          setIsMemberSlideOpen(true)
+                        }}
+                        className="p-2 border border-outline-variant/30 rounded-full hover:bg-surface-container transition-colors"
+                      >
+                        <span className="material-symbols-outlined text-[16px]">edit</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          if (window.confirm('Delete member?')) {
+                            setTeamMembers(teamMembers.filter((item) => item.id !== m.id))
+                            showNotification('Member removed.')
+                          }
+                        }}
+                        className="p-2 border border-outline-variant/30 rounded-full hover:bg-red-50 hover:text-red-600 transition-colors"
+                      >
+                        <span className="material-symbols-outlined text-[16px]">delete</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 5: SERVICES */}
+          {activeTab === 'services' && (
+            <div>
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold tracking-tight">Studio Disciplines &amp; Services</h2>
+                <p className="text-xs text-on-surface-variant">Edit core capability descriptions and tech chips.</p>
+              </div>
+
+              <div className="space-y-6">
+                {services.map((srv, idx) => (
+                  <div
+                    key={srv.id}
+                    className="p-6 rounded-2xl border border-outline-variant/20 bg-surface-container-lowest space-y-4"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span
+                          className="w-3.5 h-3.5 rounded-full"
+                          style={{ backgroundColor: srv.accentColor }}
+                        ></span>
+                        <h3 className="font-bold text-base text-on-surface">Discipline {idx + 1}: {srv.title}</h3>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {['#FF5B5B', '#74BE9C', '#2b00d1', '#F6A6CF'].map((c) => (
+                          <button
+                            key={c}
+                            onClick={() => {
+                              const updated = [...services]
+                              updated[idx].accentColor = c
+                              setServices(updated)
+                            }}
+                            className={`w-5 h-5 rounded-full border ${
+                              srv.accentColor === c ? 'ring-2 ring-primary ring-offset-1' : ''
+                            }`}
+                            style={{ backgroundColor: c }}
+                          />
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-on-surface mb-1 uppercase">Title</label>
+                      <input
+                        value={srv.title}
+                        onChange={(e) => {
+                          const updated = [...services]
+                          updated[idx].title = e.target.value
+                          setServices(updated)
+                        }}
+                        className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-sm"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-on-surface mb-1 uppercase">
+                        Description
+                      </label>
+                      <textarea
+                        rows={2}
+                        value={srv.description}
+                        onChange={(e) => {
+                          const updated = [...services]
+                          updated[idx].description = e.target.value
+                          setServices(updated)
+                        }}
+                        className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-xs"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-on-surface mb-1 uppercase">
+                        Capability Bullets (One per line)
+                      </label>
+                      <textarea
+                        rows={3}
+                        value={srv.bullets.join('\n')}
+                        onChange={(e) => {
+                          const updated = [...services]
+                          updated[idx].bullets = e.target.value.split('\n')
+                          setServices(updated)
+                        }}
+                        className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-xs font-mono"
+                      />
+                    </div>
+
+                    <div className="flex justify-end pt-2">
+                      <button
+                        onClick={() => showNotification(`Saved changes for ${srv.title}`)}
+                        className="bg-primary-container text-white px-5 py-2 rounded-full font-semibold text-xs shadow-[2px_2px_0px_#1B1A17]"
+                      >
+                        Save {srv.title}
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 6: MEDIA */}
+          {activeTab === 'media' && (
+            <div>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                <div>
+                  <h2 className="text-2xl font-bold tracking-tight">Media Library</h2>
+                  <p className="text-xs text-on-surface-variant">Asset store supporting direct copy and upload.</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="relative w-64">
+                    <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[16px] text-outline">
+                      search
+                    </span>
+                    <input
+                      value={mediaSearch}
+                      onChange={(e) => setMediaSearch(e.target.value)}
+                      placeholder="Search assets..."
+                      className="w-full pl-9 pr-3 py-1.5 text-xs bg-surface-container-lowest border border-outline-variant/30 rounded-full"
+                    />
+                  </div>
+                  <label className="bg-primary-container text-white px-4 py-2 rounded-full font-semibold text-xs flex items-center gap-1.5 cursor-pointer shadow-[2px_2px_0px_#1B1A17]">
+                    <span className="material-symbols-outlined text-[16px]">upload</span>
+                    <span>Upload image</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => {
+                        const f = e.target.files?.[0]
+                        if (f) {
+                          const newAsset = {
+                            name: f.name,
+                            dims: 'Custom Upload',
+                            url: URL.createObjectURL(f),
+                          }
+                          setMediaItems([newAsset, ...mediaItems])
+                          showNotification('Asset added to library.')
+                        }
+                      }}
+                    />
+                  </label>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {mediaItems
+                  .filter((m) => m.name.toLowerCase().includes(mediaSearch.toLowerCase()))
+                  .map((item) => (
+                    <div
+                      key={item.name}
+                      className="group bg-surface-container-lowest border border-outline-variant/20 rounded-xl overflow-hidden relative"
+                    >
+                      <div className="aspect-[16/10] bg-surface-container-high overflow-hidden relative">
+                        <img src={item.url} alt="" className="w-full h-full object-cover" />
+                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                          <button
+                            onClick={() => {
+                              navigator.clipboard.writeText(item.url)
+                              showNotification('URL copied to clipboard!')
+                            }}
+                            className="p-2 rounded-full bg-white text-black hover:bg-secondary hover:text-white transition-colors"
+                            title="Copy URL"
+                          >
+                            <span className="material-symbols-outlined text-[16px]">content_copy</span>
+                          </button>
+                          <button
+                            onClick={() => {
+                              setMediaItems(mediaItems.filter((i) => i.name !== item.name))
+                              showNotification('Asset removed.')
+                            }}
+                            className="p-2 rounded-full bg-white text-black hover:bg-red-600 hover:text-white transition-colors"
+                            title="Delete"
+                          >
+                            <span className="material-symbols-outlined text-[16px]">delete</span>
+                          </button>
+                        </div>
+                      </div>
+                      <div className="p-3">
+                        <div className="font-mono text-xs font-semibold text-on-surface truncate">{item.name}</div>
+                        <div className="text-[11px] text-outline font-mono mt-0.5">{item.dims}</div>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 7: SETTINGS */}
+          {activeTab === 'settings' && (
+            <div>
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold tracking-tight">Studio Global Settings</h2>
+                <p className="text-xs text-on-surface-variant">Update telemetry, hero copy, and production contact info.</p>
+              </div>
+
+              <div className="bg-surface-container-lowest p-8 rounded-2xl border border-outline-variant/20 max-w-3xl space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-on-surface mb-1 uppercase">Site Title</label>
+                    <input
+                      value={settings.siteTitle}
+                      onChange={(e) => setSettings({ ...settings, siteTitle: e.target.value })}
+                      className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-xs"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-on-surface mb-1 uppercase">Contact Email</label>
+                    <input
+                      value={settings.contactEmail}
+                      onChange={(e) => setSettings({ ...settings, contactEmail: e.target.value })}
+                      className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-xs"
+                    />
+                  </div>
                 </div>
 
-                <div className="aspect-video w-full border border-[#444748]/40 bg-[#1c1b1b] overflow-hidden">
-                  {selectedPreviewGame.image_url ? (
-                    <img
-                      src={selectedPreviewGame.image_url}
-                      alt={selectedPreviewGame.title}
-                      className="w-full h-full object-cover"
+                <div>
+                  <label className="block text-xs font-semibold text-on-surface mb-1 uppercase">Location Line</label>
+                  <input
+                    value={settings.locationLine}
+                    onChange={(e) => setSettings({ ...settings, locationLine: e.target.value })}
+                    className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-xs"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-on-surface mb-1 uppercase">Hero Headline</label>
+                  <input
+                    value={settings.heroHeadline}
+                    onChange={(e) => setSettings({ ...settings, heroHeadline: e.target.value })}
+                    className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-xs"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-on-surface mb-1 uppercase">Hero Subline</label>
+                  <textarea
+                    rows={2}
+                    value={settings.heroSubline}
+                    onChange={(e) => setSettings({ ...settings, heroSubline: e.target.value })}
+                    className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-xs"
+                  />
+                </div>
+
+                {/* 4 Stats */}
+                <div className="pt-4 border-t border-outline-variant/15">
+                  <span className="block text-xs font-bold text-on-surface uppercase mb-3">
+                    Stats (4 Pairs)
+                  </span>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    <div>
+                      <input
+                        value={settings.stat1Val}
+                        onChange={(e) => setSettings({ ...settings, stat1Val: e.target.value })}
+                        className="w-full font-bold text-sm bg-surface-container-low border border-outline-variant/30 rounded-lg p-2"
+                      />
+                      <input
+                        value={settings.stat1Label}
+                        onChange={(e) => setSettings({ ...settings, stat1Label: e.target.value })}
+                        className="w-full text-[11px] text-outline bg-surface-container-low border border-outline-variant/30 rounded-lg p-1.5 mt-1"
+                      />
+                    </div>
+                    <div>
+                      <input
+                        value={settings.stat2Val}
+                        onChange={(e) => setSettings({ ...settings, stat2Val: e.target.value })}
+                        className="w-full font-bold text-sm bg-surface-container-low border border-outline-variant/30 rounded-lg p-2"
+                      />
+                      <input
+                        value={settings.stat2Label}
+                        onChange={(e) => setSettings({ ...settings, stat2Label: e.target.value })}
+                        className="w-full text-[11px] text-outline bg-surface-container-low border border-outline-variant/30 rounded-lg p-1.5 mt-1"
+                      />
+                    </div>
+                    <div>
+                      <input
+                        value={settings.stat3Val}
+                        onChange={(e) => setSettings({ ...settings, stat3Val: e.target.value })}
+                        className="w-full font-bold text-sm bg-surface-container-low border border-outline-variant/30 rounded-lg p-2"
+                      />
+                      <input
+                        value={settings.stat3Label}
+                        onChange={(e) => setSettings({ ...settings, stat3Label: e.target.value })}
+                        className="w-full text-[11px] text-outline bg-surface-container-low border border-outline-variant/30 rounded-lg p-1.5 mt-1"
+                      />
+                    </div>
+                    <div>
+                      <input
+                        value={settings.stat4Val}
+                        onChange={(e) => setSettings({ ...settings, stat4Val: e.target.value })}
+                        className="w-full font-bold text-sm bg-surface-container-low border border-outline-variant/30 rounded-lg p-2"
+                      />
+                      <input
+                        value={settings.stat4Label}
+                        onChange={(e) => setSettings({ ...settings, stat4Label: e.target.value })}
+                        className="w-full text-[11px] text-outline bg-surface-container-low border border-outline-variant/30 rounded-lg p-1.5 mt-1"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="pt-2 flex justify-end">
+                  <button
+                    onClick={() => showNotification('Global studio settings saved successfully!')}
+                    className="bg-primary-container text-white px-7 py-3 rounded-full font-semibold text-xs shadow-[2px_2px_0px_#1B1A17]"
+                  >
+                    Save all settings
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      </main>
+
+      {/* ========================================================================= */}
+      {/* 4. PROJECT SLIDE-OVER PANEL                                               */}
+      {/* ========================================================================= */}
+      {isProjectSlideOpen && (
+        <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="w-full max-w-xl bg-surface h-full shadow-2xl p-6 md:p-8 overflow-y-auto flex flex-col justify-between border-l border-outline-variant/20">
+            <div>
+              <div className="flex items-center justify-between pb-4 border-b border-outline-variant/15 mb-6">
+                <div>
+                  <h3 className="font-bold text-lg text-on-surface">
+                    {editingProjectId ? 'Edit Project' : 'New Project'}
+                  </h3>
+                  <p className="text-xs text-on-surface-variant">Configure specs, assets, and case study parameters.</p>
+                </div>
+                <button
+                  onClick={() => setIsProjectSlideOpen(false)}
+                  className="w-8 h-8 rounded-full border border-outline-variant/30 flex items-center justify-center hover:bg-surface-container transition-colors"
+                >
+                  <span className="material-symbols-outlined text-[16px]">close</span>
+                </button>
+              </div>
+
+              <form onSubmit={handleSaveProject} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-on-surface mb-1 uppercase">Title</label>
+                  <input
+                    required
+                    value={formTitle}
+                    onChange={(e) => handleTitleChange(e.target.value)}
+                    placeholder="e.g. PipeVision AI"
+                    className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-sm"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-on-surface mb-1 uppercase">URL Slug</label>
+                    <input
+                      required
+                      value={formSlug}
+                      onChange={(e) => setFormSlug(e.target.value)}
+                      placeholder="pipevision-ai"
+                      className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-xs font-mono"
                     />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-xs text-[#8e9192]">
-                      No Image Configured
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-on-surface mb-1 uppercase">Category</label>
+                    <select
+                      value={formCategory}
+                      onChange={(e) => setFormCategory(e.target.value)}
+                      className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-xs"
+                    >
+                      <option>Web &amp; SaaS</option>
+                      <option>Game Development</option>
+                      <option>Mobile Apps</option>
+                      <option>AI &amp; Automation</option>
+                      <option>Open Source</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-on-surface mb-1 uppercase">Delivery Tag</label>
+                  <input
+                    value={formDeliveryTag}
+                    onChange={(e) => setFormDeliveryTag(e.target.value)}
+                    placeholder="e.g. Live in 10+ shops / Delivered to A-One PVC"
+                    className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-xs"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-on-surface mb-1 uppercase">
+                    Short Description (Home/Work Cards)
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={formDescription}
+                    onChange={(e) => setFormDescription(e.target.value)}
+                    placeholder="Brief architectural summary..."
+                    className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-xs"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-on-surface mb-1 uppercase">
+                    Tech Stack (Comma-separated)
+                  </label>
+                  <input
+                    value={formTags}
+                    onChange={(e) => setFormTags(e.target.value)}
+                    placeholder="Python, YOLOv8, FastAPI, React"
+                    className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-xs font-mono"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-on-surface mb-1 uppercase">
+                    Project Image URL (or Google Drive share link)
+                  </label>
+                  <input
+                    value={formImageUrl}
+                    onChange={(e) => setFormImageUrl(e.target.value)}
+                    placeholder="https://drive.google.com/file/d/... or https://..."
+                    className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-xs font-mono"
+                  />
+                  {formImageUrl && (
+                    <div className="mt-2 aspect-video w-32 rounded border border-outline-variant/30 overflow-hidden bg-surface-container">
+                      <img src={normalizeImageUrl(formImageUrl)} alt="" className="w-full h-full object-cover" />
                     </div>
                   )}
                 </div>
 
-                <div>
-                  <span className="font-display text-[10px] uppercase tracking-widest text-[#8e9192] block mb-1">
-                    PRODUCT DESCRIPTION
-                  </span>
-                  <p className="text-xs text-[#c7c6c6] leading-relaxed font-light">
-                    {selectedPreviewGame.description}
-                  </p>
-                </div>
-
-                <div className="pt-2">
-                  <Link
-                    to={`/game/${selectedPreviewGame.slug}`}
-                    target="_blank"
-                    className="w-full py-2.5 px-4 bg-white text-black font-display text-xs tracking-widest uppercase font-bold flex items-center justify-center gap-2 hover:bg-neutral-200 transition-colors"
-                  >
-                    <span>OPEN PUBLIC PRODUCT PAGE →</span>
-                  </Link>
-                </div>
-              </div>
-            )}
-          </section>
-        </main>
-      </div>
-
-      {/* MODAL: ADD / EDIT PRODUCT */}
-      {isFormOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-in fade-in overflow-y-auto">
-          <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-[#0e0e0e] border border-[#444748] p-6 md:p-8 space-y-6 shadow-2xl">
-            <div className="flex justify-between items-center border-b border-[#444748]/40 pb-4">
-              <div className="flex items-center gap-2">
-                <h3 className="font-display text-lg text-white uppercase tracking-tight font-bold">
-                  {editingGameId ? 'EDIT PRODUCT ENTRY' : 'ADD NEW PRODUCT'}
-                </h3>
-              </div>
-              <button
-                onClick={() => setIsFormOpen(false)}
-                className="text-[#8e9192] hover:text-white p-1"
-              >
-                <span className="material-symbols-outlined">close</span>
-              </button>
-            </div>
-
-            <form onSubmit={handleSaveGame} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block font-display text-[10px] uppercase tracking-widest text-[#8e9192] mb-1">
-                    PRODUCT TITLE *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formTitle}
-                    onChange={(e) => setFormTitle(e.target.value)}
-                    placeholder="e.g. Echoes of Desolation"
-                    className="w-full bg-[#131313] border border-[#444748]/40 text-white text-xs px-3 py-2 font-mono"
-                  />
-                </div>
-                <div>
-                  <label className="block font-display text-[10px] uppercase tracking-widest text-[#8e9192] mb-1">
-                    SLUG *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formSlug}
-                    onChange={(e) => setFormSlug(e.target.value)}
-                    placeholder="e.g. echoes-of-desolation"
-                    className="w-full bg-[#131313] border border-[#444748]/40 text-white text-xs px-3 py-2 font-mono"
-                  />
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block font-display text-[10px] uppercase tracking-widest text-[#8e9192] mb-1">
-                    RELEASE DATE (YYYY-MM-DD)
-                  </label>
-                  <input
-                    type="date"
-                    value={formReleaseDate}
-                    onChange={(e) => setFormReleaseDate(e.target.value)}
-                    className="w-full bg-[#131313] border border-[#444748]/40 text-white text-xs px-3 py-2 font-mono"
-                  />
-                </div>
-                <div>
-                  <label className="block font-display text-[10px] uppercase tracking-widest text-[#8e9192] mb-1">
-                    YOUTUBE URL OR 11-CHAR ID
-                  </label>
-                  <input
-                    type="text"
-                    value={formYoutubeId}
-                    onChange={(e) => setFormYoutubeId(e.target.value)}
-                    placeholder="e.g. dQw4w9WgXcQ or https://youtu.be/..."
-                    className="w-full bg-[#131313] border border-[#444748]/40 text-white text-xs px-3 py-2 font-mono"
-                  />
-                </div>
-              </div>
-
-              {/* COVER PICTURE UPLOAD OR URL */}
-              <div className="border border-[#444748]/40 p-4 bg-[#131313] space-y-3">
-                <div className="flex items-center justify-between">
-                  <label className="block font-display text-[10px] uppercase tracking-widest text-white font-bold">
-                    PRODUCT COVER PICTURE
-                  </label>
-                  <span className="text-[10px] text-[#8e9192] font-mono">
-                    PNG, JPG, WEBP, GIF
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 items-center">
-                  {/* File Upload Button */}
-                  <div>
-                    <label className="flex flex-col items-center justify-center border border-dashed border-[#444748] hover:border-white p-4 cursor-pointer transition-colors bg-[#0e0e0e] group">
-                      <span className="material-symbols-outlined text-2xl text-[#8e9192] group-hover:text-white transition-colors mb-1">
-                        cloud_upload
-                      </span>
-                      <span className="font-display text-[11px] text-white tracking-widest uppercase">
-                        {isUploadingImage ? 'PROCESSING FILE...' : 'SELECT & UPLOAD PICTURE'}
-                      </span>
-                      <span className="text-[9px] text-[#8e9192] mt-0.5">
-                        Direct Local File Upload
-                      </span>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        disabled={isUploadingImage}
-                        onChange={handleFileUpload}
-                        className="hidden"
-                      />
-                    </label>
-                  </div>
-
-                  {/* Or enter Direct URL */}
-                  <div className="space-y-1">
-                    <span className="block font-display text-[9px] uppercase tracking-widest text-[#8e9192]">
-                      OR PASTE PICTURE URL / GOOGLE DRIVE LINK
-                    </span>
+                <div className="flex items-center gap-6 py-2">
+                  <label className="flex items-center gap-2 text-xs cursor-pointer">
                     <input
-                      type="text"
-                      value={formImageUrl}
-                      onChange={(e) => {
-                        const val = e.target.value
-                        const converted = normalizeImageUrl(val)
-                        if (converted !== val && converted.includes('lh3.googleusercontent.com')) {
-                          showNotification('Google Drive link converted to direct image URL!')
-                        }
-                        setFormImageUrl(converted)
-                      }}
-                      placeholder="https://drive.google.com/file/d/... or direct image URL"
-                      className="w-full bg-[#0e0e0e] border border-[#444748]/40 text-white text-xs px-3 py-2 font-mono focus:border-white focus:outline-none"
+                      type="checkbox"
+                      checked={formFeatured}
+                      onChange={(e) => setFormFeatured(e.target.checked)}
+                      className="rounded border-outline-variant text-primary"
                     />
-                    <p className="text-[9px] text-[#8e9192] font-mono">
-                      Tip: Google Drive share links ("Anyone with the link") are auto-formatted into direct images.
-                    </p>
-                    {formImageUrl && (
-                      <button
-                        type="button"
-                        onClick={() => setFormImageUrl('')}
-                        className="text-[10px] text-red-400 hover:underline uppercase font-mono"
-                      >
-                        [Clear Image]
-                      </button>
-                    )}
-                  </div>
+                    <span>Featured on homepage</span>
+                  </label>
+                  <label className="flex items-center gap-2 text-xs cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={formPublished}
+                      onChange={(e) => setFormPublished(e.target.checked)}
+                      className="rounded border-outline-variant text-primary"
+                    />
+                    <span>Published</span>
+                  </label>
                 </div>
 
-                {/* Form Image Preview */}
-                {formImageUrl && (
-                  <div className="pt-2 border-t border-[#444748]/30 flex items-center gap-4">
-                    <div className="w-24 h-16 border border-[#444748]/40 overflow-hidden bg-black flex-shrink-0">
-                      <img
-                        src={formImageUrl}
-                        alt="Upload preview"
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="text-[10px] text-[#8e9192] space-y-0.5">
-                      <span className="text-white block font-display uppercase tracking-widest">
-                        Image Attached & Verified
-                      </span>
-                      <span className="font-mono text-[9px] text-[#8e9192] break-all line-clamp-1">
-                        {formImageUrl.startsWith('data:') ? 'Local Image Data Embedded (Base64)' : formImageUrl}
-                      </span>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div>
-                <label className="block font-display text-[10px] uppercase tracking-widest text-[#8e9192] mb-1">
-                  TAGS (COMMA-SEPARATED)
-                </label>
-                <input
-                  type="text"
-                  value={formTags}
-                  onChange={(e) => setFormTags(e.target.value)}
-                  placeholder="e.g. Unity Engine, Blender 3D, ElevenLabs Audio, Survival Horror"
-                  className="w-full bg-[#131313] border border-[#444748]/40 text-white text-xs px-3 py-2 font-mono"
-                />
-              </div>
-
-              <div>
-                <label className="block font-display text-[10px] uppercase tracking-widest text-[#8e9192] mb-1">
-                  PRODUCT DESCRIPTION *
-                </label>
-                <textarea
-                  rows={4}
-                  required
-                  value={formDescription}
-                  onChange={(e) => setFormDescription(e.target.value)}
-                  placeholder="Comprehensive description of this game title or product..."
-                  className="w-full bg-[#131313] border border-[#444748]/40 text-white text-xs p-3 font-mono"
-                />
-              </div>
-
-              <div className="pt-4 border-t border-[#444748]/40 flex justify-end gap-3 font-display text-xs">
-                <button
-                  type="button"
-                  disabled={isSaving}
-                  onClick={() => setIsFormOpen(false)}
-                  className="px-6 py-2.5 border border-[#444748]/40 text-[#8e9192] hover:text-white uppercase tracking-widest disabled:opacity-50"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSaving || isUploadingImage}
-                  className="px-6 py-2.5 bg-white text-black font-bold uppercase tracking-widest hover:bg-neutral-200 transition-colors disabled:opacity-50 flex items-center gap-2"
-                >
-                  {isSaving && <span className="w-2 h-2 bg-black rounded-full animate-ping inline-block" />}
-                  <span>{isSaving ? 'SAVING RECORD...' : 'Save Product Record'}</span>
-                </button>
-              </div>
-            </form>
+                <div className="pt-6 border-t border-outline-variant/15 flex items-center justify-between">
+                  {editingProjectId ? (
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteProject(editingProjectId)}
+                      className="text-xs text-red-600 hover:underline font-semibold"
+                    >
+                      Delete project
+                    </button>
+                  ) : (
+                    <div></div>
+                  )}
+                  <button
+                    type="submit"
+                    className="bg-primary-container text-white px-6 py-2.5 rounded-full font-semibold text-xs shadow-[2px_2px_0px_#1B1A17]"
+                  >
+                    Save changes
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       )}
 
-      {/* MODAL: EDIT STUDIO INFO */}
-      {isStudioModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-in fade-in">
-          <div className="w-full max-w-2xl bg-[#0e0e0e] border border-[#444748] p-6 md:p-8 space-y-6">
-            <div className="flex justify-between items-center border-b border-[#444748]/40 pb-4">
-              <div className="flex items-center gap-2">
-                <h3 className="font-display text-lg text-white uppercase tracking-tight font-bold">
-                  EDIT STUDIO INFO (ID = 1)
-                </h3>
+      {/* ========================================================================= */}
+      {/* 5. INQUIRY MESSAGE VIEW SLIDE-OVER                                        */}
+      {/* ========================================================================= */}
+      {selectedInquiry && (
+        <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="w-full max-w-lg bg-surface h-full shadow-2xl p-6 md:p-8 overflow-y-auto flex flex-col justify-between border-l border-outline-variant/20">
+            <div>
+              <div className="flex items-center justify-between pb-4 border-b border-outline-variant/15 mb-6">
+                <div>
+                  <h3 className="font-bold text-lg text-on-surface">Client Inquiry</h3>
+                  <p className="text-xs text-on-surface-variant font-mono">{selectedInquiry.id}</p>
+                </div>
+                <button
+                  onClick={() => setSelectedInquiry(null)}
+                  className="w-8 h-8 rounded-full border border-outline-variant/30 flex items-center justify-center hover:bg-surface-container transition-colors"
+                >
+                  <span className="material-symbols-outlined text-[16px]">close</span>
+                </button>
               </div>
-              <button
-                onClick={() => setIsStudioModalOpen(false)}
-                className="text-[#8e9192] hover:text-white p-1"
-              >
-                <span className="material-symbols-outlined">close</span>
-              </button>
+
+              {/* Chat Thread Container */}
+              <div className="space-y-4 mb-6">
+                <div className="p-4 rounded-2xl bg-surface-container space-y-2 border border-outline-variant/20">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <div className="font-bold text-sm text-on-surface">{selectedInquiry.name}</div>
+                      <div className="text-xs text-secondary font-mono">{selectedInquiry.email}</div>
+                      {selectedInquiry.company && (
+                        <div className="text-[11px] text-outline">{selectedInquiry.company}</div>
+                      )}
+                    </div>
+                    <span className="text-[11px] px-2 py-0.5 rounded-full bg-surface-container-high font-medium">
+                      {selectedInquiry.projectType}
+                    </span>
+                  </div>
+                  {selectedInquiry.budget && (
+                    <div className="text-xs text-on-surface font-semibold pt-1">
+                      Budget Range: <span className="text-secondary">{selectedInquiry.budget}</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Message Bubble */}
+                <div className="p-4 rounded-2xl bg-surface-container-low border border-outline-variant/15 text-xs text-on-surface leading-relaxed">
+                  {selectedInquiry.message}
+                </div>
+              </div>
+
+              {/* Reply Box */}
+              <div className="space-y-2">
+                <label className="block text-xs font-semibold text-on-surface uppercase">Direct Reply</label>
+                <textarea
+                  rows={4}
+                  value={replyText}
+                  onChange={(e) => setReplyText(e.target.value)}
+                  placeholder="Draft your reply from principal inbox..."
+                  className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl p-3 text-xs"
+                />
+                <button
+                  onClick={() => {
+                    const subject = encodeURIComponent(`Re: Project Scoping — Anamorphic Studio`)
+                    const body = encodeURIComponent(replyText)
+                    window.location.href = `mailto:${selectedInquiry.email}?subject=${subject}&body=${body}`
+                    showNotification('Mail client opened for reply.')
+                  }}
+                  className="w-full bg-primary-container text-white py-2.5 rounded-full font-semibold text-xs shadow-[2px_2px_0px_#1B1A17]"
+                >
+                  Send reply
+                </button>
+              </div>
             </div>
 
-            <form onSubmit={handleSaveStudioInfo} className="space-y-4">
-              <div>
-                <label className="block font-display text-[10px] uppercase tracking-widest text-[#8e9192] mb-1">
-                  CONTACT EMAIL
-                </label>
-                <input
-                  type="email"
-                  required
-                  value={studioEmail}
-                  onChange={(e) => setStudioEmail(e.target.value)}
-                  placeholder="anamorphiicc@gmail.com"
-                  className="w-full bg-[#131313] border border-[#444748]/40 text-white text-xs px-3 py-2 font-mono"
-                />
+            <div className="pt-6 border-t border-outline-variant/15 flex items-center justify-between">
+              <button
+                onClick={() => {
+                  setInquiries(inquiries.filter((i) => i.id !== selectedInquiry.id))
+                  setSelectedInquiry(null)
+                  showNotification('Inquiry deleted.')
+                }}
+                className="text-xs text-red-600 font-semibold hover:underline"
+              >
+                Delete message
+              </button>
+              <button
+                onClick={() => {
+                  const updated = inquiries.map((i) =>
+                    i.id === selectedInquiry.id ? { ...i, status: 'replied' as const } : i
+                  )
+                  setInquiries(updated)
+                  setSelectedInquiry(null)
+                  showNotification('Marked as replied.')
+                }}
+                className="text-xs text-secondary font-semibold hover:underline"
+              >
+                Mark as replied
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================================= */}
+      {/* 6. TEAM MEMBER EDITOR SLIDE-OVER                                          */}
+      {/* ========================================================================= */}
+      {isMemberSlideOpen && editingMember && (
+        <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="w-full max-w-lg bg-surface h-full shadow-2xl p-6 md:p-8 overflow-y-auto flex flex-col justify-between border-l border-outline-variant/20">
+            <div>
+              <div className="flex items-center justify-between pb-4 border-b border-outline-variant/15 mb-6">
+                <div>
+                  <h3 className="font-bold text-lg text-on-surface">Edit Team Member</h3>
+                  <p className="text-xs text-on-surface-variant">Update credentials, bio, and LinkedIn link.</p>
+                </div>
+                <button
+                  onClick={() => setIsMemberSlideOpen(false)}
+                  className="w-8 h-8 rounded-full border border-outline-variant/30 flex items-center justify-center hover:bg-surface-container transition-colors"
+                >
+                  <span className="material-symbols-outlined text-[16px]">close</span>
+                </button>
               </div>
 
-              <div>
-                <label className="block font-display text-[10px] uppercase tracking-widest text-[#8e9192] mb-1">
-                  STUDIO MANIFESTO
-                </label>
-                <textarea
-                  rows={5}
-                  required
-                  value={studioManifesto}
-                  onChange={(e) => setStudioManifesto(e.target.value)}
-                  placeholder="ANAMORPHIC is an independent studio forging mechanics-driven, narrative-rich titles built without creative compromise..."
-                  className="w-full bg-[#131313] border border-[#444748]/40 text-white text-xs p-3 font-mono leading-relaxed"
-                />
-              </div>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-on-surface mb-1 uppercase">Name</label>
+                  <input
+                    value={editingMember.name}
+                    onChange={(e) => setEditingMember({ ...editingMember, name: e.target.value })}
+                    className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-sm"
+                  />
+                </div>
 
-              <div className="pt-4 border-t border-[#444748]/40 flex justify-end gap-3 font-display text-xs">
-                <button
-                  type="button"
-                  onClick={() => setIsStudioModalOpen(false)}
-                  className="px-6 py-2.5 border border-[#444748]/40 text-[#8e9192] hover:text-white uppercase tracking-widest"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="px-6 py-2.5 bg-white text-black font-bold uppercase tracking-widest hover:bg-neutral-200"
-                >
-                  Save Studio Info
-                </button>
+                <div>
+                  <label className="block text-xs font-semibold text-on-surface mb-1 uppercase">Role</label>
+                  <input
+                    value={editingMember.role}
+                    onChange={(e) => setEditingMember({ ...editingMember, role: e.target.value })}
+                    className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-xs"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-on-surface mb-1 uppercase">Focus Line</label>
+                  <input
+                    value={editingMember.focus}
+                    onChange={(e) => setEditingMember({ ...editingMember, focus: e.target.value })}
+                    className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-xs"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-on-surface mb-1 uppercase">Bio</label>
+                  <textarea
+                    rows={3}
+                    value={editingMember.bio}
+                    onChange={(e) => setEditingMember({ ...editingMember, bio: e.target.value })}
+                    className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-xs"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-on-surface mb-1 uppercase">
+                    Tech Chips (Comma-separated)
+                  </label>
+                  <input
+                    value={editingMember.chips.join(', ')}
+                    onChange={(e) =>
+                      setEditingMember({
+                        ...editingMember,
+                        chips: e.target.value.split(',').map((c) => c.trim()),
+                      })
+                    }
+                    className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-xs font-mono"
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-on-surface mb-1 uppercase">LinkedIn URL</label>
+                    <input
+                      value={editingMember.linkedInUrl}
+                      onChange={(e) => setEditingMember({ ...editingMember, linkedInUrl: e.target.value })}
+                      className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-xs font-mono"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-on-surface mb-1 uppercase">Order #</label>
+                    <input
+                      type="number"
+                      value={editingMember.order}
+                      onChange={(e) => setEditingMember({ ...editingMember, order: Number(e.target.value) })}
+                      className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-xs font-mono"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-on-surface mb-1 uppercase">Photo URL</label>
+                  <input
+                    value={editingMember.imageUrl}
+                    onChange={(e) => setEditingMember({ ...editingMember, imageUrl: e.target.value })}
+                    className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-xs font-mono"
+                  />
+                </div>
               </div>
-            </form>
+            </div>
+
+            <div className="pt-6 border-t border-outline-variant/15 flex justify-end">
+              <button
+                onClick={() => {
+                  const exists = teamMembers.find((m) => m.id === editingMember.id)
+                  if (exists) {
+                    setTeamMembers(teamMembers.map((m) => (m.id === editingMember.id ? editingMember : m)))
+                  } else {
+                    setTeamMembers([...teamMembers, editingMember])
+                  }
+                  setIsMemberSlideOpen(false)
+                  showNotification('Team member saved.')
+                }}
+                className="bg-primary-container text-white px-6 py-2.5 rounded-full font-semibold text-xs shadow-[2px_2px_0px_#1B1A17]"
+              >
+                Save changes
+              </button>
+            </div>
           </div>
         </div>
       )}

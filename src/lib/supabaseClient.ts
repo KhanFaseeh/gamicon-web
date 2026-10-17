@@ -98,6 +98,7 @@ export function parseGameRecord(raw: any): Game {
  * Transparently embeds image_url into description so it persists even without a separate schema column.
  */
 export function serializeGameRecord(game: {
+  id?: string
   title: string
   slug: string
   release_date: string
