@@ -1686,20 +1686,52 @@ export default function Admin() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-on-surface mb-1 uppercase">
-                    Project Image URL (or Google Drive share link)
-                  </label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-xs font-semibold text-on-surface uppercase">
+                      Project Image
+                    </label>
+                    <label className="text-xs font-semibold text-secondary hover:underline cursor-pointer flex items-center gap-1">
+                      <span className="material-symbols-outlined text-[14px]">upload_file</span>
+                      <span>Upload local image</span>
+                      <input
+                        type="file"
+                        accept="image/png,image/jpeg,image/webp,image/gif"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0]
+                          if (!file) return
+                          if (file.size > 2 * 1024 * 1024) {
+                            showNotification('Image size exceeds 2MB limit. Please choose a smaller image.', 'error')
+                            return
+                          }
+                          const reader = new FileReader()
+                          reader.onload = () => {
+                            if (typeof reader.result === 'string') {
+                              setFormImageUrl(reader.result)
+                              showNotification('Image attached successfully!')
+                            }
+                          }
+                          reader.readAsDataURL(file)
+                        }}
+                      />
+                    </label>
+                  </div>
                   <input
                     value={formImageUrl}
                     onChange={(e) => setFormImageUrl(e.target.value)}
-                    placeholder="https://drive.google.com/file/d/... or direct image URL"
+                    placeholder="Paste direct image URL (Imgur, Postimages) or Google Drive link"
                     className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-xs font-mono"
                   />
-                  <div className="mt-1.5 flex items-start gap-1.5 text-[11px] text-on-surface-variant font-mono">
-                    <span className="material-symbols-outlined text-[14px] text-amber-600 shrink-0 mt-0.5">info</span>
-                    <span>
-                      For Google Drive images: Ensure file permissions are set to <strong>"Anyone with the link can view"</strong> in Drive.
-                    </span>
+                  <div className="mt-2 space-y-1 bg-surface-container/60 p-2.5 rounded-lg border border-outline-variant/15 text-[11px] text-on-surface-variant font-mono">
+                    <div className="flex items-start gap-1.5 font-semibold text-on-surface">
+                      <span className="material-symbols-outlined text-[14px] text-secondary shrink-0 mt-0.5">help</span>
+                      <span>Image Upload Options:</span>
+                    </div>
+                    <p className="pl-5 text-[10px] leading-relaxed">
+                      • <strong>Upload from device</strong>: Click "Upload local image" above to attach directly without any external host.<br/>
+                      • <strong>Postimages / Imgur</strong>: Paste any direct image link ending in <code>.jpg</code>, <code>.png</code>, or <code>.webp</code>.<br/>
+                      • <strong>Google Drive</strong>: Ensure sharing is set to <strong>"Anyone with the link can view"</strong> (Restricted links require Google account sign-in and cannot be loaded by external websites).
+                    </p>
                   </div>
                   {formImageUrl && (
                     <div className="mt-2.5 flex items-center gap-4">
@@ -1710,20 +1742,30 @@ export default function Admin() {
                           alt="Preview"
                           className="w-full h-full object-cover"
                           onError={(e) => {
-                            // Fallback to secondary Drive view stream if lh3 was blocked
                             const target = e.currentTarget
-                            const fallback = getDriveFallbackUrl(formImageUrl)
-                            if (target.src !== fallback) {
-                              target.src = fallback
+                            if (formImageUrl) {
+                              const fallback = getDriveFallbackUrl(formImageUrl)
+                              if (target.src !== fallback) {
+                                target.src = fallback
+                                return
+                              }
                             }
+                            target.src = 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=120&q=80'
                           }}
                         />
                       </div>
-                      <div className="text-[11px] text-outline font-mono truncate max-w-xs">
-                        Direct Stream URL:
-                        <div className="text-[10px] text-primary break-all">
-                          {normalizeImageUrl(formImageUrl)}
+                      <div className="text-[11px] text-outline font-mono truncate max-w-xs space-y-1">
+                        <div className="text-[10px] font-bold text-on-surface">Image Preview:</div>
+                        <div className="text-[10px] text-primary break-all line-clamp-2">
+                          {formImageUrl.startsWith('data:') ? 'Local file attached (Base64 Data URI)' : normalizeImageUrl(formImageUrl)}
                         </div>
+                        <button
+                          type="button"
+                          onClick={() => setFormImageUrl('')}
+                          className="text-xs text-red-600 hover:underline block"
+                        >
+                          Clear image
+                        </button>
                       </div>
                     </div>
                   )}
