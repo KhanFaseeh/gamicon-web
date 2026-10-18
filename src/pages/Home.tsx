@@ -89,8 +89,7 @@ const DEFAULT_TEAM: HomeTeamMember[] = [
     focus: 'Node.js · Go · PostgreSQL · Redis · RabbitMQ · Docker',
     bio: 'Architects distributed services and real-time data pipelines. Supervises uptime, security, and scalability across our five live production SaaS platforms.',
     chips: ['Node.js', 'Go', 'PostgreSQL', 'Redis', 'RabbitMQ', 'Docker'],
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuCBH5memFcwy57yMTRXoHEsrveGfwU6jj5m6Vf26XA_SwYnI6ptJr0p8q7xX3wjNg1lv_IjsrK3kMX9h5WrEp9c84nbkXiiF6uubJN35EDdDLPOqBseJ68YrclzUTHNGrDKPvEnB45FbRzOHTTzjbRuDqKeSC4ka6ifHTJQlgh-c3KlrHhqSCgcpqwYEx45PgoBps8GuYR2FcbOgWUAJCI8dhDHLZ8120okauYr02FBXFymm1j1hDGu',
+    imageUrl: '/fahad-backend.jpg',
   },
   {
     id: 'member-4',

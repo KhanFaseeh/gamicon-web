@@ -70,8 +70,7 @@ const TEAM_MEMBERS: TeamMember[] = [
     disciplineSub: 'Zero Downtime',
     bio: 'Node.js, Go, and PostgreSQL backends engineered to sustain heavy concurrency under zero unmanaged downtime. Architect and custodian of five live production multi-tenant SaaS platforms.',
     chips: ['TypeScript', 'Go', 'Node.js', 'PostgreSQL', 'Docker', 'Redis', 'RabbitMQ'],
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuBx9TIs49Kb0IvpeF6uqLG73w7-n3R5Uqw3nzs6BxQInrfhx6T_BtKGXxz78hVI5ZWZ4YDLnJ4p2wC9oqX0FBuwhvgt52v32biMQBi0-mdFC1nh0_gVaQoAn2ViocNtTIIJK8r49S5sfZkV8CCwrp3owd-S15dwbxR_yLIQMcYUmqSYynQ4dBI1gT7cWmWeGZafRMqDb9McK_Cnjt1NTNwjIcLHWtbVhDZd4odK9bwp8tithHTfNEG4',
+    imageUrl: '/fahad-backend.jpg',
     badgeText: 'Principal 03',
     badgeBg: 'bg-[#74BE9C] text-primary',
     inverted: false,
