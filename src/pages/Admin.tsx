@@ -374,6 +374,8 @@ export default function Admin() {
   const [formDescription, setFormDescription] = useState('')
   const [formTags, setFormTags] = useState('')
   const [formImageUrl, setFormImageUrl] = useState('')
+  const [formCoverFile, setFormCoverFile] = useState<File | null>(null)
+  const [isUploadingImage, setIsUploadingImage] = useState(false)
   const [formFeatured, setFormFeatured] = useState(true)
   const [formPublished, setFormPublished] = useState(true)
 
@@ -413,6 +415,7 @@ export default function Admin() {
     setFormDescription('')
     setFormTags('React, TypeScript, Node.js')
     setFormImageUrl('')
+    setFormCoverFile(null)
     setFormFeatured(false)
     setFormPublished(true)
     setIsProjectSlideOpen(true)
@@ -427,6 +430,7 @@ export default function Admin() {
     setFormDescription(p.description || '')
     setFormTags((p.tags || []).join(', '))
     setFormImageUrl(p.image_url || '')
+    setFormCoverFile(null)
     setFormFeatured(true)
     setFormPublished(true)
     setIsProjectSlideOpen(true)
@@ -445,6 +449,35 @@ export default function Admin() {
     }
   }
 
+  // Helper to upload file to Supabase Storage bucket 'game-images'
+  const uploadImageToSupabaseStorage = async (file: File, slug: string): Promise<string> => {
+    const fileExt = file.name.split('.').pop() || 'jpg'
+    const fileName = `${slug || 'cover'}-${Date.now()}.${fileExt}`
+    const filePath = `covers/${fileName}`
+
+    const { error: uploadError } = await supabase.storage
+      .from('game-images')
+      .upload(filePath, file, {
+        cacheControl: '3600',
+        upsert: true,
+      })
+
+    if (uploadError) {
+      console.warn('Supabase storage upload error:', uploadError)
+      throw new Error(uploadError.message || 'Storage upload failed')
+    }
+
+    const { data } = supabase.storage
+      .from('game-images')
+      .getPublicUrl(filePath)
+
+    if (!data?.publicUrl) {
+      throw new Error('Failed to retrieve public URL from Supabase storage.')
+    }
+
+    return data.publicUrl
+  }
+
   // Save Project to Supabase
   const handleSaveProject = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -453,8 +486,25 @@ export default function Admin() {
       return
     }
 
+    setIsUploadingImage(true)
+    let finalImageUrl = formImageUrl
+
+    // If user selected a new file via <input type="file" />, upload it to Supabase storage 'game-images'
+    if (formCoverFile) {
+      try {
+        showNotification('Uploading image to Supabase Storage (game-images)...')
+        finalImageUrl = await uploadImageToSupabaseStorage(formCoverFile, formSlug.trim() || 'project')
+        setFormImageUrl(finalImageUrl)
+      } catch (uploadErr: any) {
+        console.error('Upload to Supabase Storage failed:', uploadErr)
+        showNotification(`Storage upload failed: ${uploadErr.message}. If the bucket 'game-images' does not exist yet, make sure to create it in Supabase dashboard and set it to Public.`, 'error')
+        setIsUploadingImage(false)
+        return
+      }
+    }
+
     const tagsArray = formTags.split(',').map((t) => t.trim()).filter(Boolean)
-    const normalizedImg = normalizeImageUrl(formImageUrl)
+    const normalizedImg = normalizeImageUrl(finalImageUrl)
     const payload = serializeGameRecord({
       id: editingProjectId || undefined,
       title: formTitle.trim(),
@@ -471,12 +521,15 @@ export default function Admin() {
         showNotification('Project updated successfully.')
       } else {
         await supabase.from('games').insert([payload])
-        showNotification('Project published successfully.')
+        showNotification('Project published successfully with Supabase Storage image.')
       }
       setIsProjectSlideOpen(false)
+      setFormCoverFile(null)
       loadGames()
     } catch (err: any) {
       showNotification(`Save failed: ${err.message}`, 'error')
+    } finally {
+      setIsUploadingImage(false)
     }
   }
 
@@ -1706,51 +1759,72 @@ export default function Admin() {
                 <div>
                   <div className="flex items-center justify-between mb-1">
                     <label className="block text-xs font-semibold text-on-surface uppercase">
-                      Project Image
+                      Game / Project Cover Image
                     </label>
-                    <label className="text-xs font-semibold text-secondary hover:underline cursor-pointer flex items-center gap-1">
-                      <span className="material-symbols-outlined text-[14px]">upload_file</span>
-                      <span>Upload local image</span>
-                      <input
-                        type="file"
-                        accept="image/png,image/jpeg,image/webp,image/gif"
-                        className="hidden"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0]
-                          if (!file) return
-                          if (file.size > 2 * 1024 * 1024) {
-                            showNotification('Image size exceeds 2MB limit. Please choose a smaller image.', 'error')
-                            return
-                          }
-                          const reader = new FileReader()
-                          reader.onload = () => {
-                            if (typeof reader.result === 'string') {
-                              setFormImageUrl(reader.result)
-                              showNotification('Image attached successfully!')
-                            }
-                          }
-                          reader.readAsDataURL(file)
-                        }}
-                      />
-                    </label>
+                    <span className="text-[11px] font-mono text-secondary font-semibold">
+                      Supabase Storage (game-images)
+                    </span>
                   </div>
-                  <input
-                    value={formImageUrl}
-                    onChange={(e) => setFormImageUrl(e.target.value)}
-                    placeholder="Paste direct image URL (Imgur, Postimages) or Google Drive link"
-                    className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-xs font-mono"
-                  />
+
+                  {/* Standard File Input for Supabase Storage Upload */}
+                  <div className="p-3 bg-surface-container-low rounded-xl border border-outline-variant/30 space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="material-symbols-outlined text-[18px] text-secondary">cloud_upload</span>
+                      <span className="text-xs font-semibold text-on-surface">Upload Cover File (Supabase Storage)</span>
+                    </div>
+                    <input
+                      type="file"
+                      accept="image/png,image/jpeg,image/webp,image/gif"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0]
+                        if (!file) return
+                        if (file.size > 5 * 1024 * 1024) {
+                          showNotification('File exceeds 5MB limit. Please choose a smaller image.', 'error')
+                          return
+                        }
+                        setFormCoverFile(file)
+                        // Local preview URL while waiting for form submission
+                        const previewUrl = URL.createObjectURL(file)
+                        setFormImageUrl(previewUrl)
+                        showNotification(`Selected file "${file.name}". Will upload to Supabase 'game-images' on save.`)
+                      }}
+                      className="block w-full text-xs text-on-surface-variant file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary-container file:text-white hover:file:bg-secondary cursor-pointer"
+                    />
+                    {formCoverFile && (
+                      <p className="text-[11px] font-mono text-emerald-600 flex items-center gap-1 font-medium">
+                        <span className="material-symbols-outlined text-[14px]">check_circle</span>
+                        Ready to upload: {formCoverFile.name} ({(formCoverFile.size / 1024).toFixed(1)} KB)
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Or Manual Direct URL Input */}
+                  <div className="mt-2.5">
+                    <label className="block text-[11px] font-semibold text-on-surface-variant mb-1 uppercase">
+                      Or direct image URL / Google Drive link
+                    </label>
+                    <input
+                      value={formCoverFile ? '' : formImageUrl}
+                      disabled={!!formCoverFile}
+                      onChange={(e) => setFormImageUrl(e.target.value)}
+                      placeholder={formCoverFile ? 'File attached above will be uploaded to Supabase' : 'https://... or Google Drive link'}
+                      className="w-full bg-surface-container-low border border-outline-variant/30 rounded-xl px-3.5 py-2 text-xs font-mono disabled:opacity-50"
+                    />
+                  </div>
+
+                  {/* Storage Bucket Notice */}
                   <div className="mt-2 space-y-1 bg-surface-container/60 p-2.5 rounded-lg border border-outline-variant/15 text-[11px] text-on-surface-variant font-mono">
                     <div className="flex items-start gap-1.5 font-semibold text-on-surface">
-                      <span className="material-symbols-outlined text-[14px] text-secondary shrink-0 mt-0.5">help</span>
-                      <span>Image Upload Options:</span>
+                      <span className="material-symbols-outlined text-[14px] text-secondary shrink-0 mt-0.5">info</span>
+                      <span>Supabase Storage Integration:</span>
                     </div>
                     <p className="pl-5 text-[10px] leading-relaxed">
-                      • <strong>Upload from device</strong>: Click "Upload local image" above to attach directly without any external host.<br/>
-                      • <strong>Postimages / Imgur</strong>: Paste any direct image link ending in <code>.jpg</code>, <code>.png</code>, or <code>.webp</code>.<br/>
-                      • <strong>Google Drive</strong>: Ensure sharing is set to <strong>"Anyone with the link can view"</strong> (Restricted links require Google account sign-in and cannot be loaded by external websites).
+                      • Uploading files pushes them to the public bucket <code>game-images</code> in Supabase Storage.<br/>
+                      • The public URL (<code>getPublicUrl</code>) is automatically generated and saved into the database table.<br/>
+                      • Ensure the <code>game-images</code> bucket in your Supabase dashboard is marked <strong>Public</strong> so images load universally.
                     </p>
                   </div>
+
                   {formImageUrl && (
                     <div className="mt-2.5 flex items-center gap-4">
                       <div className="aspect-video w-36 rounded border border-outline-variant/30 overflow-hidden bg-surface-container shrink-0 relative">
@@ -1773,11 +1847,14 @@ export default function Admin() {
                       <div className="text-[11px] text-outline font-mono truncate max-w-xs space-y-1">
                         <div className="text-[10px] font-bold text-on-surface">Image Preview:</div>
                         <div className="text-[10px] text-primary break-all line-clamp-2">
-                          {formImageUrl.startsWith('data:') ? 'Local file attached (Base64 Data URI)' : normalizeImageUrl(formImageUrl)}
+                          {formCoverFile ? `Pending upload: ${formCoverFile.name}` : normalizeImageUrl(formImageUrl)}
                         </div>
                         <button
                           type="button"
-                          onClick={() => setFormImageUrl('')}
+                          onClick={() => {
+                            setFormImageUrl('')
+                            setFormCoverFile(null)
+                          }}
                           className="text-xs text-red-600 hover:underline block"
                         >
                           Clear image
@@ -1822,9 +1899,17 @@ export default function Admin() {
                   )}
                   <button
                     type="submit"
-                    className="bg-primary-container text-white px-6 py-2.5 rounded-full font-semibold text-xs shadow-[2px_2px_0px_#1B1A17]"
+                    disabled={isUploadingImage}
+                    className="bg-primary-container text-white px-6 py-2.5 rounded-full font-semibold text-xs shadow-[2px_2px_0px_#1B1A17] disabled:opacity-50 flex items-center gap-2"
                   >
-                    Save changes
+                    {isUploadingImage ? (
+                      <>
+                        <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                        <span>Uploading to Supabase...</span>
+                      </>
+                    ) : (
+                      <span>Save changes</span>
+                    )}
                   </button>
                 </div>
               </form>
