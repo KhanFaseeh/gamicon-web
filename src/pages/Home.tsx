@@ -2,55 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
-import { supabase, parseGameRecord, normalizeImageUrl, getDriveFallbackUrl, type Game } from '../lib/supabaseClient'
-
-// Default fallback projects (zero dummy images)
-const DEFAULT_PROJECTS = [
-  {
-    slug: 'workforce-suite',
-    title: 'Workforce Suite',
-    badge: '5 Live SaaS Platforms',
-    badgeColor: 'bg-[#F6A6CF] text-[#1B1A17]',
-    meta: '2023–PRESENT',
-    description:
-      'Five live production SaaS platforms (SSPlus, Reta TNA, Swift Attend, SwiftOne, Vortex360) managing end-to-end employee attendance, automated shift rosters, and payroll calculations with sub-second batch sync.',
-    tags: ['Node.js', 'TypeScript', 'React', 'MongoDB', 'Redis Caching', 'RabbitMQ Queues'],
-    imageUrl: '',
-  },
-  {
-    slug: 'pipevision-ai',
-    title: 'PipeVision AI',
-    badge: 'Computer Vision & ERP',
-    badgeColor: 'bg-[#74BE9C] text-[#1B1A17]',
-    meta: 'A-ONE PVC CO.',
-    description:
-      'Factory ERP fused with an edge YOLOv8 computer vision pipeline counting manufactured pipes on a continuous high-speed conveyor belt, auto-reconciling factory shifts against ledger inventories.',
-    tags: ['Python', 'YOLOv8', 'OpenCV', 'FastAPI', 'React', 'MySQL'],
-    imageUrl: '',
-  },
-  {
-    slug: 'skyiq',
-    title: 'SkyIQ',
-    badge: 'Aviation Telemetry',
-    badgeColor: 'bg-[#3D1BFD] text-white',
-    meta: 'MISSION CRITICAL',
-    description:
-      'High-throughput airport operations platform backend handling flight schedule ingestion, granular role-based clearance hierarchies, and sub-100ms automated dispatch emergency broadcast alerts.',
-    tags: ['Node.js', 'TypeScript', 'PostgreSQL', 'Prisma ORM', 'Docker', 'Prometheus'],
-    imageUrl: '',
-  },
-  {
-    slug: 'pos-suite',
-    title: 'Accounting & POS Suite',
-    badge: '10+ Stores Active',
-    badgeColor: 'bg-[#FF5B5B] text-white',
-    meta: 'COMMERCIAL RETAIL',
-    description:
-      'Enterprise retail checkout and balance ledger deployed across 10+ high-traffic shops, supporting multi-rate GST taxation, split refunds, offline cash drawers, and ESC/POS thermal receipt printing.',
-    tags: ['React', 'Node.js', 'Express', 'MySQL', 'ESC/POS', 'Tailwind'],
-    imageUrl: '',
-  },
-]
+import { normalizeImageUrl, getDriveFallbackUrl } from '../lib/supabaseClient'
 
 interface HomeTeamMember {
   id: string
@@ -103,7 +55,6 @@ const DEFAULT_TEAM: HomeTeamMember[] = [
 ]
 
 export default function Home() {
-  const [games, setGames] = useState<Game[]>([])
   const [team, setTeam] = useState<HomeTeamMember[]>(() => {
     try {
       const saved = localStorage.getItem('anamorphic_team')
@@ -151,49 +102,6 @@ export default function Home() {
       // ignore
     }
   }, [])
-
-  useEffect(() => {
-    async function fetchGames() {
-      try {
-        const { data, error } = await supabase
-          .from('games')
-          .select('*')
-          .order('created_at', { ascending: false })
-
-        if (!error && data) {
-          setGames(data.map(parseGameRecord))
-        } else {
-          setGames([])
-        }
-      } catch (err) {
-        console.warn('Supabase fetch error', err)
-        setGames([])
-      }
-    }
-    fetchGames()
-  }, [])
-
-  // If projects are added via admin panel, show them; otherwise display the curated 4 production platforms
-  const displayProjects =
-    games.length > 0
-      ? games.map((g, idx) => ({
-          slug: g.slug,
-          title: g.title,
-          badge: g.tags?.[0] || 'Production Verified',
-          badgeColor:
-            idx % 4 === 0
-              ? 'bg-[#F6A6CF] text-[#1B1A17]'
-              : idx % 4 === 1
-              ? 'bg-[#74BE9C] text-[#1B1A17]'
-              : idx % 4 === 2
-              ? 'bg-[#3D1BFD] text-white'
-              : 'bg-[#FF5B5B] text-white',
-          meta: g.release_date || 'ACTIVE',
-          description: g.description,
-          tags: g.tags || ['Systems', 'Production'],
-          imageUrl: g.image_url || '',
-        }))
-      : DEFAULT_PROJECTS
 
   return (
     <div className="bg-background text-on-surface antialiased selection:bg-secondary selection:text-white min-h-screen">
@@ -249,14 +157,14 @@ export default function Home() {
                 </div>
 
                 {/* Fused Explore CTA */}
-                <a className="fused-pod group inline-flex items-center self-start sm:self-auto" href="#work">
+                <Link className="fused-pod group inline-flex items-center self-start sm:self-auto" to="/work">
                   <span className="bg-primary-container text-surface px-6 py-3.5 rounded-l-full font-label-eyebrow text-label-eyebrow font-medium group-hover:bg-secondary group-hover:text-on-secondary transition-colors duration-150">
                     Explore Shipped Work
                   </span>
                   <span className="fused-arrow bg-primary-container text-surface w-12 h-12 rounded-r-full flex items-center justify-center -ml-px border-l border-surface/20 group-hover:bg-secondary group-hover:text-on-secondary transition-all duration-150">
                     <span className="material-symbols-outlined">north_east</span>
                   </span>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -403,94 +311,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ========================================================================= */}
-        {/* FEATURED PROJECTS SECTION (Editorial Asymmetric Portfolio)                */}
-        {/* ========================================================================= */}
-        <section className="py-space-xl px-margin md:px-margin-desktop bg-background" id="work">
-          <div className="max-w-[1440px] mx-auto">
-            {/* Section Header */}
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 pb-8 border-b border-on-surface/15">
-              <div>
-                <span className="inline-block px-3 py-1 rounded-full bg-surface-container crisp-stroke font-label-eyebrow text-label-eyebrow font-medium mb-4">
-                  Our Work
-                </span>
-                <h2 className="font-headline-lg text-headline-md-mobile md:text-headline-lg tracking-tight">
-                  Live in production, not on Figma artboards.
-                </h2>
-              </div>
-              <p className="font-body-md text-body-md text-on-surface-variant mt-4 md:mt-0 max-w-md">
-                Concrete software systems handling real transactions, live telemetry, and physical plant
-                operations daily.
-              </p>
-            </div>
 
-            {/* Case Studies Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
-              {displayProjects.map((proj) => (
-                <article key={proj.slug} className="flex flex-col group">
-                  <Link
-                    to={`/work/${proj.slug}`}
-                    className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden bg-surface-container crisp-stroke mb-6 block"
-                  >
-                    <img
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      alt={proj.title}
-                      src={normalizeImageUrl(proj.imageUrl)}
-                      referrerPolicy="no-referrer"
-                      onError={(e) => {
-                        const target = e.currentTarget
-                        if (proj.imageUrl) {
-                          const fallback = getDriveFallbackUrl(proj.imageUrl)
-                          if (target.src !== fallback && fallback !== target.src) {
-                            target.src = fallback
-                          }
-                        }
-                      }}
-                    />
-                    <div className="absolute top-4 left-4">
-                      <span
-                        className={`px-3 py-1 rounded-full font-label-eyebrow text-label-eyebrow font-semibold ${proj.badgeColor}`}
-                      >
-                        {proj.badge}
-                      </span>
-                    </div>
-                    <div className="absolute bottom-4 right-4">
-                      <div className="w-10 h-10 rounded-full bg-primary-container text-surface flex items-center justify-center group-hover:bg-secondary group-hover:text-white transition-colors duration-200">
-                        <span className="material-symbols-outlined">north_east</span>
-                      </div>
-                    </div>
-                  </Link>
-
-                  <div className="flex items-baseline justify-between mb-2">
-                    <Link to={`/work/${proj.slug}`} className="hover:text-secondary transition-colors">
-                      <h3 className="font-headline-md text-headline-md tracking-tight text-on-surface">
-                        {proj.title}
-                      </h3>
-                    </Link>
-                    <span className="font-label-eyebrow text-label-eyebrow text-on-surface-variant font-mono">
-                      {proj.meta}
-                    </span>
-                  </div>
-
-                  <p className="font-body-md text-body-md text-on-surface-variant mb-4">
-                    {proj.description}
-                  </p>
-
-                  <div className="flex flex-wrap gap-2 pt-2">
-                    {proj.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-2.5 py-1 rounded-full bg-surface-container font-label-eyebrow text-label-eyebrow text-on-surface"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* ========================================================================= */}
         {/* STUDIO STATS & VERIFIED METRICS (#1B1A17 full-bleed block)                */}
