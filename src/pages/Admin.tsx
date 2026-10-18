@@ -1665,7 +1665,18 @@ export default function Admin() {
 
                 <div className="pt-2 flex justify-end">
                   <button
-                    onClick={() => showNotification('Global studio settings saved successfully!')}
+                    onClick={async () => {
+                      try {
+                        await supabase.from('studio_info').upsert({
+                          id: 1,
+                          manifesto: settings.heroSubline || settings.heroHeadline,
+                          contact_email: settings.contactEmail,
+                        })
+                        showNotification('Global studio settings saved and synced with Supabase!')
+                      } catch (err: any) {
+                        showNotification('Saved locally (Supabase sync error: ' + err.message + ')')
+                      }
+                    }}
                     className="bg-primary-container text-white px-7 py-3 rounded-full font-semibold text-xs shadow-[2px_2px_0px_#1B1A17]"
                   >
                     Save all settings
@@ -2140,21 +2151,30 @@ export default function Admin() {
                         type="file"
                         accept="image/png,image/jpeg,image/webp,image/gif"
                         className="hidden"
-                        onChange={(e) => {
+                        onChange={async (e) => {
                           const file = e.target.files?.[0]
                           if (!file) return
-                          if (file.size > 2 * 1024 * 1024) {
-                            showNotification('Image size exceeds 2MB limit. Please choose a smaller image.', 'error')
+                          if (file.size > 5 * 1024 * 1024) {
+                            showNotification('Image size exceeds 5MB limit. Please choose a smaller image.', 'error')
                             return
                           }
-                          const reader = new FileReader()
-                          reader.onload = () => {
-                            if (typeof reader.result === 'string') {
-                              setEditingMember({ ...editingMember, imageUrl: reader.result })
-                              showNotification('Photo attached successfully!')
+                          try {
+                            showNotification('Uploading photo to Supabase Storage...')
+                            const memberSlug = editingMember.name.toLowerCase().replace(/[^a-z0-9]+/g, '-') || 'member'
+                            const publicUrl = await uploadImageToSupabaseStorage(file, `team-${memberSlug}`)
+                            setEditingMember({ ...editingMember, imageUrl: publicUrl })
+                            showNotification('Photo uploaded to Supabase Storage successfully!')
+                          } catch (storageErr) {
+                            console.warn('Storage upload fallback to base64:', storageErr)
+                            const reader = new FileReader()
+                            reader.onload = () => {
+                              if (typeof reader.result === 'string') {
+                                setEditingMember({ ...editingMember, imageUrl: reader.result })
+                                showNotification('Photo attached locally!')
+                              }
                             }
+                            reader.readAsDataURL(file)
                           }
-                          reader.readAsDataURL(file)
                         }}
                       />
                     </label>
