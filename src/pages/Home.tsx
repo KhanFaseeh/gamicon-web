@@ -4,7 +4,7 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { supabase, parseGameRecord, normalizeImageUrl, getDriveFallbackUrl, type Game } from '../lib/supabaseClient'
 
-// Default fallback projects with spec imagery if database is empty
+// Default fallback projects (zero dummy images)
 const DEFAULT_PROJECTS = [
   {
     slug: 'workforce-suite',
@@ -15,8 +15,7 @@ const DEFAULT_PROJECTS = [
     description:
       'Five live production SaaS platforms (SSPlus, Reta TNA, Swift Attend, SwiftOne, Vortex360) managing end-to-end employee attendance, automated shift rosters, and payroll calculations with sub-second batch sync.',
     tags: ['Node.js', 'TypeScript', 'React', 'MongoDB', 'Redis Caching', 'RabbitMQ Queues'],
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuAwSOHtfgTBgORUPfvPzVUWwmqjqaNjVi8cpogpLEvhjzf23Wy_qRtEhpuQ_-SvX5yFNPzEH0w27W0We3yOPcuDUm8RhB_q4ZWTF7Vl-FA52dEiQUv_fdvFS0a9Ai66bLBbvXZ5l1BVukuwsHt2_C1JkcGgd2iXODw1gcB86SGr7TX4VUuLnH5jlHQ3kCvSqvcaj1c7SRMNv5lVIFKyvae9VgYIYHuGAKrMjj3N90OCuc6uN4adIePm',
+    imageUrl: '',
   },
   {
     slug: 'pipevision-ai',
@@ -27,8 +26,7 @@ const DEFAULT_PROJECTS = [
     description:
       'Factory ERP fused with an edge YOLOv8 computer vision pipeline counting manufactured pipes on a continuous high-speed conveyor belt, auto-reconciling factory shifts against ledger inventories.',
     tags: ['Python', 'YOLOv8', 'OpenCV', 'FastAPI', 'React', 'MySQL'],
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuBnkTOST_CjoRJejbMWRU_WRonRszmuMQ48vb5vCqgffoVslKIxy-WOThQzU0JE40Zxnwr7TUvQXtFmV8OQFbJPGSH3o9oNzJYWFaUtzGQPLC2bjQ8Tfj9yzfWYzLoALNtMD6FqGxqe5lg9uYfl0s-6NhjiklwuTamqYflbUYI3kTYDjA19GrzfEzvW56Ln8B7lVmMibo0bg9_1ylr_2TQ8oEdFf5U1047Cb1SX7_Csyq6aV7m7J4TS',
+    imageUrl: '',
   },
   {
     slug: 'skyiq',
@@ -39,8 +37,7 @@ const DEFAULT_PROJECTS = [
     description:
       'High-throughput airport operations platform backend handling flight schedule ingestion, granular role-based clearance hierarchies, and sub-100ms automated dispatch emergency broadcast alerts.',
     tags: ['Node.js', 'TypeScript', 'PostgreSQL', 'Prisma ORM', 'Docker', 'Prometheus'],
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuAEtWDlCgO9rLSM4xdXxIoYvPaj4vnyrWUwwjM-aW_MkBnS7r05eMkIc1jVcMtZqGo4VhpeCZ_5dSIhWUYNXKTutxpc1dywIyWo67d2MLcgOJ9g7t1Q9KTMivhWWhYgMUzyK3-nAUmdE6vUyvclvkaqCcIsTpQt69_CM65YEITz0hg3nxBQhNY9alb_oYe6JrCR4qcTl4m1plwDreT0jW24ZCCh-8NU1FP3kXETaAJfh2uJo04ALj1w',
+    imageUrl: '',
   },
   {
     slug: 'pos-suite',
@@ -51,8 +48,7 @@ const DEFAULT_PROJECTS = [
     description:
       'Enterprise retail checkout and balance ledger deployed across 10+ high-traffic shops, supporting multi-rate GST taxation, split refunds, offline cash drawers, and ESC/POS thermal receipt printing.',
     tags: ['React', 'Node.js', 'Express', 'MySQL', 'ESC/POS', 'Tailwind'],
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuD7R25kLejYIb3QI0beCWMuEGqSBwGXy2hnWqPZXl4MynA9xrK6n2EWyDikmgJPqk80rc1h0OUlhxi_8HPDWJI7LaEURuUXrAF5IPGyQJ-A7dfvVx2-y_sOo3DCWavAKmDnSF4AJDnmOQbnepVZSlpC0lL2m4GnuoGyEsDZygtcyMlFNeptez23EW4Nl0pYSUJJ0GqvksvotRCZL1Py5C_qvTVe98um-_MFF55HbcALlyjuci5QxF-Z',
+    imageUrl: '',
   },
 ]
 

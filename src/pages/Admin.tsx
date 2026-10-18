@@ -449,6 +449,19 @@ export default function Admin() {
     }
   }
 
+  // Convert a local file to Base64 data URL
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.onload = () => {
+        if (typeof reader.result === 'string') resolve(reader.result)
+        else reject(new Error('Failed to read file as data URL'))
+      }
+      reader.onerror = () => reject(reader.error || new Error('FileReader error'))
+      reader.readAsDataURL(file)
+    })
+  }
+
   // Helper to upload file to Supabase Storage bucket 'game-images'
   const uploadImageToSupabaseStorage = async (file: File, slug: string): Promise<string> => {
     const fileExt = file.name.split('.').pop() || 'jpg'
@@ -489,17 +502,23 @@ export default function Admin() {
     setIsUploadingImage(true)
     let finalImageUrl = formImageUrl
 
-    // If user selected a new file via <input type="file" />, upload it to Supabase storage 'game-images'
+    // If user selected a new file via <input type="file" />, attempt upload to Supabase storage 'game-images'
     if (formCoverFile) {
       try {
-        showNotification('Uploading image to Supabase Storage (game-images)...')
+        showNotification('Uploading image to Supabase Storage...')
         finalImageUrl = await uploadImageToSupabaseStorage(formCoverFile, formSlug.trim() || 'project')
         setFormImageUrl(finalImageUrl)
       } catch (uploadErr: any) {
-        console.error('Upload to Supabase Storage failed:', uploadErr)
-        showNotification(`Storage upload failed: ${uploadErr.message}. If the bucket 'game-images' does not exist yet, make sure to create it in Supabase dashboard and set it to Public.`, 'error')
-        setIsUploadingImage(false)
-        return
+        console.warn('Supabase Storage bucket upload unavailable, falling back to direct image encoding:', uploadErr)
+        try {
+          finalImageUrl = await fileToBase64(formCoverFile)
+          setFormImageUrl(finalImageUrl)
+          showNotification('Saved image via direct encoding (Supabase bucket not yet configured).', 'success')
+        } catch (encodeErr: any) {
+          showNotification(`Image processing error: ${encodeErr.message}`, 'error')
+          setIsUploadingImage(false)
+          return
+        }
       }
     }
 
@@ -1283,7 +1302,7 @@ export default function Admin() {
                     <div className="flex items-center gap-4">
                       <span className="material-symbols-outlined text-outline cursor-grab">drag_indicator</span>
                       <img
-                        src={normalizeImageUrl(m.imageUrl) || 'https://via.placeholder.com/80'}
+                        src={normalizeImageUrl(m.imageUrl) || ''}
                         referrerPolicy="no-referrer"
                         alt=""
                         className="w-12 h-12 rounded-full object-cover border border-outline-variant/20 bg-surface-container"
@@ -1291,12 +1310,10 @@ export default function Admin() {
                           const target = e.currentTarget
                           if (m.imageUrl) {
                             const fallback = getDriveFallbackUrl(m.imageUrl)
-                            if (target.src !== fallback) {
+                            if (target.src !== fallback && fallback !== target.src) {
                               target.src = fallback
-                              return
                             }
                           }
-                          target.src = 'https://via.placeholder.com/80'
                         }}
                       />
                       <div>
@@ -2171,12 +2188,10 @@ export default function Admin() {
                             const target = e.currentTarget
                             if (editingMember.imageUrl) {
                               const fallback = getDriveFallbackUrl(editingMember.imageUrl)
-                              if (target.src !== fallback) {
+                              if (target.src !== fallback && fallback !== target.src) {
                                 target.src = fallback
-                                return
                               }
                             }
-                            target.src = 'https://via.placeholder.com/160'
                           }}
                         />
                       </div>

@@ -66,6 +66,11 @@ export function normalizeImageUrl(url?: string | null): string {
   if (!url || typeof url !== 'string') return ''
   const trimmed = url.trim()
 
+  // Base64 Data URIs and Object URLs must be returned directly without modification
+  if (trimmed.startsWith('data:') || trimmed.startsWith('blob:')) {
+    return trimmed
+  }
+
   const driveId = extractGoogleDriveFileId(trimmed)
   if (driveId) {
     // High-speed Google CDN format for inline images
@@ -80,11 +85,14 @@ export function normalizeImageUrl(url?: string | null): string {
  */
 export function getDriveFallbackUrl(url?: string | null): string {
   if (!url || typeof url !== 'string') return ''
-  const driveId = extractGoogleDriveFileId(url)
+  const trimmed = url.trim()
+  if (trimmed.startsWith('data:') || trimmed.startsWith('blob:')) return trimmed
+
+  const driveId = extractGoogleDriveFileId(trimmed)
   if (driveId) {
     return `https://drive.google.com/uc?export=view&id=${driveId}`
   }
-  return url
+  return trimmed
 }
 
 /**

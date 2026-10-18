@@ -31,8 +31,7 @@ const PROJECTS: Project[] = [
     description:
       'Five live multi-role SaaS platforms (SSPlus, Reta TNA, Swift Attend, SwiftOne, Vortex360) for attendance, scheduling, and payroll with Redis caching & RabbitMQ workers.',
     tags: ['Node.js', 'TypeScript', 'React', 'MongoDB', 'Redis', 'RabbitMQ', 'Docker'],
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuA6JuSnJ5ncwLHE79qaY6a6KfvkVu2zCiaQ0GfKVF3qMLOiiQbJw_lu9IYmk8Hk4hvIb0xi9RbBx6V5Iz7OEqN2YK16ANGlHvpETLB5BXcBtdwfgZHWezbpAVwMKmV5Wk1KPKfJjcnZ3cbZw6IklSlF-vyZzkNe_OzaQLePpXN0JDKIjAnSGY3P9QXzd-FgJdY6tgpC47ixiLz_lRmX_-MKg_hRgCW64iSJT82MJ4Ir7vpDjHcuHmuE',
+    imageUrl: '',
     aspect: 'aspect-[16/10]',
     colSpan: 'md:col-span-7',
   },
@@ -47,8 +46,7 @@ const PROJECTS: Project[] = [
     description:
       'Airport operations telemetry & flight data ingestion engine with sub-100ms emergency dispatch alerts and RBAC.',
     tags: ['Node.js', 'TypeScript', 'PostgreSQL', 'Prisma', 'Docker'],
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuDJzYwucrmOSgA1vP3AsOk1E4ezYuUCWtzl3vAlRnZF7KzEBF9Yqu4-h-iz7nql2hpG5WZVc2iBhsFqjF9dv0ga-AZyyo7VgdyMxttAXLKk-76IOUgzH8DgtdmwydfKXV3Oqjq_nyyyKcBbnIFGScAdWnoQHzA1TD11lapHybQHknYytJLHYgidmLWFInhb0P_CfP6fSaujaSIIBijo7uvNto3AzOH-BMadNevp5EciAAFRsLlClrV2',
+    imageUrl: '',
     aspect: 'aspect-[4/5]',
     colSpan: 'md:col-span-5',
   },
@@ -63,8 +61,7 @@ const PROJECTS: Project[] = [
     description:
       'Enterprise retail ERP and point-of-sale system: fast multi-item checkout, dual returns, customer/vendor ledgers, and thermal ESC/POS printing.',
     tags: ['React', 'Node.js', 'Express', 'MySQL', 'Tailwind CSS'],
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuCr7_ccwtaZ8kMipd4yS43uM0HmIfIyayraeKs8edD1MVzL3cI0blDYdaDqH6GhJg7u8455mpWlrNLI7Ivq9wQIN0V1UfE0Migk_SsQlr4vgbV3sn03QfbwNGmwsvrHbXbJ8TdUoJUjZkDl3Hft-DurjAkhGWNdEdRvsFG26Bcw6L5upC6qW6YWmESqWnHM-OQXLh7V_msVdIzb_A2Xu6BjebXqePKEx3JnHUHE6g4TrQVjZV8JaKj5',
+    imageUrl: '',
     aspect: 'aspect-[16/10]',
     colSpan: 'md:col-span-6',
   },
@@ -79,8 +76,7 @@ const PROJECTS: Project[] = [
     description:
       'Factory ERP fused with edge YOLOv8 computer vision counting manufactured pipes on a continuous high-speed conveyor belt.',
     tags: ['Python', 'YOLOv8', 'OpenCV', 'FastAPI', 'React', 'MySQL'],
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuD33CzgIW36wxkuo_ug0YMqXMKa54EwKgby3imS7hOac0ErFd_9JLIkzC9M24mGG7Az9T-iMIM2Qa1WytbV0P9ohH5A9i6U8FgL9ZIFELbExBFt6-EQ2BRSG276NmBiKQl1w3PbeaMkdDIpFxJBVNUqEsWAhcOx7gxtUvSrAg5CCgH9GMvPDmi3CugLfEjpDeDjbSo7KtulJZ979W5hcluti6G5zhLJkSaEXr60z5Q5wY9wAg8XCwzN',
+    imageUrl: '',
     aspect: 'aspect-[16/10]',
     colSpan: 'md:col-span-6',
   },
@@ -95,8 +91,7 @@ const PROJECTS: Project[] = [
     description:
       '4-role automotive inspection & test-drive scheduling platform with offline-first synchronization and real-time chat.',
     tags: ['Flutter', 'Node.js', 'MySQL', 'Socket.io', 'Firebase'],
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuBErQlyqvxgzQQRKpLvI26w4zXpiW1KKsGgpjeM-fmbUXnDzRk7RSXx0JZfj5CHI33PfBIMY6qHu80tnPytubFnKdD4felS8psD5A7ijQPIO4UcCyYaBgDXj88e2tcxo-vgB3N5aZOAdzpUMaaaMFqAKNkvxJxbLum8Pq5oaRStEc4rFfx7GZeawz2zhIfjB6Io1j_rxsF1c7l1Fjk2H7Ywv_kGzoVFrWOobrKG3vMnUMpUnDY1Qz7p',
+    imageUrl: '',
     aspect: 'aspect-[4/5]',
     colSpan: 'md:col-span-5',
   },
@@ -111,8 +106,7 @@ const PROJECTS: Project[] = [
     description:
       'Buy, barter, and bid marketplace featuring real-time buyer-seller negotiation chat, Escrow states, and role hierarchies.',
     tags: ['React', 'Next.js', 'WebSockets', 'Node.js', 'PostgreSQL'],
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuBQjCpLqX-61IcHjA4O2zgLV4_eHdM9CWqTAol7xkT4Qhj1dm7YMlkV1-D6SHtlBqHfwitBEC67WLNph9aLqv5iM5tVAHo5PYc7c-DDCknL5a2RCKDUrMBzMBZCf-_8iJz3iMlE_IWum6SYREtGVq-xlIIdM02m--D6btF6OWsgmQeryxDWJnJ2U_HRKhcgtTBTyAkP6BXd5K68dE0qj_uXiapVu8W85m8ea_ZA_8HD1twcVSpJtL61',
+    imageUrl: '',
     aspect: 'aspect-[16/10]',
     colSpan: 'md:col-span-7',
   },
@@ -127,8 +121,7 @@ const PROJECTS: Project[] = [
     description:
       'Solar potential and irradiance analysis engine computing geospatial coordinate metrics via microservices architecture.',
     tags: ['Go', 'Python', 'React', 'Docker', 'Leaflet GIS'],
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuCf6HQkZ1sPCKfJAT3DSjWZ1hFzXxBFXbpRWmqHZ89jpY-MersCs0A2M4MMwO76ZuOiStxo9qbK2ZiZlNXyTPayQ-7cTYLstudtkPB0nybjRgAiPJ8NY591HVIMSgmr7iKxs6yDD-CV4h5qe7S4PuIrDjX_At5jmHxT1QTefE7vhq-EhftrSnGsIAv-qIphbaQSi8TKubUx8sidzbM7mRYKuS5Y4D5trrtbPopZuezm_MwVlulrm-im',
+    imageUrl: '',
     aspect: 'aspect-[16/10]',
     colSpan: 'md:col-span-6',
   },
@@ -143,8 +136,7 @@ const PROJECTS: Project[] = [
     description:
       'Server-rendered booking platform with JWT authentication, granular user permissions, payment webhooks, and containerized deployment.',
     tags: ['Node.js', 'Express', 'MongoDB', 'Docker', 'Stripe'],
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuBpECcJdq0rphIlnjMyw03VvODUzqBHispANgY_aZjkvpGuP5fBpo4CeM4Mffr2j_M9zZEqpgnRtwXiKjknmac0xRs6IzVPlRpGyqCF6MNr1SNm8MBCwSlZ-rry-9tzbj9ULFwJrSjwkDYxZeGVwBu37-7K-aIcOSWkDtMsV3wgW57O_TzFZK4yqJFKTp36VWn_30DBFgFR6JFJFqB2I-Lz5xxxnQJIiy6ZfR08hsvAnBzZQf4i4BHz',
+    imageUrl: '',
     aspect: 'aspect-[16/10]',
     colSpan: 'md:col-span-6',
   },
@@ -159,8 +151,7 @@ const PROJECTS: Project[] = [
     description:
       'Containerized conversational AI system with persistent context thread storage, token optimization, and JWT session handling.',
     tags: ['TypeScript', 'Next.js', 'OpenAI API', 'MongoDB', 'Docker'],
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuDOukjvOedJnD_6Bmx0XN2UMp905PW0EVWyHEBY6r1aW1Xhu1O8Ehj7ohBFjGAyhclI3wXo5feSJboabSdU6xzjZepFiuyUTtCR1q6XM8b3WC9urfNqYNxzTNgpgVznGa6--vfQjrFZR3vNIfGw9VKEdUt2UPoedklYw2Tvjtv3mo1Y_sPvs7bdo8OB8t8HKQXTWM37J4k3v2NFHxdYecxWGTYENGQepGcYcBozXtsMsTeo_e6PXm7s',
+    imageUrl: '',
     aspect: 'aspect-[16/10]',
     colSpan: 'md:col-span-6',
   },
@@ -175,8 +166,7 @@ const PROJECTS: Project[] = [
     description:
       'High-throughput API for parallel image transformations and video metadata extraction offloaded to isolated worker threads.',
     tags: ['Node.js', 'TypeScript', 'Worker Threads', 'Sharp', 'FFmpeg'],
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuA-zK6_OXTDJf_htnWjAMj-1UUBn4B_GzGqG8e2SR8X4Eimpy2GKHPZIw1mdY3zNGQb3oVgm5_SL4p5FAnB00fu8JulSNmx-DNCehmIZOpfdc8fLwYLxpfEefEQwIqs9dR6mAJPVJao6yUnAvJpvwAIIWiBb_HbKyYg4xPj1BOGF0NbNQU7g2QnPRRfQBK3tFP2LRki04ffFIn3Evr5qSHRAraz1WmVuSKPBBnFt7NiydjVaNF47PEb',
+    imageUrl: '',
     aspect: 'aspect-[16/10]',
     colSpan: 'md:col-span-6',
   },

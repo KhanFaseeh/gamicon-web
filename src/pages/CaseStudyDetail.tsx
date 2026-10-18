@@ -158,8 +158,7 @@ const DEFAULT_CASE_STUDIES: Record<string, CaseStudyData> = {
     arch1Fps: '64.2 FPS',
     arch1StreamUrl: 'ws://edge-node-03.plant.internal/stream',
     arch1CamName: 'CAM-BASLER-01',
-    arch1ImgUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuDPs8ZBHxma3oXU95SQz2FXpuwGqeprh73xaliwfPN1_05cab3p4x9k1bnBuBD1kIrdkGu_G1KkuOzQTz6zjeKAFHxB3q88z19uB6t2XgmS_52v59o1yIVDEwU2giJg90YJ2R6a-4dgAjXVNDDmThubRcjHY6vZob2oKfuuO-aYXa_WOl-kQUC_nHhf5e_sTvW7u-14Qq2tdB7miQJXD4YXxfj64RFVzVTajpSvh3kQC_C5nJouppmZ',
+    arch1ImgUrl: '',
     box1Label: 'PVC-Class-A',
     box1Confidence: '99.4%',
     box1Details: 'ID: #48102 · Speed: 2.1 m/s · Dia: 110mm',
@@ -270,8 +269,7 @@ const DEFAULT_CASE_STUDIES: Record<string, CaseStudyData> = {
     arch1Fps: '99.98% Uptime',
     arch1StreamUrl: 'amqp://cluster-ingest.tna.internal',
     arch1CamName: 'TNA-GATEWAY-CORE',
-    arch1ImgUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuA6JuSnJ5ncwLHE79qaY6a6KfvkVu2zCiaQ0GfKVF3qMLOiiQbJw_lu9IYmk8Hk4hvIb0xi9RbBx6V5Iz7OEqN2YK16ANGlHvpETLB5BXcBtdwfgZHWezbpAVwMKmV5Wk1KPKfJjcnZ3cbZw6IklSlF-vyZzkNe_OzaQLePpXN0JDKIjAnSGY3P9QXzd-FgJdY6tgpC47ixiLz_lRmX_-MKg_hRgCW64iSJT82MJ4Ir7vpDjHcuHmuE',
+    arch1ImgUrl: '',
     box1Label: 'SYNC-PASS',
     box1Confidence: '100%',
     box1Details: 'EmpID: #90214 · Shift: Alpha · Verified',
@@ -391,8 +389,7 @@ const DEFAULT_CASE_STUDIES: Record<string, CaseStudyData> = {
     arch1Fps: '60.0 FPS',
     arch1StreamUrl: 'unity://runtime-debugger.asylum-level',
     arch1CamName: 'CINEMACHINE-DIRECTOR-01',
-    arch1ImgUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuDPs8ZBHxma3oXU95SQz2FXpuwGqeprh73xaliwfPN1_05cab3p4x9k1bnBuBD1kIrdkGu_G1KkuOzQTz6zjeKAFHxB3q88z19uB6t2XgmS_52v59o1yIVDEwU2giJg90YJ2R6a-4dgAjXVNDDmThubRcjHY6vZob2oKfuuO-aYXa_WOl-kQUC_nHhf5e_sTvW7u-14Qq2tdB7miQJXD4YXxfj64RFVzVTajpSvh3kQC_C5nJouppmZ',
+    arch1ImgUrl: '',
     box1Label: 'AI-MUTATED-PATIENT',
     box1Confidence: 'State: PURSUIT',
     box1Details: 'LOS: True · Dist: 8.4m · Speed: 5.2 m/s',
