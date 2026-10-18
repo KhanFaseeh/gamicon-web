@@ -29,8 +29,7 @@ const TEAM_MEMBERS: TeamMember[] = [
     disciplineSub: 'Real-Time Core',
     bio: "Runs delivery end to end — technical scoping, architecture roadmaps, sprint execution, and shipping. Directs studio game development practices, real-time rendering pipelines, and release governance.",
     chips: ['Unity 3D', 'C#', 'HLSL Shaders', 'Sprint Scoping', 'Production CI/CD', 'Photon Realtime'],
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuASG0W42bY_gsxnnA3_k_vOaJMpMRkTnbhDtAgNMyxuQh16_1SD5oG3DFLMGGzfYquZBn77mMCbkLen4TsI-pHohdFb38m5tF-7OWAE2qAoDthPJcgjyj0eIM2PMtk2BXV6FlNUGfQLNNPMxqjg8A_bXAV6gbJzTxM2Z-SkBtj5gP47gG43tw_VKASueCNPcm97vUdgvjdpCM4rMbTrlN_TNQIR__WfpWZU5mFbqoDAcxiDXbsp3lPx',
+    imageUrl: '/faseeh-ceo.jpg',
     badgeText: 'Principal 01',
     badgeBg: 'bg-[#F6A6CF] text-primary',
     inverted: false,

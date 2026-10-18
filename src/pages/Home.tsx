@@ -71,8 +71,7 @@ const DEFAULT_TEAM: HomeTeamMember[] = [
     focus: 'Delivery · Unity · C# Architecture · Release Ops',
     bio: 'Directs studio technical strategy, client scoping, project timetables, and quality governance. Leads the Unity game practice and release lifecycle pipelines.',
     chips: ['Unity 3D', 'C#', 'HLSL Shaders', 'Sprint Scoping', 'Production CI/CD', 'Photon'],
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuASG0W42bY_gsxnnA3_k_vOaJMpMRkTnbhDtAgNMyxuQh16_1SD5oG3DFLMGGzfYquZBn77mMCbkLen4TsI-pHohdFb38m5tF-7OWAE2qAoDthPJcgjyj0eIM2PMtk2BXV6FlNUGfQLNNPMxqjg8A_bXAV6gbJzTxM2Z-SkBtj5gP47gG43tw_VKASueCNPcm97vUdgvjdpCM4rMbTrlN_TNQIR__WfpWZU5mFbqoDAcxiDXbsp3lPx',
+    imageUrl: '/faseeh-ceo.jpg',
   },
   {
     id: 'member-2',
