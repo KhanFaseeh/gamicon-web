@@ -54,8 +54,7 @@ const TEAM_MEMBERS: TeamMember[] = [
       'Substance Painter',
       'Physics Engines',
     ],
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuABKgk5aoLbkEjSO4kD0UHMS75Ss76wIMD7K923R0hYc269aXlE_Bqzb7EKyzDeSclq51KJF4dLIyapTX9NsLgB3r8kpK1wL4zZ9GcIRKdX4HpL2Rwcc0RMBBRjaDZ0lE2DEe_HVueLs-Py6rSnfJvvIx-Y0-AUvhSSxpoEwB1h1tjEnnKDHipkyFWvB1PgrIXzK7f1HRk30QBJl0TEJuvuP47F0uk7cV-ZkG9Uj66IpV-c5h872fN6',
+    imageUrl: '/tayyab-cto.jpg',
     badgeText: 'CTO · Principal 02',
     badgeBg: 'bg-[#FF5B5B] text-white',
     inverted: true,
@@ -87,8 +86,7 @@ const TEAM_MEMBERS: TeamMember[] = [
     disciplineSub: 'Computer Vision',
     bio: 'Cross-platform Flutter apps, reactive React interfaces, high-throughput Node.js APIs, and on-premise YOLOv8 edge computer vision systems deployed into live industrial manufacturing plants.',
     chips: ['Flutter', 'React', 'Node.js', 'Python', 'YOLOv8', 'FastAPI', 'WebSockets'],
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuB5xYc-mLL9-A1w9lvObOPRrOspFo1dTyE4AcB3z8VOddNPohXGrlDbrMP64JzQbrKAI6ScMntkHcYr2AQguwjnHsZJ31SdPCuToXZKm-3utNnUPfvSaX7T6emLW9dYVkY2ZeK6x30QCO61A9yuKhR6l4-JjWo5FTWv8Bbefk__eTX9GfhVN5sPyF1jU1OBd1JZlMgD62ajZnd1Z0f64xl2ydNZsRg50AEb5TpOIlz_WlwRa64pD98C',
+    imageUrl: '/ali-mobile.webp',
     badgeText: 'Principal 04',
     badgeBg: 'bg-[#e3dfff] text-secondary font-bold',
     inverted: true,

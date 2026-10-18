@@ -104,8 +104,7 @@ const INITIAL_TEAM: AdminTeamMember[] = [
     focus: 'Unity 6 · Blender 3D · Enemy AI · Gameplay Systems · Rigging',
     bio: 'Leads technical architecture, Blender 3D modeling, rigging, enemy AI, and gameplay physics across Unity 6 and independent productions.',
     chips: ['Unity 6', 'Blender', 'NavMesh AI', 'Cinemachine', 'Mixamo', 'URP'],
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuABKgk5aoLbkEjSO4kD0UHMS75Ss76wIMD7K923R0hYc269aXlE_Bqzb7EKyzDeSclq51KJF4dLIyapTX9NsLgB3r8kpK1wL4zZ9GcIRKdX4HpL2Rwcc0RMBBRjaDZ0lE2DEe_HVueLs-Py6rSnfJvvIx-Y0-AUvhSSxpoEwB1h1tjEnnKDHipkyFWvB1PgrIXzK7f1HRk30QBJl0TEJuvuP47F0uk7cV-ZkG9Uj66IpV-c5h872fN6',
+    imageUrl: '/tayyab-cto.jpg',
     linkedInUrl: 'https://linkedin.com/in/m-tayyabmalik',
     order: 2,
   },
@@ -128,8 +127,7 @@ const INITIAL_TEAM: AdminTeamMember[] = [
     focus: 'Flutter / Dart · React · Python · YOLOv8 · Mobile Edge AI',
     bio: 'Specializes in cross-platform mobile systems and edge computer vision. Developed the YOLOv8 factory counting pipeline and multi-platform architectures.',
     chips: ['Flutter', 'React', 'Python', 'YOLOv8', 'FastAPI', 'WebSockets'],
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuB5xYc-mLL9-A1w9lvObOPRrOspFo1dTyE4AcB3z8VOddNPohXGrlDbrMP64JzQbrKAI6ScMntkHcYr2AQguwjnHsZJ31SdPCuToXZKm-3utNnUPfvSaX7T6emLW9dYVkY2ZeK6x30QCO61A9yuKhR6l4-JjWo5FTWv8Bbefk__eTX9GfhVN5sPyF1jU1OBd1JZlMgD62ajZnd1Z0f64xl2ydNZsRg50AEb5TpOIlz_WlwRa64pD98C',
+    imageUrl: '/ali-mobile.webp',
     linkedInUrl: 'https://linkedin.com',
     order: 4,
   },
@@ -208,7 +206,7 @@ const INITIAL_MEDIA = [
   {
     name: 'tayyab-portrait.jpg',
     dims: '800 × 1000',
-    url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuABKgk5aoLbkEjSO4kD0UHMS75Ss76wIMD7K923R0hYc269aXlE_Bqzb7EKyzDeSclq51KJF4dLIyapTX9NsLgB3r8kpK1wL4zZ9GcIRKdX4HpL2Rwcc0RMBBRjaDZ0lE2DEe_HVueLs-Py6rSnfJvvIx-Y0-AUvhSSxpoEwB1h1tjEnnKDHipkyFWvB1PgrIXzK7f1HRk30QBJl0TEJuvuP47F0uk7cV-ZkG9Uj66IpV-c5h872fN6',
+    url: '/tayyab-cto.jpg',
   },
   {
     name: 'shah-fahad-portrait.jpg',
@@ -216,9 +214,9 @@ const INITIAL_MEDIA = [
     url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBx9TIs49Kb0IvpeF6uqLG73w7-n3R5Uqw3nzs6BxQInrfhx6T_BtKGXxz78hVI5ZWZ4YDLnJ4p2wC9oqX0FBuwhvgt52v32biMQBi0-mdFC1nh0_gVaQoAn2ViocNtTIIJK8r49S5sfZkV8CCwrp3owd-S15dwbxR_yLIQMcYUmqSYynQ4dBI1gT7cWmWeGZafRMqDb9McK_Cnjt1NTNwjIcLHWtbVhDZd4odK9bwp8tithHTfNEG4',
   },
   {
-    name: 'muhammad-ali-portrait.jpg',
+    name: 'muhammad-ali-portrait.webp',
     dims: '800 × 1000',
-    url: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB5xYc-mLL9-A1w9lvObOPRrOspFo1dTyE4AcB3z8VOddNPohXGrlDbrMP64JzQbrKAI6ScMntkHcYr2AQguwjnHsZJ31SdPCuToXZKm-3utNnUPfvSaX7T6emLW9dYVkY2ZeK6x30QCO61A9yuKhR6l4-JjWo5FTWv8Bbefk__eTX9GfhVN5sPyF1jU1OBd1JZlMgD62ajZnd1Z0f64xl2ydNZsRg50AEb5TpOIlz_WlwRa64pD98C',
+    url: '/ali-mobile.webp',
   },
 ]
 

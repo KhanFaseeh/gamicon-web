@@ -80,8 +80,7 @@ const DEFAULT_TEAM: HomeTeamMember[] = [
     focus: 'Unity 6 · Blender 3D · Enemy AI · Gameplay Systems · Rigging',
     bio: 'Leads technical architecture, Blender 3D modeling, rigging, enemy AI, and gameplay physics across Unity 6 and independent productions.',
     chips: ['Unity 6', 'Blender', 'NavMesh AI', 'Cinemachine', 'Mixamo', 'URP'],
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuABKgk5aoLbkEjSO4kD0UHMS75Ss76wIMD7K923R0hYc269aXlE_Bqzb7EKyzDeSclq51KJF4dLIyapTX9NsLgB3r8kpK1wL4zZ9GcIRKdX4HpL2Rwcc0RMBBRjaDZ0lE2DEe_HVueLs-Py6rSnfJvvIx-Y0-AUvhSSxpoEwB1h1tjEnnKDHipkyFWvB1PgrIXzK7f1HRk30QBJl0TEJuvuP47F0uk7cV-ZkG9Uj66IpV-c5h872fN6',
+    imageUrl: '/tayyab-cto.jpg',
   },
   {
     id: 'member-3',
@@ -100,8 +99,7 @@ const DEFAULT_TEAM: HomeTeamMember[] = [
     focus: 'Flutter / Dart · React · Python · YOLOv8 · Mobile Edge AI',
     bio: 'Specializes in cross-platform mobile systems and edge computer vision. Developed the YOLOv8 factory counting pipeline and multi-platform architectures.',
     chips: ['Flutter', 'React', 'Python', 'YOLOv8', 'FastAPI', 'WebSockets'],
-    imageUrl:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuAS9vtxytMp8uhLYQvS6-IxDx2v7Dj_yiJWU4ziCpq6ZfoWfGPhZDr7J9FSvqWOYiummnybNIyo6kzu2rR_4s1Y1N2vxpWLNBp0wHq3l9FdANDgCWQlBApN2gnoXDVNtH2LqNQjqqa2OYV2SIRhcSbuW-Xrh7AasPkHysJScBBVhN_4kVy2mCT2-Q8LVfUuBklBYqVkULSMDn14IVHmu17f3d4Fjm53zNeRDyTo9FssZ5sUgY4PXfvL',
+    imageUrl: '/ali-mobile.webp',
   },
 ]
 
