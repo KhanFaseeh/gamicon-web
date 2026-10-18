@@ -170,6 +170,21 @@ const PROJECTS: Project[] = [
     aspect: 'aspect-[16/10]',
     colSpan: 'md:col-span-6',
   },
+  {
+    id: 'shadow-of-honor',
+    num: '11',
+    subCategory: 'Game Development',
+    category: 'game-dev',
+    title: 'Shadow of Honor',
+    statusBadge: 'Vertical Slice · Unity 6',
+    statusBadgeClass: 'bg-[#F6A6CF] text-[#1B1A17]',
+    description:
+      'High-fidelity third-person dark fantasy combat prototype in Unity 6: deterministic katana deflection mechanics, adaptive enemy horde AI, and custom HLSL volumetric fog.',
+    tags: ['Unity 6', 'C#', 'HLSL Shaders', 'Cinemachine', 'NavMesh AI', 'Blender 3D'],
+    imageUrl: '/shadow-of-honor.jpg',
+    aspect: 'aspect-[16/10]',
+    colSpan: 'md:col-span-6',
+  },
 ]
 
 export default function Work() {
@@ -200,7 +215,8 @@ export default function Work() {
       ? games.map((g, idx) => {
           const catTag = (g.tags?.[0] || 'Web & SaaS').toLowerCase()
           let category = 'web-saas'
-          if (catTag.includes('mobile') || catTag.includes('app')) category = 'mobile'
+          if (catTag.includes('game') || catTag.includes('unity') || catTag.includes('shader')) category = 'game-dev'
+          else if (catTag.includes('mobile') || catTag.includes('app')) category = 'mobile'
           else if (catTag.includes('ai') || catTag.includes('vision') || catTag.includes('automation')) category = 'ai-automation'
           else if (catTag.includes('open')) category = 'open-source'
 
@@ -237,6 +253,7 @@ export default function Work() {
   const countWeb = allProjects.filter((p) => p.category.includes('web-saas')).length
   const countMobile = allProjects.filter((p) => p.category.includes('mobile')).length
   const countAI = allProjects.filter((p) => p.category.includes('ai-automation')).length
+  const countGame = allProjects.filter((p) => p.category.includes('game-dev')).length
   const countOSS = allProjects.filter((p) => p.category.includes('open-source')).length
 
   return (
@@ -370,6 +387,16 @@ export default function Work() {
                 }`}
               >
                 AI &amp; Automation ({countAI})
+              </button>
+              <button
+                onClick={() => setFilter('game-dev')}
+                className={`px-4 py-1.5 rounded-full text-label-eyebrow font-label-eyebrow font-medium transition-colors duration-150 ${
+                  filter === 'game-dev'
+                    ? 'bg-primary-container text-surface'
+                    : 'bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high'
+                }`}
+              >
+                Game Dev ({countGame})
               </button>
               <button
                 onClick={() => setFilter('open-source')}

@@ -217,6 +217,11 @@ const INITIAL_MEDIA = [
     dims: '800 × 1000',
     url: '/ali-mobile.webp',
   },
+  {
+    name: 'shadow-of-honor-title.jpg',
+    dims: '1920 × 1080',
+    url: '/shadow-of-honor.jpg',
+  },
 ]
 
 type ActiveTab = 'dashboard' | 'projects' | 'inquiries' | 'team' | 'services' | 'media' | 'settings'

@@ -264,8 +264,8 @@ export default function Services() {
                 <div className="rounded-xl overflow-hidden border border-on-surface/15 bg-surface-container-high aspect-[4/5] relative group">
                   <img
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    alt="Character State Machines & Inventory Matrix"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAlFDndLwUOCpAxGFh2fOYLeB49MaHhI0O3LpApt_VJcQs1WawgRi9pLbdla83SUrWqWsXR_lTePq5S6EUIPSUM8P2SEjrzTKLJmEQZorF1anNWbolHsNezJuXHS_6fymxpVi4SJvlQJ6aTyc2zUUeoPTTxqL0mOn1JxVfU4vYKHQZUotsGA20WOZjSaibcSZntZ2QK_gbcpLplh-VHyJSMBEl5eBpB-yCTD2JItyEQKEE_oTpNBVWA"
+                    alt="Shadow of Honor - Combat Engine"
+                    src="/shadow-of-honor.jpg"
                   />
                   <div className="absolute bottom-0 inset-x-0 p-5 bg-gradient-to-t from-primary-container/90 via-primary-container/60 to-transparent text-surface">
                     <div className="text-xs font-mono uppercase tracking-wider text-tertiary-fixed mb-1">
