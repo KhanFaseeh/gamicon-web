@@ -8,7 +8,7 @@ const DEFAULT_STUDIO_INFO: StudioInfo = {
   id: 1,
   manifesto:
     'Anamorphic is an independent engineering studio for games, web platforms, and mobile apps — founded by engineers who run live production systems, not pitch decks or un-shipped prototypes.',
-  contact_email: 'anamorphiicc@gmail.com',
+  contact_email: 'hello@anamorphic.studio',
   press_kit_url: 'https://anamorphic.studio/press-kit.zip',
 }
 
@@ -287,7 +287,7 @@ export default function About() {
                   Studio Founded
                 </h3>
                 <p className="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-                  Three principal engineers unite around a singular rule: take full technical ownership and eliminate non-technical management bloat. Direct access to source repositories from day zero.
+                  Four principal engineers unite around a singular rule: take full technical ownership and eliminate non-technical management bloat. Direct access to source repositories from day zero.
                 </p>
               </div>
 

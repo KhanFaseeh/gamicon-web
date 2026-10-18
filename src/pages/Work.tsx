@@ -233,6 +233,12 @@ export default function Work() {
       ? allProjects
       : allProjects.filter((p) => p.category.includes(filter))
 
+  const countAll = allProjects.length
+  const countWeb = allProjects.filter((p) => p.category.includes('web-saas')).length
+  const countMobile = allProjects.filter((p) => p.category.includes('mobile')).length
+  const countAI = allProjects.filter((p) => p.category.includes('ai-automation')).length
+  const countOSS = allProjects.filter((p) => p.category.includes('open-source')).length
+
   return (
     <div className="bg-background text-on-surface antialiased selection:bg-secondary selection:text-on-secondary min-h-screen flex flex-col justify-between overflow-x-hidden">
       <Header />
@@ -279,7 +285,7 @@ export default function Work() {
               </div>
               <div className="md:col-span-4 flex md:justify-end">
                 <div className="inline-flex items-center gap-2 border border-on-surface/15 bg-surface-container-low px-3.5 py-1.5 rounded-full">
-                  <span className="w-2 h-2 rounded-full bg-[#74BE9C] animate-pulse"></span>
+                  <span className="w-2 h-2 rounded-full bg-[#74BE9C]"></span>
                   <span className="font-label-eyebrow text-label-eyebrow text-on-surface font-semibold">
                     10 Verified Implementations
                   </span>
@@ -333,7 +339,7 @@ export default function Work() {
                     : 'bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high'
                 }`}
               >
-                All (10)
+                All ({countAll})
               </button>
               <button
                 onClick={() => setFilter('web-saas')}
@@ -343,7 +349,7 @@ export default function Work() {
                     : 'bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high'
                 }`}
               >
-                Web &amp; SaaS (6)
+                Web &amp; SaaS ({countWeb})
               </button>
               <button
                 onClick={() => setFilter('mobile')}
@@ -353,7 +359,7 @@ export default function Work() {
                     : 'bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high'
                 }`}
               >
-                Mobile Apps (2)
+                Mobile Apps ({countMobile})
               </button>
               <button
                 onClick={() => setFilter('ai-automation')}
@@ -363,7 +369,7 @@ export default function Work() {
                     : 'bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high'
                 }`}
               >
-                AI &amp; Automation (2)
+                AI &amp; Automation ({countAI})
               </button>
               <button
                 onClick={() => setFilter('open-source')}
@@ -373,7 +379,7 @@ export default function Work() {
                     : 'bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high'
                 }`}
               >
-                Open Source (2)
+                Open Source ({countOSS})
               </button>
             </div>
           </div>
@@ -503,7 +509,7 @@ export default function Work() {
               <div className="mt-8 flex flex-wrap items-center gap-4">
                 <a
                   className="fused-pod group inline-flex items-center transition-transform duration-150 active:scale-[0.98]"
-                  href="mailto:contact@anamorphic.studio"
+                  href="mailto:hello@anamorphic.studio"
                 >
                   <span className="bg-primary-container text-surface group-hover:bg-secondary group-hover:text-on-secondary font-label-eyebrow text-body-md font-semibold px-8 py-4 rounded-l-full transition-colors duration-150">
                     Start a project

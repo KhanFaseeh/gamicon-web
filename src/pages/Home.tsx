@@ -221,14 +221,14 @@ export default function Home() {
               <h1 className="font-display-xxl text-headline-lg-mobile md:text-display-xxl tracking-tight text-on-surface">
                 We engineer systems
               </h1>
-              <h1 className="tracking-tight text-on-surface mt-1">
-                <span className="font-display-serif-xxl text-headline-lg-mobile md:text-display-serif-xxl italic font-normal text-secondary">
+              <div className="flex flex-wrap items-baseline gap-x-4 mt-2">
+                <span className="font-display-serif-xxl text-headline-lg-mobile md:text-display-serif-xxl italic font-normal text-secondary inline-block">
                   that actually
                 </span>
-                <span className="font-display-xxl text-headline-lg-mobile md:text-display-xxl ml-2 font-extrabold">
+                <span className="font-display-xxl text-headline-lg-mobile md:text-display-xxl font-extrabold inline-block">
                   ship.
                 </span>
-              </h1>
+              </div>
             </div>
 
             {/* Sub-narrative & Action Cluster */}
@@ -672,7 +672,7 @@ export default function Home() {
             </div>
 
             <div className="md:col-span-4 flex flex-col items-start md:items-end">
-              <a className="fused-pod group inline-flex items-center" href="mailto:contact@anamorphic.studio">
+              <a className="fused-pod group inline-flex items-center" href="mailto:hello@anamorphic.studio">
                 <span className="bg-primary-container text-surface px-8 py-4 rounded-l-full font-label-eyebrow text-body-md font-semibold group-hover:bg-secondary group-hover:text-on-secondary transition-colors duration-150">
                   Start Project
                 </span>
@@ -681,7 +681,7 @@ export default function Home() {
                 </span>
               </a>
               <span className="font-label-eyebrow text-label-eyebrow text-on-surface-variant mt-4">
-                Direct dispatch: contact@anamorphic.studio
+                Direct dispatch: hello@anamorphic.studio
               </span>
             </div>
           </div>

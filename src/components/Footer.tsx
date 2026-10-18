@@ -13,8 +13,8 @@ export default function Footer() {
       // ignore
     }
     return {
-      contactEmail: 'anamorphiicc@gmail.com',
-      githubUrl: 'https://github.com',
+      contactEmail: 'hello@anamorphic.studio',
+      githubUrl: 'https://github.com/ShahandFahad',
       linkedinUrl: 'https://linkedin.com',
       footerCopyright: '© Anamorphic Studio. Verified production stacks.',
     }
@@ -93,9 +93,9 @@ export default function Footer() {
                   Studio Status
                 </span>
                 <div className="flex items-center space-x-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#74BE9C] animate-pulse"></span>
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#74BE9C]"></span>
                   <span className="font-body-md text-body-md text-surface font-medium">
-                    Accepting Q3 Production Engagements
+                    Active Production Cycles · Open for Commission
                   </span>
                 </div>
               </div>
@@ -176,7 +176,7 @@ export default function Footer() {
 
                   {/* Email */}
                   <a
-                    href={`mailto:${settings.contactEmail || 'anamorphiicc@gmail.com'}`}
+                    href={`mailto:${settings.contactEmail || 'hello@anamorphic.studio'}`}
                     aria-label="Direct Email"
                     className="w-10 h-10 rounded-full border border-surface/30 flex items-center justify-center text-surface hover:bg-surface hover:text-primary-container transition-colors duration-150"
                   >
@@ -188,11 +188,11 @@ export default function Footer() {
 
             {/* Secondary Links & Admin Link */}
             <div className="pt-8 flex flex-wrap gap-4 text-surface-variant font-label-eyebrow text-label-eyebrow items-center border-t border-surface/10">
-              <Link to="/contact" className="hover:text-surface transition-colors">
+              <Link to="/privacy" className="hover:text-surface transition-colors">
                 Privacy Policy
               </Link>
               <span>·</span>
-              <Link to="/contact" className="hover:text-surface transition-colors">
+              <Link to="/terms" className="hover:text-surface transition-colors">
                 Terms of Service
               </Link>
               <span>·</span>

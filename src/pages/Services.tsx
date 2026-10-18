@@ -637,7 +637,7 @@ export default function Services() {
             </p>
 
             {/* Primary Action Fused Pill */}
-            <a className="fused-pod group inline-flex items-center" href="mailto:contact@anamorphic.studio">
+            <a className="fused-pod group inline-flex items-center" href="mailto:hello@anamorphic.studio">
               <span className="bg-primary text-on-primary font-body-lg text-body-lg font-medium px-8 py-4 rounded-l-full group-hover:bg-secondary group-hover:text-white transition-colors duration-150">
                 Start a Project
               </span>

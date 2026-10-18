@@ -34,21 +34,14 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
 
   return (
     <div className="bg-surface text-on-surface font-body-md text-body-md min-h-screen flex flex-col justify-between antialiased selection:bg-secondary selection:text-on-secondary">
-      {/* Production Environmental Ticker Header */}
+      {/* Top Editorial Header */}
       <header className="w-full border-b border-on-surface/10 px-6 py-3 flex items-center justify-between text-label-eyebrow font-label-eyebrow text-on-surface-variant bg-surface/90">
         <div className="flex items-center gap-3">
-          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#74BE9C]/20 text-[#1B1A17] font-medium text-[11px] border border-[#74BE9C]/40">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#74BE9C]"></span>
-            Cluster US-East-1 (Primary)
-          </span>
+          <span className="font-semibold text-on-surface">Anamorphic Studio CMS</span>
           <span className="hidden sm:inline text-outline">/</span>
-          <span className="hidden sm:inline font-mono text-[11px] text-outline">v4.18.2-prod</span>
+          <span className="hidden sm:inline text-on-surface-variant">Production Management</span>
         </div>
         <div className="flex items-center gap-4 text-xs">
-          <span className="flex items-center gap-1 text-on-surface-variant">
-            <span className="material-symbols-outlined text-[15px] text-outline">lock</span>
-            Strict SSL
-          </span>
           <Link
             to="/"
             className="hover:text-primary transition-colors flex items-center gap-1 text-on-surface-variant hover:text-on-surface"
@@ -211,15 +204,14 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
             <div className="mt-6 pt-4 border-t border-outline-variant/15 text-center">
               <p className="text-[11px] font-mono text-on-surface-variant/70 tracking-tight flex items-center justify-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-secondary-container inline-block"></span>
-                Direct session auth · 2FA active · Zero trust zone
+                Authorized Studio Management Access
               </p>
             </div>
           </div>
 
-          {/* Quick Telemetry Below Card */}
-          <div className="mt-6 text-center text-xs text-on-surface-variant/60 font-label-eyebrow space-y-1">
-            <p>Restricted access: Anamorphic Design &amp; Technology Group LLC</p>
-            <p className="font-mono text-[10px] text-outline">Edge ingress routed via 192.88.99.12</p>
+          {/* Clean Subtext */}
+          <div className="mt-6 text-center text-xs text-on-surface-variant/60 font-label-eyebrow">
+            <p>Anamorphic Studio Administration</p>
           </div>
         </div>
       </main>
@@ -229,16 +221,12 @@ export default function AdminLogin({ onLoginSuccess }: AdminLoginProps) {
         <div className="flex items-center gap-4">
           <span className="text-on-surface font-semibold">anamorphic</span>
           <span className="text-outline">·</span>
-          <span>NYC UTC-5 (09:42 EST)</span>
-          <span className="text-outline">·</span>
-          <span>LDN UTC+0 (14:42 GMT)</span>
+          <span>Engineering Management Console</span>
         </div>
         <div className="flex items-center gap-4 text-[11px] text-outline">
           <Link to="/" className="hover:text-on-surface transition-colors">
             Return to Studio
           </Link>
-          <span>·</span>
-          <span>Status: Operational (99.98%)</span>
         </div>
       </footer>
     </div>

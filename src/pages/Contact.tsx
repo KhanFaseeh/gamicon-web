@@ -16,7 +16,7 @@ const DEFAULT_CONTACT_TEAM: ContactTeamMember[] = [
 ]
 
 export default function Contact() {
-  const [selectedDiscipline, setSelectedDiscipline] = useState('🌐 Web Platform / SaaS')
+  const [selectedDiscipline, setSelectedDiscipline] = useState('Web Platforms & SaaS')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState('')
@@ -49,7 +49,7 @@ export default function Contact() {
       // ignore
     }
     return {
-      contactEmail: 'anamorphiicc@gmail.com',
+      contactEmail: 'hello@anamorphic.studio',
       locationLine: 'Lahore, Peshawar & Global Remote · UTC+5',
     }
   })
@@ -83,7 +83,7 @@ export default function Contact() {
     const body = encodeURIComponent(
       `Name / Team: ${name}\nEmail: ${email}\nDiscipline: ${selectedDiscipline}\n\nProject Overview & Timeline:\n${message}`
     )
-    window.location.href = `mailto:${settings.contactEmail || 'anamorphiicc@gmail.com'}?subject=${subject}&body=${body}`
+    window.location.href = `mailto:${settings.contactEmail || 'hello@anamorphic.studio'}?subject=${subject}&body=${body}`
     setSubmitted(true)
   }
 
@@ -104,13 +104,13 @@ export default function Contact() {
               </span>
             </div>
 
-            {/* Giant Typographic Headline: Italic Serif Didone + Grotesque Sans */}
+            {/* Typographic Headline: Italic Serif Didone + Grotesque Sans with clean spacing */}
             <div className="mb-8">
-              <h1 className="text-on-surface">
-                <span className="block font-display-serif-xxl-mobile md:font-display-serif-xxl text-display-serif-xxl-mobile md:text-display-serif-xxl italic font-normal text-on-surface tracking-tight">
+              <h1 className="text-on-surface flex flex-wrap items-baseline gap-x-4">
+                <span className="font-display-serif-xxl-mobile md:font-display-serif-xxl text-display-serif-xxl-mobile md:text-display-serif-xxl italic font-normal text-on-surface tracking-tight">
                   Tell us what
                 </span>
-                <span className="block font-display-xxl-mobile md:font-display-xxl text-display-xxl-mobile md:text-display-xxl tracking-tighter font-extrabold text-on-surface uppercase md:normal-case -mt-1 md:-mt-4">
+                <span className="font-display-xxl-mobile md:font-display-xxl text-display-xxl-mobile md:text-display-xxl tracking-tight font-extrabold text-on-surface">
                   you're building.
                 </span>
               </h1>
@@ -119,7 +119,7 @@ export default function Contact() {
             {/* Editorial Subtitle with Principal Scoping Assurance */}
             <div className="max-w-3xl space-y-6">
               <p className="font-body-lg text-body-lg text-on-surface-variant font-normal leading-relaxed">
-                No sales reps, no discovery sprint upsells. You get direct architectural scoping from the three engineers who write the software.
+                No sales reps, no discovery sprint upsells. You get direct architectural scoping from the four engineers who write the software.
               </p>
               <div>
                 <a href="#contact-flow" className="fused-pod group inline-flex items-center">
@@ -247,25 +247,26 @@ export default function Contact() {
                     </div>
                   </div>
 
-                  {/* Quick Reply Chips */}
+                  {/* Quick Reply Chips (Geometric badges, zero emojis) */}
                   <div className="pl-11 flex flex-wrap gap-2.5">
                     {[
-                      '🎮 Game Development',
-                      '🌐 Web Platform / SaaS',
-                      '📱 Mobile App',
-                      '⚡ Something else (AI / CV / Edge)',
-                    ].map((chip) => (
+                      { label: 'Game Development', code: 'GAME' },
+                      { label: 'Web Platforms & SaaS', code: 'SAAS' },
+                      { label: 'Mobile Apps', code: 'MBL' },
+                      { label: 'AI, Vision & Automation', code: 'EDGE' },
+                    ].map(({ label, code }) => (
                       <button
-                        key={chip}
+                        key={label}
                         type="button"
-                        onClick={() => setSelectedDiscipline(chip)}
-                        className={`px-4 py-2 rounded-full text-left font-body-md text-body-md transition-all duration-150 ${
-                          selectedDiscipline === chip
+                        onClick={() => setSelectedDiscipline(label)}
+                        className={`px-4 py-2 rounded-full text-left font-body-md text-body-md transition-all duration-150 inline-flex items-center gap-2 ${
+                          selectedDiscipline === label
                             ? 'bg-secondary-fixed text-on-secondary-fixed border border-secondary font-semibold'
                             : 'bg-surface-container hover:bg-primary hover:text-white border border-on-surface/10 font-medium text-on-surface'
                         }`}
                       >
-                        {chip}
+                        <span className="font-mono text-xs opacity-70">[{code}]</span>
+                        <span>{label}</span>
                       </button>
                     ))}
                   </div>
@@ -374,9 +375,9 @@ export default function Contact() {
                 <div className="md:col-span-6">
                   <a
                     className="font-headline-md md:font-headline-md text-headline-md hover:text-secondary transition-colors underline underline-offset-8 decoration-on-surface/20 font-bold"
-                    href={`mailto:${settings.contactEmail || 'anamorphiicc@gmail.com'}`}
+                    href={`mailto:${settings.contactEmail || 'hello@anamorphic.studio'}`}
                   >
-                    {settings.contactEmail || 'anamorphiicc@gmail.com'}
+                    {settings.contactEmail || 'hello@anamorphic.studio'}
                   </a>
                 </div>
                 <div className="md:col-span-3 md:text-right">
@@ -420,7 +421,7 @@ export default function Contact() {
                 <div className="md:col-span-3 md:text-right">
                   <a
                     className="inline-flex items-center text-secondary font-body-md text-body-md font-semibold hover:underline"
-                    href="mailto:anamorphiicc@gmail.com"
+                    href="mailto:hello@anamorphic.studio"
                   >
                     Direct calendar link option
                     <span className="material-symbols-outlined text-[18px] ml-1">north_east</span>

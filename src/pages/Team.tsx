@@ -34,7 +34,7 @@ const TEAM_MEMBERS: TeamMember[] = [
     badgeBg: 'bg-[#F6A6CF] text-primary',
     inverted: false,
     linkedInUrl: 'https://linkedin.com',
-    email: 'anamorphiicc@gmail.com',
+    email: 'hello@anamorphic.studio',
   },
   {
     name: 'Muhammad Tayyab',
@@ -76,7 +76,8 @@ const TEAM_MEMBERS: TeamMember[] = [
     badgeBg: 'bg-[#74BE9C] text-primary',
     inverted: false,
     linkedInUrl: 'https://linkedin.com',
-    email: 'anamorphiicc@gmail.com',
+    githubUrl: 'https://github.com/ShahandFahad',
+    email: 'hello@anamorphic.studio',
   },
   {
     name: 'Muhammad Ali',
@@ -91,7 +92,8 @@ const TEAM_MEMBERS: TeamMember[] = [
     badgeBg: 'bg-[#e3dfff] text-secondary font-bold',
     inverted: true,
     linkedInUrl: 'https://linkedin.com',
-    email: 'anamorphiicc@gmail.com',
+    githubUrl: 'https://github.com/Muhammad-ali234',
+    email: 'hello@anamorphic.studio',
   },
 ]
 
@@ -449,7 +451,7 @@ export default function Team() {
             <div className="flex-shrink-0">
               <a
                 className="fused-pod group inline-flex items-center transition-all duration-150"
-                href="mailto:anamorphiicc@gmail.com"
+                href="mailto:hello@anamorphic.studio"
               >
                 <span className="bg-primary text-surface px-7 py-4 rounded-l-full font-label-eyebrow text-body-md font-semibold group-hover:bg-secondary group-hover:text-on-secondary transition-colors duration-150">
                   Say hello
